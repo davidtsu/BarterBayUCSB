@@ -7,5 +7,10 @@
         android:text="We're not responsible."
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/legal_info" />
+        android:id="@+id/legal_info"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:textAllCaps="false"
+        android:textStyle="normal|italic"
+        android:fontFamily="sans-serif"
+        android:textSize="18sp" />
 </LinearLayout>
