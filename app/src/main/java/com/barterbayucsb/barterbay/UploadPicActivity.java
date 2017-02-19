@@ -3,7 +3,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-//import android.graphics.Bitmap;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -16,9 +15,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.barterbayucsb.barterbay.Manifest.permission;
-
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+
+//import android.graphics.Bitmap;
 //import java.io.FileDescriptor;
 //import java.io.IOException;
 
@@ -50,9 +49,7 @@ public class UploadPicActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 // modified from https://developer.android.com/training/permissions/requesting.html
-                if (ContextCompat.checkSelfPermission(thisActivity,
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                        ) {
+                if (ContextCompat.checkSelfPermission(thisActivity, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     //if (ActivityCompat.shouldShowRequestPermissionRationale(thisActivity,
                             //android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
@@ -64,9 +61,7 @@ public class UploadPicActivity extends AppCompatActivity {
 
                         // No explanation needed, we can request the permission.
 
-                        ActivityCompat.requestPermissions(thisActivity,
-                                new String[]{READ_EXTERNAL_STORAGE},
-                                MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                        ActivityCompat.requestPermissions(thisActivity, new String[]{READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
 
                     }
                 else{

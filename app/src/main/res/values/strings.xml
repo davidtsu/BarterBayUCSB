@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">BarterBay</string>
     <string name="action_settings">Settings</string>
-    <string name="snackbar_text">Please enter a title for your post</string>
 </resources>
