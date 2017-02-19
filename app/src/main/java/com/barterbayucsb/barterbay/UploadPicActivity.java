@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 //import android.graphics.Bitmap;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,6 +30,9 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 public class UploadPicActivity extends AppCompatActivity {
     private static final int RESULT_LOAD_IMAGE = 1;
     int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
+    static int[] newArray = new int[]{0xffffffff, 0x00000000, 0x00000000, 0xffffffff};
+
+    static Bitmap currentBitmap = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
 
     Activity thisActivity = this;
     @Override
@@ -38,6 +42,8 @@ public class UploadPicActivity extends AppCompatActivity {
         setContentView(R.layout.uploadpic);
         Button uploadButton2 = (Button) findViewById(R.id.uploadButton2);
         Button doneButton = (Button) findViewById(R.id.doneButton);
+        final ImageView imageView = (ImageView) findViewById(R.id.imgView);
+
 
         uploadButton2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +69,7 @@ public class UploadPicActivity extends AppCompatActivity {
                                 MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
 
                     }
+                else{
                     Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(i, RESULT_LOAD_IMAGE);
                     Uri selectedImage = i.getData();
@@ -75,9 +82,9 @@ public class UploadPicActivity extends AppCompatActivity {
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                     String picturePath = cursor.getString(columnIndex);
                     cursor.close();
-                    ImageView imageView = (ImageView) findViewById(R.id.imgView);
                     imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-                    //}
+                    currentBitmap = BitmapFactory.decodeFile(picturePath);
+                    }
 
 
                 //}

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/titleTextView"
+        android:textAppearance="@android:style/TextAppearance.Material.Large"
+        android:textAlignment="center" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.08" />
+
+    <ImageView
+        android:id="@+id/postImg"
+        android:layout_width="274dp"
+        android:layout_height="235dp"
+        android:cropToPadding="true"
+        android:background="?android:attr/colorAccent"
+        android:clickable="false"
+        android:scaleType="fitCenter"
+        android:contentDescription="displays the image"
+        android:adjustViewBounds="false"
+        android:layout_gravity="center_horizontal"></ImageView>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.08" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="355dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/messageTextView"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:layout_weight="0.82"
+        android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:text="Contact Poster"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/contactPoster"
+        android:layout_gravity="center"></Button>
+
+    <Button
+        android:text="done"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/doneButton"
+        android:layout_gravity="center"></Button>
+
+</LinearLayout>

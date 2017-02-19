@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+
+    <TextView
+        android:text="Review"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ReviewText" />
+
+
+    <AutoCompleteTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/titleTextView"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/floatingActionButton"
+        android:layout_weight="0.70"
+        android:capitalize="sentences"
+        tools:gravity="top"
+        android:gravity="top"
+        android:textSize="30sp" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:id="@+id/ratingBar"
+        android:paddingTop="10dp"
+        android:foregroundGravity="center_horizontal"
+        android:rating="3"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:layout_gravity="center"
+        android:layout_weight="0.05" />
+
+    <Button
+        android:text="Submit Review"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/doneButton" />
+
+</LinearLayout>
