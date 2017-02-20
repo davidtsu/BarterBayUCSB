@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -32,10 +33,32 @@ public class UploadPicActivity extends AppCompatActivity {
     static int[] newArray = new int[]{0xffffffff, 0x00000000, 0x00000000, 0xffffffff};
 
     static Bitmap currentBitmap = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
-
     Activity thisActivity = this;
-    @Override
 
+    /**
+     * helper to retrieve the path of an image URI
+     */
+    public String getPath(Uri uri) {
+        // just some safety built in
+        if( uri == null ) {
+            // TODO perform some logging or show user feedback
+            return null;
+        }
+        // try to retrieve the image from the media store first
+        // this will only work for images selected from gallery
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        if( cursor != null ){
+            int column_index = cursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String path = cursor.getString(column_index);
+            cursor.close();
+            return path;
+        }
+        // this is our fallback here
+        return uri.getPath();
+    }
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.uploadpic);
@@ -67,18 +90,7 @@ public class UploadPicActivity extends AppCompatActivity {
                 else{
                     Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(i, RESULT_LOAD_IMAGE);
-                    Uri selectedImage = i.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    try {
-                        cursor.moveToFirst();
-                    } catch (Exception e) {
-                    }
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String picturePath = cursor.getString(columnIndex);
-                    cursor.close();
-                    imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-                    currentBitmap = BitmapFactory.decodeFile(picturePath);
+
                     }
 
 
@@ -92,6 +104,18 @@ public class UploadPicActivity extends AppCompatActivity {
             }
 
         });
-
+    }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == RESULT_LOAD_IMAGE) {
+                Uri selectedImageUri = data.getData();
+                String picturePath = getPath(selectedImageUri);
+                //String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                ImageView imageView = (ImageView) findViewById(R.id.imgView);
+                Log.i("picture path:", picturePath);
+                imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                //currentBitmap = BitmapFactory.decodeFile(picturePath);
+            }
+        }
     }
 }
