@@ -1,36 +1,61 @@
 package com.barterbayucsb.barterbay;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 import static android.os.Environment.getExternalStorageDirectory;
 
 /**
- * Created by Ming Chen on 2/7/2017.
+ * Created by Daniel on 2/20/2017.
  */
 
-//class Offer implements java.io.Serializable{
-class Offer { // since bitmap can't be serialized, we need a helper class for saving a post to a file.
+class SerializableOffer implements java.io.Serializable{
     private String name = "";
     private String description = "";
     private int value;
-    Bitmap image;
+    byte[] image;
     String id;
 
 
-    public Offer() {
+    public SerializableOffer() {
         int[] newArray = new int[]{0xffffffff, 0x00000000, 0x00000000, 0xffffffff};
 
         name = "test user";
         id = "test id";
         description = "a test item";
         value = 1;
-
-        image = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
+        //image = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8); TODO: potentially make a default byte array of the example bitmap
     }
+    public SerializableOffer(Offer offer) {
 
+        name = offer.getName();
+        id = offer.id;
+        description = offer.getDescription();
+        value = offer.getValue();
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        offer.image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        image = stream.toByteArray();
+
+    }
+    public Offer toOffer()
+    {
+        Offer offer = new Offer();
+        offer.setName(name);
+        offer.id = id;
+        offer.setDescription(description);
+        offer.setValue(value);
+
+        return offer;
+    }
     public int getValue(){
         return value;
     }
@@ -61,11 +86,7 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
     public void setDescription(String s) {
         description = s;
     }
-    public void writeOffer(View view) throws IOException {
-        SerializableOffer SO = new SerializableOffer(this);
-        SO.writeOffer(view);
-    }
-   /* public void writeOffer(View view, Context c) throws IOException {   //This class doesn't write anymore since bitmaps aren't serializable.
+    public void writeOffer(View view) throws IOException {   //now working!
         String path = getPath();
         File myFile = new File(path);
         myFile.getParentFile().mkdirs();                                //makes the directory for file with path obtained from getPath
@@ -80,5 +101,11 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
         out.close();
         Snackbar.make(view, "Wrote to "+getPath(), Snackbar.LENGTH_SHORT).show();
 
-    }*/
+    }
+    public static Offer readOffer(File f, Context c) throws IOException {
+
+
+
+        return new Offer();
+    }
 }

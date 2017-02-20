@@ -32,7 +32,7 @@ public class UploadPicActivity extends AppCompatActivity {
     int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     static int[] newArray = new int[]{0xffffffff, 0x00000000, 0x00000000, 0xffffffff};
 
-    static Bitmap currentBitmap = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
+    protected static Bitmap currentBitmap = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
     Activity thisActivity = this;
 
     /**
@@ -42,6 +42,7 @@ public class UploadPicActivity extends AppCompatActivity {
         // just some safety built in
         if( uri == null ) {
             // TODO perform some logging or show user feedback
+
             return null;
         }
         // try to retrieve the image from the media store first
@@ -114,7 +115,8 @@ public class UploadPicActivity extends AppCompatActivity {
                 ImageView imageView = (ImageView) findViewById(R.id.imgView);
                 Log.i("picture path:", picturePath);
                 imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-                //currentBitmap = BitmapFactory.decodeFile(picturePath);
+                currentBitmap = BitmapFactory.decodeFile(picturePath); //makes it easier to fetch the image at when the post is submitted
+                //TODO: handle the edge case that the image is not locally available (happens with google photos app)
             }
         }
     }

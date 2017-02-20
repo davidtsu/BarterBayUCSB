@@ -11,7 +11,9 @@
         android:text="Review"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ReviewText" />
+        android:id="@+id/ReviewText"
+        android:paddingLeft="5dp"
+        android:paddingTop="3dp" />
 
 
     <AutoCompleteTextView

@@ -9,12 +9,12 @@
         android:id="@+id/imgView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.80"
+        android:layout_weight="0.98"
         android:cropToPadding="true"
         android:background="?android:attr/colorAccent"
         android:clickable="false"
-        android:scaleType="fitCenter"
-        android:contentDescription="displays the image"></ImageView>
+        android:contentDescription="displays the image"
+        android:adjustViewBounds="false"></ImageView>
     <Button
         android:text="upload picture"
         android:layout_width="match_parent"

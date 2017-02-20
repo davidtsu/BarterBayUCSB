@@ -8,12 +8,15 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -65,6 +68,23 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
+        //fixes the first element in np not displaying
+        Field f = null;
+        try {
+            f =NumberPicker.class.getDeclaredField("mInputText");
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        f.setAccessible(true);
+        EditText inputText = null;
+        try {
+            inputText = (EditText)f.get(np);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        inputText.setFilters(new InputFilter[0]);
+
+
 
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,9 +112,9 @@ public class PostActivity extends AppCompatActivity {
 
                     }
                 else{//cases 2 and 3
-                    testOffer.setName(titleTest);
+                    testOffer.setName(titleTest); //no need to get titleTextView's string again
                     testOffer.setDescription(descriptionTextView.getText().toString());
-                    testOffer.setValue(1);
+                    testOffer.setValue(np.getValue());
                     testOffer.image = UploadPicActivity.currentBitmap;
                     testOffer.id = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.US).format(new Date()); //prepares our post to be saved to a file named after the current timestamp
 
@@ -114,9 +134,11 @@ public class PostActivity extends AppCompatActivity {
 
                         ActivityCompat.requestPermissions(thisActivity, new String[]{WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
                     }
-                    else {//case 3
+                    else {//case 3 //TODO: create a SerializableOffer from the current Offer and write it.
                         try {
-                            testOffer.writeOffer(view, thisActivity);
+                            testOffer.writeOffer(view);
+                            Snackbar.make(view, "Successfully wrote to" + testOffer.getPath(), Snackbar.LENGTH_SHORT).show();
+
                             finish();
 
                         } catch (IOException e) {
@@ -134,7 +156,7 @@ public class PostActivity extends AppCompatActivity {
                 //}
             }
         });
-        ActivityCompat.requestPermissions(thisActivity, new String[]{WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+        //ActivityCompat.requestPermissions(thisActivity, new String[]{WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
 
 
     }
