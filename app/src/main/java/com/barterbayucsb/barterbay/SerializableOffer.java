@@ -1,6 +1,7 @@
 package com.barterbayucsb.barterbay;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
@@ -24,7 +25,9 @@ class SerializableOffer implements java.io.Serializable{
     private String description = "";
     private int value;
     byte[] image;
+    String path = "";
     String id;
+
     private final long serialVersionUID = ObjectStreamClass.lookup(this.getClass()).getSerialVersionUID();//TODO: fix this
 
 
@@ -44,7 +47,7 @@ class SerializableOffer implements java.io.Serializable{
         id = offer.id;
         description = offer.getDescription();
         value = offer.getValue();
-
+        path = offer.getPath();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         offer.image.compress(Bitmap.CompressFormat.PNG, 100, stream);
         image = stream.toByteArray();
@@ -57,6 +60,14 @@ class SerializableOffer implements java.io.Serializable{
         offer.id = id;
         offer.setDescription(description);
         offer.setValue(value);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inMutable = true;
+        Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length, options);
+        //Canvas canvas = new Canvas(bmp);
+
+
+        offer.image = bmp;
 
         return offer;
     }

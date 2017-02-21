@@ -52,6 +52,14 @@
         android:id="@+id/ValueTextView"
         android:textAppearance="@android:style/TextAppearance.Material.Small"
         android:paddingLeft="2dp" />
+    <TextView
+        android:text="Posted:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/TimeTextView"
+        android:textAppearance="@android:style/TextAppearance.Material.Small"
+        android:paddingLeft="2dp" />
+
 
     <Button
         android:text="Contact Poster"

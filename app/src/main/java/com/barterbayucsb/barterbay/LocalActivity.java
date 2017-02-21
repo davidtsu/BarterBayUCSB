@@ -80,9 +80,13 @@ public class LocalActivity extends AppCompatActivity {
     {
         File _offers = new File("storage/emulated/0/offers");
         File[] allOffers = _offers.listFiles();
+        int i = 0;
         for (File f: allOffers) {
             try {
-                LocalOffers.add(LocalOffers.size(), SerializableOffer.readOffer(f));
+
+//                LocalOffers.add(LocalOffers.size(), SerializableOffer.readOffer(f));
+                LocalOffers.add(i,SerializableOffer.readOffer(f));
+                i++;
             }
             catch (IOException e) {
                 e.printStackTrace();

@@ -5,8 +5,6 @@ import android.view.View;
 
 import java.io.IOException;
 
-import static android.os.Environment.getExternalStorageDirectory;
-
 /**
  * Created by Ming Chen on 2/7/2017.
  */
@@ -16,6 +14,7 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
     private String name = "";
     private String description = "";
     private int value;
+    private String path = "";
     Bitmap image;
     String id;
 
@@ -23,12 +22,17 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
     public Offer() {
         int[] newArray = new int[]{0xffffffff, 0x00000000, 0x00000000, 0xffffffff};
 
-        name = "test user";
+        name = "test title";
         id = "test id";
         description = "a test item";
         value = 1;
 
         image = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
+    }
+
+    public String getPath()
+    {
+        return path;
     }
 
     public int getValue(){
@@ -41,12 +45,6 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
 
     public String getDescription() {
         return description;
-    }
-
-    public String getPath(){
-        //return (getExternalStorageDirectory().toString().substring(0,getExternalStorageDirectory().toString().length()-1)+"offers/"+id+".offer");  //there's probably a better way to do this
-        return (getExternalStorageDirectory().toString() + "/offers/"+id+".offer");
-
     }
 
     public void setValue(int i){

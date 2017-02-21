@@ -16,6 +16,7 @@ public class ViewPost extends AppCompatActivity {
     TextView TitleTV;
     TextView DescriptionTV;
     TextView ValueTV;
+    TextView TimeTV;
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,7 @@ public class ViewPost extends AppCompatActivity {
         TitleTV = (TextView) findViewById(R.id.titleTextView);
         DescriptionTV = (TextView) findViewById(R.id.descriptionTextView);
         ValueTV = (TextView) findViewById(R.id.ValueTextView);
+        TimeTV = (TextView) findViewById(R.id.TimeTextView);
         Button contactPosterButton = (Button) findViewById(R.id.contactPoster);
         Button doneButton = (Button) findViewById(R.id.doneButton);
 
@@ -36,6 +38,7 @@ public class ViewPost extends AppCompatActivity {
         TitleTV.setText(LocalActivity.currentOffer.getName());
         DescriptionTV.setText(LocalActivity.currentOffer.getDescription());
         ValueTV.setText("Estimated Value: "+PostActivity.valueStrings[LocalActivity.currentOffer.getValue()]);
+        TimeTV.setText("Submitted on "+LocalActivity.currentOffer.id);
 
         doneButton.setOnClickListener(new View.OnClickListener() {//end activity, clear currentOffer
             @Override
