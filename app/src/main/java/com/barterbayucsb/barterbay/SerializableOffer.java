@@ -1,15 +1,17 @@
 package com.barterbayucsb.barterbay;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.ObjectStreamClass;
 
 import static android.os.Environment.getExternalStorageDirectory;
 
@@ -23,6 +25,8 @@ class SerializableOffer implements java.io.Serializable{
     private int value;
     byte[] image;
     String id;
+    private final long serialVersionUID = ObjectStreamClass.lookup(this.getClass()).getSerialVersionUID();//TODO: fix this
+
 
 
     public SerializableOffer() {
@@ -91,7 +95,7 @@ class SerializableOffer implements java.io.Serializable{
         File myFile = new File(path);
         myFile.getParentFile().mkdirs();                                //makes the directory for file with path obtained from getPath
         Boolean created = myFile.createNewFile();       //if the file doesn't already exist it makes the file, stores if it created a file in created (not yet being used by anything)
-                                                        //this line always causes a java.io.IOException: No such file or directory
+        //this line always causes a java.io.IOException: No such file or directory
 
         FileOutputStream out = new FileOutputStream(myFile.toString());
         //FileOutputStream out = c.openFileOutput(getPath(), Context.MODE_PRIVATE);
@@ -102,10 +106,18 @@ class SerializableOffer implements java.io.Serializable{
         Snackbar.make(view, "Wrote to "+getPath(), Snackbar.LENGTH_SHORT).show();
 
     }
-    public static Offer readOffer(File f, Context c) throws IOException {
+    public static Offer readOffer(File f) throws IOException, ClassNotFoundException {
+        FileInputStream fileIn = new FileInputStream(f.getPath());
+        ObjectInputStream in = new ObjectInputStream(fileIn);
+        SerializableOffer so = (SerializableOffer) in.readObject();
 
 
+        in.close();
+        fileIn.close();
 
-        return new Offer();
+        Offer o = so.toOffer();
+
+
+        return o;
     }
 }

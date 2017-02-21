@@ -28,7 +28,8 @@
         tools:gravity="top"
         android:gravity="top"
         android:textSize="30sp"
-        android:hint="Enter title here..." />
+        android:hint="Enter title here..."
+        android:fontFamily="sans-serif-smallcaps" />
 
     <TextView
         android:text="Post Description"

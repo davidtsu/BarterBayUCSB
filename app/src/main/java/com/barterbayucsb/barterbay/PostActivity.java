@@ -33,7 +33,7 @@ public class PostActivity extends AppCompatActivity {
     public static Offer testOffer = new Offer();
     //Context thisContext = this;
     Activity thisActivity = this;
-    String[] valueStrings =  {"$1—$10","$11—$25","$26—$50","$51—$100","$101—$250","$251—$500","$501—$1,000","$1,001—$10,000","$10,001+","Priceless"};
+    public static String[] valueStrings =  {"$1—$10","$11—$25","$26—$50","$51—$100","$101—$250","$251—$500","$501—$1,000","$1,001—$10,000","$10,001+","Priceless"};
     @Override
 
 
@@ -95,9 +95,9 @@ public class PostActivity extends AppCompatActivity {
 
         });
         doneButton.setOnClickListener(new View.OnClickListener() {  //handles 3 different cases for clicking the post button:
-                                                                    //case 1: titleText hasn't been updated by the user - displays a message and refuses to post;
-                                                                    //case 2: titleText is valid but the user as not given permission to write to external storage - prompts the user to use external storage;
-                                                                    //case 3: titleText is valid and the user has given permission - writes the offer generated as a file to external storage.
+            //case 1: titleText hasn't been updated by the user - displays a message and refuses to post;
+            //case 2: titleText is valid but the user as not given permission to write to external storage - prompts the user to use external storage;
+            //case 3: titleText is valid and the user has given permission - writes the offer generated as a file to external storage.
 
 
 
@@ -107,11 +107,11 @@ public class PostActivity extends AppCompatActivity {
                 if((titleTest.equals("")||titleTest.equals("Enter title here..."))) { //case 1
 
 
-                        Snackbar.make(view,"Please enter a title for your post", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(view,"Please enter a title for your post", Snackbar.LENGTH_SHORT).show();
 
 
-                    }
-                else{//cases 2 and 3
+                }
+                else {//cases 2 and 3
                     testOffer.setName(titleTest); //no need to get titleTextView's string again
                     testOffer.setDescription(descriptionTextView.getText().toString());
                     testOffer.setValue(np.getValue());
@@ -133,8 +133,7 @@ public class PostActivity extends AppCompatActivity {
                         // No explanation needed, we can request the permission.
 
                         ActivityCompat.requestPermissions(thisActivity, new String[]{WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-                    }
-                    else {//case 3 //TODO: create a SerializableOffer from the current Offer and write it.
+                    } else {//case 3 //TODO: create a SerializableOffer from the current Offer and write it.
                         try {
                             testOffer.writeOffer(view);
                             Snackbar.make(view, "Successfully wrote to" + testOffer.getPath(), Snackbar.LENGTH_SHORT).show();
@@ -147,19 +146,12 @@ public class PostActivity extends AppCompatActivity {
 
                         }
 
-
+                        return;
                     }
                 }
-                //else {
-                  //  Snackbar.make(view,"You don't have write permission", Snackbar.LENGTH_SHORT).show();
-
-                //}
+                Snackbar.make(view,"You don't have write permission", Snackbar.LENGTH_SHORT).show();
             }
         });
-        //ActivityCompat.requestPermissions(thisActivity, new String[]{WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-
-
     }
-
 
 }
