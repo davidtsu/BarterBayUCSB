@@ -21,8 +21,8 @@
 
     <ImageView
         android:id="@+id/postImg"
-        android:layout_width="match_parent"
-        android:layout_height="211dp"
+        android:layout_width="217dp"
+        android:layout_height="193dp"
         android:cropToPadding="true"
         android:background="?android:attr/colorAccent"
         android:clickable="false"
@@ -30,7 +30,8 @@
         android:contentDescription="displays the image"
         android:adjustViewBounds="false"
         android:layout_gravity="center_horizontal"
-        android:elevation="0dp"></ImageView>
+        android:elevation="0dp"
+        android:layout_weight="0.18"></ImageView>
 
     <TextView
         android:text="TextView"

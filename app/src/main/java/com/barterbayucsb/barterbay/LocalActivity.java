@@ -2,6 +2,7 @@ package com.barterbayucsb.barterbay;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -123,13 +124,14 @@ public class LocalActivity extends AppCompatActivity {
         info_text6.setText(LocalOffers.get(5 + 7*(page-1)).getName());
         info_text7.setText(LocalOffers.get(6 + 7*(page-1)).getName());
 
-        image1.setImageBitmap(LocalOffers.get(0 + 7*(page-1)).image);
-        image2.setImageBitmap(LocalOffers.get(1 + 7*(page-1)).image);
-        image3.setImageBitmap(LocalOffers.get(2 + 7*(page-1)).image);
-        image4.setImageBitmap(LocalOffers.get(3 + 7*(page-1)).image);
-        image5.setImageBitmap(LocalOffers.get(4 + 7*(page-1)).image);
-        image6.setImageBitmap(LocalOffers.get(5 + 7*(page-1)).image);
-        image7.setImageBitmap(LocalOffers.get(6 + 7*(page-1)).image);
+
+        image1.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(0 + 7*(page-1)).image),100,100,false));
+        image2.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(1 + 7*(page-1)).image),100,100,false));
+        image3.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(2 + 7*(page-1)).image),100,100,false));
+        image4.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(3 + 7*(page-1)).image),100,100,false));
+        image5.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(4 + 7*(page-1)).image),100,100,false));
+        image6.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(5 + 7*(page-1)).image),100,100,false));
+        image7.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(6 + 7*(page-1)).image),100,100,false));
 
     }
 

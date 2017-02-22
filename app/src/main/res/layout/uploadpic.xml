@@ -8,24 +8,24 @@
     <ImageView
         android:id="@+id/imgView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.98"
+        android:layout_height="0dp"
+        android:layout_weight="0.79"
         android:cropToPadding="true"
         android:background="?android:attr/colorAccent"
         android:clickable="false"
         android:contentDescription="displays the image"
-        android:adjustViewBounds="false"></ImageView>
+        android:adjustViewBounds="false"/>
     <Button
         android:text="upload picture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/uploadButton2"
-        android:layout_gravity="center"></Button>
+        android:layout_gravity="center"/>
     <Button
         android:text="done"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/doneButton"
-        android:layout_gravity="center"></Button>
+        android:layout_gravity="center"/>
 
     </LinearLayout>

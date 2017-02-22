@@ -37,8 +37,9 @@ public class ViewPost extends AppCompatActivity {
         IV.setImageBitmap(LocalActivity.currentOffer.image);
         TitleTV.setText(LocalActivity.currentOffer.getName());
         DescriptionTV.setText(LocalActivity.currentOffer.getDescription());
-        ValueTV.setText("Estimated Value: "+PostActivity.valueStrings[LocalActivity.currentOffer.getValue()]);
-        TimeTV.setText("Submitted on "+LocalActivity.currentOffer.id);
+        ValueTV.setText("Estimated Value: "+PostActivity.valueStrings[LocalActivity.currentOffer.getValue()]+".");
+        //TimeTV.setText("Submitted on "+LocalActivity.currentOffer.id);
+        TimeTV.setText(new TimeFormatter().formattedAge(LocalActivity.currentOffer.id));
 
         doneButton.setOnClickListener(new View.OnClickListener() {//end activity, clear currentOffer
             @Override

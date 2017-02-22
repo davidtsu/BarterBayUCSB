@@ -114,8 +114,8 @@ public class UploadPicActivity extends AppCompatActivity {
                 //String[] filePathColumn = {MediaStore.Images.Media.DATA};
                 ImageView imageView = (ImageView) findViewById(R.id.imgView);
                 Log.i("picture path:", picturePath);
-                imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-                currentBitmap = BitmapFactory.decodeFile(picturePath); //makes it easier to fetch the image at when the post is submitted
+                currentBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(picturePath),512,512,false); //makes it easier to fetch the image at when the post is submitted
+                imageView.setImageBitmap(currentBitmap);    //shows the user a preview
                 //TODO: handle the edge case that the image is not locally available (happens with google photos app)
             }
         }
