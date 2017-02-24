@@ -4,6 +4,7 @@ CS48 project - G07
 README
 -----------------------
 Steps to run:
+
 Option 1: build from Android Studio
 
 	1. Download and install Android Studio with default libraries as well as the libraries you are prompted to install and/or update.
