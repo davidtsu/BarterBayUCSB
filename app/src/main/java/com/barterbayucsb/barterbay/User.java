@@ -10,6 +10,7 @@ final class User {
     private String name = "";
     private String id = "";
     private ArrayList<Offer> offers;
+    private ArrayList<Review> reviews;
     private String session;
     public User(){
         offers = new ArrayList<Offer>();

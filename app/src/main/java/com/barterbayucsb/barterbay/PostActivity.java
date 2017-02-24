@@ -149,7 +149,6 @@ public class PostActivity extends AppCompatActivity {
                         return;
                     }
                 }
-                Snackbar.make(view,"You don't have write permission", Snackbar.LENGTH_SHORT).show();
             }
         });
     }

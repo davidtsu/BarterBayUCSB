@@ -11,5 +11,6 @@ public class MyOffersActivity  extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.myoffers);
+        //TODO: Implement MyOffersActivity, create XML layout for MyOffersActivity
     }
 }
