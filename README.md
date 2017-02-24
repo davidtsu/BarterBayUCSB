@@ -3,7 +3,7 @@ CS48 project - G07
 
 README
 -----------------------
-Steps to run: \n
+Steps to run:
 
 Option 1: build from Android Studio
 
