@@ -1,5 +1,6 @@
 package com.barterbayucsb.barterbay;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -10,11 +11,11 @@ import android.widget.TextView;
  * Created by Daniel on 2/23/2017.
  */
 public class LoginActivity extends AppCompatActivity {
+
+    private int LOGIN_EMAIL = 0;
+
     @Override
-
-
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         //TODO: implement LoginActivity, create a new XML layout for LoginActivit
@@ -26,8 +27,10 @@ public class LoginActivity extends AppCompatActivity {
                 TextView passwordView = (TextView) findViewById(R.id.login_password);
                 ServerGate gate = new ServerGate();
                 gate.login(emailView.toString(), passwordView.toString());
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivityForResult(intent, LOGIN_EMAIL);
             }
         });
-
     }
+
 }
