@@ -10,6 +10,9 @@ class ServerGate {
      */
     User test_user= new User();
     Offer test_offer = new Offer();
+
+    //define server result code here
+    private int RESULT_OK = 0;
     User login(String user_id, String user_password) {
         //TODO: implement login. null if login failed, an User instance if login success
         return test_user;
@@ -33,4 +36,9 @@ class ServerGate {
 
     //todo: add more methods here for interacting with server if needed
     //todo: params above like offer_id, user_id is not absoluitely needed, you can change it if need
+
+    int upload_offer(Offer offer) {
+        return RESULT_OK;
+    }
+
 }
