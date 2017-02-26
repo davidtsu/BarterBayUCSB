@@ -29,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
                 gate.login(emailView.toString(), passwordView.toString());
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivityForResult(intent, LOGIN_EMAIL);
+                finish(); // you shouldn't be able to press the back button and go back to login
             }
         });
     }

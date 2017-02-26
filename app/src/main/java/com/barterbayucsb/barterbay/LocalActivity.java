@@ -53,7 +53,7 @@ public class LocalActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LocalActivity.this, MapActivity.class);
+                Intent intent = new Intent(LocalActivity.this, MapsActivityNew.class);
                 startActivity(intent);
             }
 
