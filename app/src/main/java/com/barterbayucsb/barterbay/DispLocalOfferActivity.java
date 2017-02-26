@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * Created by David on 1/27/2017.
  */
 
-public class LocalActivity extends AppCompatActivity {
+public class DispLocalOfferActivity extends AppCompatActivity {
     public static Offer currentOffer;
     protected int page = 1;
     protected ArrayList<Offer> LocalOffers = new ArrayList<Offer>();
@@ -53,7 +53,7 @@ public class LocalActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LocalActivity.this, MapsActivityNew.class);
+                Intent intent = new Intent(DispLocalOfferActivity.this, MapActivity.class);
                 startActivity(intent);
             }
 
@@ -158,7 +158,7 @@ public class LocalActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 currentOffer = LocalOffers.get(0 + 7*(page-1));
-                Intent intent = new Intent(LocalActivity.this, ViewPost.class);
+                Intent intent = new Intent(DispLocalOfferActivity.this, ViewPost.class);
                 startActivity(intent);
             }
         });
@@ -169,7 +169,7 @@ public class LocalActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 currentOffer = LocalOffers.get(1 + 7*(page-1));
-                Intent intent = new Intent(LocalActivity.this, ViewPost.class);
+                Intent intent = new Intent(DispLocalOfferActivity.this, ViewPost.class);
                 startActivity(intent);
             }
         });
@@ -180,7 +180,7 @@ public class LocalActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 currentOffer = LocalOffers.get(2 + 7*(page-1));
-                Intent intent = new Intent(LocalActivity.this, ViewPost.class);
+                Intent intent = new Intent(DispLocalOfferActivity.this, ViewPost.class);
                 startActivity(intent);
             }
         });
@@ -191,7 +191,7 @@ public class LocalActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 currentOffer = LocalOffers.get(3 + 7*(page-1));
-                Intent intent = new Intent(LocalActivity.this, ViewPost.class);
+                Intent intent = new Intent(DispLocalOfferActivity.this, ViewPost.class);
                 startActivity(intent);
             }
         });
@@ -202,7 +202,7 @@ public class LocalActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 currentOffer = LocalOffers.get(4 + 7*(page-1));
-                Intent intent = new Intent(LocalActivity.this, ViewPost.class);
+                Intent intent = new Intent(DispLocalOfferActivity.this, ViewPost.class);
                 startActivity(intent);
             }
         });
@@ -213,7 +213,7 @@ public class LocalActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 currentOffer = LocalOffers.get(5 + 7*(page-1));
-                Intent intent = new Intent(LocalActivity.this, ViewPost.class);
+                Intent intent = new Intent(DispLocalOfferActivity.this, ViewPost.class);
                 startActivity(intent);
             }
         });
@@ -224,7 +224,7 @@ public class LocalActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 currentOffer = LocalOffers.get(6 + 7*(page-1));
-                Intent intent = new Intent(LocalActivity.this, ViewPost.class);
+                Intent intent = new Intent(DispLocalOfferActivity.this, ViewPost.class);
                 startActivity(intent);
             }
         });

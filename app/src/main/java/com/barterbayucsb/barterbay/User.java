@@ -12,6 +12,7 @@ final class User {
     private ArrayList<Offer> offers;
     private ArrayList<Review> reviews;
     private String session;
+
     public User(){
         offers = new ArrayList<Offer>();
         name = "test user";

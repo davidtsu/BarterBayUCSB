@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         local_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,LocalActivity.class);
+                Intent intent = new Intent(MainActivity.this,DispLocalOfferActivity.class);
                 startActivity(intent);
             }
         });

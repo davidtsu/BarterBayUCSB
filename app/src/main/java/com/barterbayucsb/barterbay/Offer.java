@@ -17,6 +17,7 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
     private String path = "";
     Bitmap image;
     String id;
+    String owner_user_id;
 
 
     public Offer() {
