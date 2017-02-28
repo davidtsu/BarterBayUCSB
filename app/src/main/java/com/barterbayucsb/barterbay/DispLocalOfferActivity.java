@@ -24,25 +24,24 @@ import static android.os.Environment.getExternalStorageDirectory;
 
 public class DispLocalOfferActivity extends AppCompatActivity {
     public static Offer currentOffer;
+    protected int maxPage = 0;
     protected int page = 1;
-    public static ArrayList<Offer> LocalOffers = new ArrayList<Offer>();
+    public static ArrayList<Offer> LocalOffers;
     protected Activity thisActivity = this;
     static int[] newArray = new int[]{0xffffffff, 0x00000000, 0x00000000, 0xffffffff};
 
-
+    protected Button prevButton, nextButton;
     protected View thisView;
-    protected TextView info_text1, info_text2, info_text3, info_text4, info_text5, info_text6, info_text7;
+    protected TextView info_text1, info_text2, info_text3, info_text4, info_text5, info_text6, info_text7, pageNo;
     protected ImageView image1, image2, image3, image4, image5, image6, image7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        LocalOffers = new ArrayList<Offer>();
         setContentView(R.layout.localoffersnew);
-        for(int i=0; i<7; i++) {
-            /*try {
-                new SerializableOffer(new Offer()).writeOffer(thisView);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
+        super.onCreate(savedInstanceState);
+
+        for(int i=0; i<8; i++) {
 
             LocalOffers.add(new Offer()); //so that we don't try to display offers that don't exist
 
@@ -51,9 +50,32 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         Button DELETE = (Button) findViewById(R.id.deletebutton);
 
         thisView = this.getWindow().getDecorView().findViewById(android.R.id.content);
+        prevButton = (Button) findViewById(R.id.previousButton);
+        nextButton = (Button) findViewById(R.id.nextButton);
+        pageNo = (TextView) findViewById(R.id.pageNoTextView);
+
         initializeTextsAndImages();
-        super.onCreate(savedInstanceState);
         getDevicePosts(info_text1, thisView);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(page>=maxPage)
+                    return;
+                page ++;
+                displayPosts();
+                updateButtons();
+            }
+        });
+        prevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(page <=1)
+                    return;
+                page--;
+                displayPosts();
+                updateButtons();
+            }
+        });
 
 
 
@@ -83,13 +105,22 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
 
                 }*/
-                String deleteCmd = "rm -r " + new File(getExternalStorageDirectory().toString()+"/offers");
+                String deleteCmd = "rm -rf " + new File(getExternalStorageDirectory().toString()+"/offers");
                 Runtime runtime = Runtime.getRuntime();
                 try {
                     runtime.exec(deleteCmd);
                     Snackbar.make(view, "Wiped" + getExternalStorageDirectory().toString() + "/offers/", Snackbar.LENGTH_SHORT).show();
                 } catch (IOException e) { }
+                for(int i=0; i<8; i++) {
+            /*try {
+                new SerializableOffer(new Offer()).writeOffer(thisView);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
 
+                    //LocalOffers.add(new Offer()); //so that we don't try to display offers that don't exist
+
+                }
 
             }
         });
@@ -98,17 +129,22 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
 
 
-    protected void getDevicePosts(TextView t, View view)
-    {
+    protected void getDevicePosts(TextView t, View view) {
         File _offers = new File(getExternalStorageDirectory().toString() + "/offers/");
         Snackbar.make(view, "got offers from" + getExternalStorageDirectory().toString() + "/offers/", Snackbar.LENGTH_SHORT).show();
 
-        if(!_offers.isDirectory())
-            return;
-        //File[] allOffers = _offers.listFiles();
-        if(_offers.listFiles() == null)
+        if (!_offers.isDirectory()) {
+            displayPosts();
+            updateButtons();
             return;
 
+        }
+        //File[] allOffers = _offers.listFiles();
+        if (_offers.listFiles() == null) {
+            displayPosts();
+            updateButtons();
+            return;
+        }
         int i = 0;
         for (File f : _offers.listFiles()) {
             try {
@@ -133,8 +169,9 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
         }
         //displayPostsOld(t);
-
         displayPosts();
+        updateButtons();
+
     }
     protected void displayPostsOld(TextView t)
     {
@@ -263,10 +300,45 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
 
     }
+
+    protected void updateButtons()
+    {
+        maxPage = LocalOffers.size()/7;
+
+        if(page>=maxPage)
+        {
+            nextButton.setEnabled(false);
+            nextButton.setAlpha(.5f);
+
+        }
+        else
+        {
+            nextButton.setEnabled(true);
+            nextButton.setAlpha(1f);
+
+        }
+        if(page<=1)
+        {
+            prevButton.setEnabled(false);
+            prevButton.setAlpha(.5f);
+
+        }
+        else
+        {
+            prevButton.setEnabled(true);
+            prevButton.setAlpha(1f);
+
+        }
+        pageNo.setText("Page " + page +" of " + maxPage);
+    }
+
+
     public static ArrayList<Offer> getOfferArrayList()
     {
         return LocalOffers;
     }
+
+
 
 
 

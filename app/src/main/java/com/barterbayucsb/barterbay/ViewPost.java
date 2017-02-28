@@ -3,6 +3,7 @@ package com.barterbayucsb.barterbay;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -60,4 +61,16 @@ public class ViewPost extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    public boolean onKeyDown(int key, KeyEvent event) {
+        if(key == KeyEvent.KEYCODE_BACK)
+        {
+            MapsActivityNew.showInfoWindows();
+            finish();
+            return true;
+        }
+        return false;
+    }
+
 }

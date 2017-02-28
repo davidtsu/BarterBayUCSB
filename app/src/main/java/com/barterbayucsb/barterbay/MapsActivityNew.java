@@ -81,6 +81,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
 
 
 
+
         final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location l;
         lm.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
@@ -110,6 +111,17 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
 
         mMap = googleMap;
 
+
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng ll)
+            {
+                showInfoWindows();  //Prevents the info windows going away when the map is pressed
+            }
+        });
+
+
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker m) {
@@ -126,7 +138,10 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         for(Offer o: LocalOffers)
         {
             if(!o.getLocation().equals(UCSB)) { //debug offers will have UCSB as their lat long
-                mo.position(o.getLocation()).title(o.getName()).snippet(o.getDescription());
+                String snip = o.getDescription();
+                if(snip.length()>=25)
+                    snip = snip.substring(0,23) + "...";
+                mo.position(o.getLocation()).title(o.getName()).snippet(snip);
                 m = mMap.addMarker(mo);
                 m.showInfoWindow();
                 m.setTag(o);
@@ -150,4 +165,9 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
 
         }
     }
+
+
+
+
+
 }
