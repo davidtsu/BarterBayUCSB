@@ -16,6 +16,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static android.os.Environment.getExternalStorageDirectory;
+
 /**
  * Created by David on 1/27/2017.
  */
@@ -23,8 +25,9 @@ import java.util.ArrayList;
 public class DispLocalOfferActivity extends AppCompatActivity {
     public static Offer currentOffer;
     protected int page = 1;
-    protected ArrayList<Offer> LocalOffers = new ArrayList<Offer>();
+    public static ArrayList<Offer> LocalOffers = new ArrayList<Offer>();
     protected Activity thisActivity = this;
+    static int[] newArray = new int[]{0xffffffff, 0x00000000, 0x00000000, 0xffffffff};
 
 
     protected View thisView;
@@ -35,7 +38,14 @@ public class DispLocalOfferActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.localoffersnew);
         for(int i=0; i<7; i++) {
+            /*try {
+                new SerializableOffer(new Offer()).writeOffer(thisView);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
+
             LocalOffers.add(new Offer()); //so that we don't try to display offers that don't exist
+
         }
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingMapButton);
         Button DELETE = (Button) findViewById(R.id.deletebutton);
@@ -53,7 +63,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(DispLocalOfferActivity.this, MapActivity.class);
+                Intent intent = new Intent(DispLocalOfferActivity.this, MapsActivityNew.class);
                 startActivity(intent);
             }
 
@@ -62,14 +72,25 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         DELETE.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                File _offers = new File("storage/emulated/0/offers");
-                File[] allOffers = _offers.listFiles();
+                /*
 
-                for (File f : allOffers) {
+                File _offers = new File(getExternalStorageDirectory().toString() + "/offers");
+                if(_offers.listFiles() == null)
+                    return;
+                for (File f : _offers.listFiles()) {
                     f.delete();
-                    Snackbar.make(view, "Wiped storage/emulated/0/offers", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(view, "Wiped" + getExternalStorageDirectory().toString() + "/offers/", Snackbar.LENGTH_SHORT).show();
 
-                }
+
+                }*/
+                String deleteCmd = "rm -r " + new File(getExternalStorageDirectory().toString()+"/offers");
+                Runtime runtime = Runtime.getRuntime();
+                try {
+                    runtime.exec(deleteCmd);
+                    Snackbar.make(view, "Wiped" + getExternalStorageDirectory().toString() + "/offers/", Snackbar.LENGTH_SHORT).show();
+                } catch (IOException e) { }
+
+
             }
         });
     }
@@ -79,22 +100,31 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
     protected void getDevicePosts(TextView t, View view)
     {
-        File _offers = new File("storage/emulated/0/offers");
-        File[] allOffers = _offers.listFiles();
+        File _offers = new File(getExternalStorageDirectory().toString() + "/offers/");
+        Snackbar.make(view, "got offers from" + getExternalStorageDirectory().toString() + "/offers/", Snackbar.LENGTH_SHORT).show();
+
+        if(!_offers.isDirectory())
+            return;
+        //File[] allOffers = _offers.listFiles();
+        if(_offers.listFiles() == null)
+            return;
+
         int i = 0;
-        for (File f: allOffers) {
+        for (File f : _offers.listFiles()) {
             try {
 
 //                LocalOffers.add(LocalOffers.size(), SerializableOffer.readOffer(f));
-                LocalOffers.add(i,SerializableOffer.readOffer(f));
+                Offer newOffer = SerializableOffer.readOffer(f);
+                if(newOffer.image==null)
+                    newOffer.image = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
+                LocalOffers.add(i,newOffer);
+
                 i++;
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
                 Snackbar.make(view, "Error reading from " + f.getPath(), Snackbar.LENGTH_LONG).show();
 
-            }
-            catch (ClassNotFoundException e) {
+            } catch (ClassNotFoundException e) {
 
                 e.printStackTrace();
                 Snackbar.make(view, "Error reading from " + f.getPath(), Snackbar.LENGTH_SHORT).show();
@@ -103,6 +133,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
         }
         //displayPostsOld(t);
+
         displayPosts();
     }
     protected void displayPostsOld(TextView t)
@@ -116,6 +147,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
     }
     protected void displayPosts()
     {
+
         info_text1.setText(LocalOffers.get(0 + 7*(page-1)).getName());
         info_text2.setText(LocalOffers.get(1 + 7*(page-1)).getName());
         info_text3.setText(LocalOffers.get(2 + 7*(page-1)).getName());
@@ -231,6 +263,11 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
 
     }
+    public static ArrayList<Offer> getOfferArrayList()
+    {
+        return LocalOffers;
+    }
+
 
 
 

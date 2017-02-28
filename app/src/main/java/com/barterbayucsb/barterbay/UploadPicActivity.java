@@ -31,6 +31,7 @@ public class UploadPicActivity extends AppCompatActivity {
     private static final int RESULT_LOAD_IMAGE = 1;
     int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     static int[] newArray = new int[]{0xffffffff, 0x00000000, 0x00000000, 0xffffffff};
+    static int opened = 0;
 
     protected static Bitmap currentBitmap = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
     Activity thisActivity = this;
@@ -61,6 +62,7 @@ public class UploadPicActivity extends AppCompatActivity {
         return uri.getPath();
     }
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.uploadpic);
         Button uploadButton2 = (Button) findViewById(R.id.uploadButton2);
@@ -75,24 +77,24 @@ public class UploadPicActivity extends AppCompatActivity {
                 // modified from https://developer.android.com/training/permissions/requesting.html
                 if (ContextCompat.checkSelfPermission(thisActivity, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     //if (ActivityCompat.shouldShowRequestPermissionRationale(thisActivity,
-                            //android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    //android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
-                        // Show an explanation to the user *asynchronously* -- don't block
-                        // this thread waiting for the user's response! After the user
-                        // sees the explanation, try again to request the permission.
+                    // Show an explanation to the user *asynchronously* -- don't block
+                    // this thread waiting for the user's response! After the user
+                    // sees the explanation, try again to request the permission.
 
                     //} else {
 
-                        // No explanation needed, we can request the permission.
+                    // No explanation needed, we can request the permission.
 
-                        ActivityCompat.requestPermissions(thisActivity, new String[]{READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                    ActivityCompat.requestPermissions(thisActivity, new String[]{READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
 
-                    }
+                }
                 else{
                     Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(i, RESULT_LOAD_IMAGE);
 
-                    }
+                }
 
 
                 //}
@@ -116,6 +118,7 @@ public class UploadPicActivity extends AppCompatActivity {
                 Log.i("picture path:", picturePath);
                 currentBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(picturePath),512,512,false); //makes it easier to fetch the image at when the post is submitted
                 imageView.setImageBitmap(currentBitmap);    //shows the user a preview
+                opened = 1; //PostActivity can now see if there is an image
                 //TODO: handle the edge case that the image is not locally available (happens with google photos app)
             }
         }

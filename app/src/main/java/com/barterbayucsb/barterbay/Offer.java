@@ -3,6 +3,8 @@ package com.barterbayucsb.barterbay;
 import android.graphics.Bitmap;
 import android.view.View;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.IOException;
 
 /**
@@ -15,9 +17,10 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
     private String description = "";
     private int value;
     private String path = "";
+    private double latitude;
+    private double longitude;
     Bitmap image;
     String id;
-    String owner_user_id;
 
 
     public Offer() {
@@ -27,6 +30,8 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
         id = "test id";
         description = "a test item";
         value = 1;
+        latitude = 34.4140;
+        longitude = -119.8489;
 
         image = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
     }
@@ -53,6 +58,7 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
     }
 
 
+
     public void setName(String s) {
         name = s;
     }
@@ -63,6 +69,17 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
     public void writeOffer(View view) throws IOException {
         SerializableOffer SO = new SerializableOffer(this);
         SO.writeOffer(view);
+    }
+
+    public void setLocation(LatLng ll)
+    {
+        latitude = ll.latitude;
+        longitude = ll.longitude;
+
+    }
+    public LatLng getLocation()
+    {
+        return new LatLng(latitude,longitude);
     }
    /* public void writeOffer(View view, Context c) throws IOException {   //This class doesn't write anymore since bitmaps aren't serializable.
         String path = getPath();

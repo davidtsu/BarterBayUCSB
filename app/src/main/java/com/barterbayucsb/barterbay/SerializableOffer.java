@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,6 +29,8 @@ class SerializableOffer implements java.io.Serializable{
     byte[] image;
     String path = "";
     String id;
+    private double latitude;
+    private double longitude;
 
     private final long serialVersionUID = ObjectStreamClass.lookup(this.getClass()).getSerialVersionUID();//TODO: fix this
 
@@ -39,6 +43,8 @@ class SerializableOffer implements java.io.Serializable{
         id = "test id";
         description = "a test item";
         value = 1;
+        latitude = 34.4140;
+        longitude = -119.8489;
         //image = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8); TODO: potentially make a default byte array of the example bitmap
     }
     public SerializableOffer(Offer offer) {
@@ -51,6 +57,8 @@ class SerializableOffer implements java.io.Serializable{
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         offer.image.compress(Bitmap.CompressFormat.PNG, 100, stream);
         image = stream.toByteArray();
+        latitude = offer.getLocation().latitude;
+        longitude = offer.getLocation().longitude;
 
     }
     public Offer toOffer()
@@ -60,7 +68,7 @@ class SerializableOffer implements java.io.Serializable{
         offer.id = id;
         offer.setDescription(description);
         offer.setValue(value);
-
+        offer.setLocation(new LatLng(latitude,longitude));
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inMutable = true;
         Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length, options);

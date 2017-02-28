@@ -45,6 +45,7 @@ public class ViewPost extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 DispLocalOfferActivity.currentOffer = null;
+                MapsActivityNew.showInfoWindows();
                 finish();
             }
 
