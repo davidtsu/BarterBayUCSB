@@ -26,7 +26,7 @@ public class OldLoginActivity extends AppCompatActivity {
                 TextView emailView = (TextView) findViewById(R.id.login_email);
                 TextView passwordView = (TextView) findViewById(R.id.login_password);
                 ServerGate gate = new ServerGate();
-                gate.login(emailView.toString(), passwordView.toString());
+                gate.user_login(emailView.toString(), passwordView.toString());
                 Intent intent = new Intent(OldLoginActivity.this, MainActivity.class);
                 startActivityForResult(intent, LOGIN_EMAIL);
                 finish(); // you shouldn't be able to press the back button and go back to login

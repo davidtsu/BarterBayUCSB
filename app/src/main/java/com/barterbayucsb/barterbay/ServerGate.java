@@ -13,9 +13,10 @@ class ServerGate {
 
     //define server result code here
     private static int RESULT_OK = 0;
-    User login(String user_id, String user_password) {
+    User user_login(String user_id, String user_password) {
         //TODO: implement login. null if login failed, an User instance if login success
         return test_user;
+        //return null;
     }
 
     /*
