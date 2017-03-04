@@ -55,7 +55,7 @@ public class ViewPost extends AppCompatActivity {
         contactPosterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view,"(123) 456-7890", Snackbar.LENGTH_LONG).show(); //TODO: once user is implemented in Offer make this get the user's phone number (and potentially rewrite it so it can be copied to the clipboard)
+                Snackbar.make(view,"123-456-7890", Snackbar.LENGTH_LONG).show(); //TODO: once user is implemented in Offer make this get the user's phone number (and potentially rewrite it so it can be copied to the clipboard)
 
             }
         });

@@ -35,7 +35,7 @@ class ServerGate {
     }
 
     //todo: add more methods here for interacting with server if needed
-    //todo: params above like offer_id, user_id is not absoluitely needed, you can change it if need
+    //todo: params above like offer_id, user_id is not absolutely needed, you can change it if need
 
     static int upload_offer(Offer offer) {
         return RESULT_OK;
