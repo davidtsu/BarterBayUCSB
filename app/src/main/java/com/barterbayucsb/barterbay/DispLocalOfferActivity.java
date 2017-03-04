@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static android.os.Environment.getExternalStorageDirectory;
+import static com.barterbayucsb.barterbay.R.styleable.FloatingActionButton;
 
 /**
  * Created by David on 1/27/2017.

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 final class User {
     private String name = "";
     private String id = "";
-    private PhoneNumber phone = new PhoneNumber();
+    //private PhoneNumber phone = new PhoneNumber();
     private ArrayList<Offer> offers;
     private ArrayList<Review> reviews;
     private String session;
