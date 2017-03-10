@@ -313,7 +313,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             User user = gate.user_login(mEmail, mPassword);
             return user != null;
 
-
             // TODO: register the new account here.
 
         }
