@@ -153,7 +153,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(l.getLatitude(),l.getLongitude()), 14.0f));
         mMap.addCircle(new CircleOptions().center(
                 new LatLng(l.getLatitude(),l.getLongitude()))
-                .radius(1000)
+                .radius((int)10*(1+SettingsActivity.Preferences.getDISTANCE()))
                 .strokeColor(Color.argb(0xFF,0x21,0x07,0x6d))
                 .fillColor(Color.argb(0x22,0x21,0x07,0x6d)));   //adds a circle that is radius 10000 (units?) with border color that is the accent color and fill color that is a translucent accent color
     }

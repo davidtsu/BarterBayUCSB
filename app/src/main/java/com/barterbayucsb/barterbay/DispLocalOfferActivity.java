@@ -15,9 +15,10 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import static android.os.Environment.getExternalStorageDirectory;
-import static com.barterbayucsb.barterbay.R.styleable.FloatingActionButton;
 
 /**
  * Created by David on 1/27/2017.
@@ -170,10 +171,49 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
         }
         //displayPostsOld(t);
+        sortPosts();
+
         displayPosts();
         updateButtons();
 
     }
+
+    protected void sortPosts() {
+        if(SettingsActivity.Preferences.getFILTER_BY_LOCATION()) //TODO: implement location calculations and sorting. Will need a permission check for location
+        {
+            Collections.sort(LocalOffers, new Comparator<Offer>() {
+                @Override
+                public int compare(Offer O1, Offer O2) {
+                    return 0;
+                }
+            });
+        }
+        else if(SettingsActivity.Preferences.getFILTER_BY_PRICE())
+        {
+            Collections.sort(LocalOffers, new Comparator<Offer>() {
+                @Override
+                public int compare(Offer O1, Offer O2) {
+                    return  Integer.compare(O1.getValue(), O2.getValue());
+                }
+            });
+
+
+        }
+        else //default case. Since the radio buttons are mutually exclusive and the logic is too, we can assume this case will be applicable. Additionally, this allows the function to work properly even if settings haven't been initialized yet.
+            Collections.sort(LocalOffers, new Comparator<Offer>() {
+
+                @Override
+                public int compare(Offer O1, Offer O2)
+                {
+                    if(O1.id.equals("test id")||O2.id.equals("test id")) return 0;
+
+                    return TimeFormatter.compareAges(O1, O2);
+                }
+            });
+
+
+    }
+
     protected void displayPostsOld(TextView t)
     {
         //t.setText((""));
@@ -341,7 +381,33 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
 
 
-
-
-
 }
+
+//decided not to use these since they can be implemented inline
+
+/*
+class dateComparator implements Comparator<Offer>
+{
+    @Override
+    public int compare(Offer O1, Offer O2)
+    {
+        return TimeFormatter.compareAges(O1, O2);
+    }
+}
+class locationComparator implements Comparator<Offer>
+{
+    @Override
+    public int compare(Offer O1, Offer O2)
+    {
+        return 1;
+    }
+}
+class priceComparator implements Comparator<Offer>
+{
+    @Override
+    public int compare(Offer O1, Offer O2)
+    {
+        return 1;
+    }
+}
+*/

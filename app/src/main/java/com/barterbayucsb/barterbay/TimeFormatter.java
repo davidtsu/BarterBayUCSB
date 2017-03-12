@@ -37,6 +37,11 @@ public class TimeFormatter {
 
 
     }
+    public static int compareAges(Offer O1, Offer O2){
+        TimeFormatter T1 = new TimeFormatter(O1.id);
+        TimeFormatter T2 = new TimeFormatter(O2.id);
+        return Integer.compare(T1.getDiff(),T2.getDiff());
+    }
 
     protected String formattedAge(String timestamp)
     {

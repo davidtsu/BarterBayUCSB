@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <TextView
+        android:text="Maximum Distance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:padding="4dp"
+        android:textAppearance="@android:style/TextAppearance.Material.Body1"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:weightSum="1"
+        android:layout_weight="0.00">
+
+        <TextView
+            android:text="0"
+            android:layout_width="wrap_content"
+            android:layout_height="31dp"
+            android:id="@+id/sliderLabelText"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:layout_weight="0.35"
+            android:gravity="center_vertical|center_horizontal" />
+
+        <SeekBar
+            android:layout_width="294dp"
+            android:layout_height="match_parent"
+            android:id="@+id/seekBar"
+            android:layout_gravity="right"
+            android:layout_weight="0.67" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.04" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+
+    <TextView
+        android:text="Filter offers by:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView5"
+        android:textAppearance="@android:style/TextAppearance.Material.Body1"
+        android:textSize="16sp"
+        android:paddingTop="12dp"
+        android:paddingBottom="4dp"
+        android:paddingLeft="4dp" />
+
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:paddingLeft="4dp"
+        android:id="@+id/radioGroup">
+
+        <RadioButton
+            android:text="Age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ageButton"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:text="Location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/locationButton"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:text="Price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/priceButton"
+            android:layout_weight="1" />
+
+    </RadioGroup>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.95" />
+
+    <Button
+        android:text="DONE"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/SettingsDoneButton" />
+
+
+</LinearLayout>
