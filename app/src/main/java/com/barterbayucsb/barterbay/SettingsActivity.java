@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.io.File;
@@ -42,6 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
         final RadioButton ageButton = (RadioButton) findViewById(R.id.ageButton);
         final RadioButton locationButton = (RadioButton) findViewById(R.id.locationButton);
         final RadioButton priceButton = (RadioButton) findViewById(R.id.priceButton);
+        final Switch filterSwitch = (Switch) findViewById(R.id.switch2);
 
 
 
@@ -52,16 +54,22 @@ public class SettingsActivity extends AppCompatActivity {
                 Preferences = SerializableSettings.readOffer(settingsPath);
             } catch (IOException e) {
                 e.printStackTrace();
-                Snackbar.make(view, "Error reading from " + SerializableSettings.getPath(), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(view, "Error reading from " + SerializableSettings.getPath()+ ". Initialized default settings.", Snackbar.LENGTH_LONG).show();
+                SerializableSettings defaultConfig = new SerializableSettings(1000, true, false, false, true); //default configs are 10.0km, filter by age, filter low to high
+                Preferences = defaultConfig;
+
 
             } catch (ClassNotFoundException e) {
 
                 e.printStackTrace();
-                Snackbar.make(view, "Error reading from " + SerializableSettings.getPath(), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(view, "Error reading from " + SerializableSettings.getPath() +". Initialized default settings.", Snackbar.LENGTH_SHORT).show();
+                SerializableSettings defaultConfig = new SerializableSettings(1000, true, false, false, true); //default configs are 10.0km, filter by age, filter low to high
+                Preferences = defaultConfig;
+
             }
         }
         else {
-            SerializableSettings defaultConfig = new SerializableSettings(1000, true, false, false); //default configs are 10.0km, filter by age
+            SerializableSettings defaultConfig = new SerializableSettings(1000, true, false, false, true); //default configs are 10.0km, filter by age, filter low to high
             Preferences = defaultConfig;
             try {
                 defaultConfig.writeSettings(view);
@@ -77,7 +85,7 @@ public class SettingsActivity extends AppCompatActivity {
         //final TextView sliderLabel = (TextView) findViewById(R.id.sliderLabelText);
 
         sb.setMax(10100);
-        sb.incrementProgressBy(1);
+        //sb.incrementProgressBy(1);
         sb.setProgress(Preferences.getDISTANCE());
 
 
@@ -85,6 +93,7 @@ public class SettingsActivity extends AppCompatActivity {
         ageButton.setChecked(Preferences.getFILTER_BY_AGE());
         locationButton.setChecked(Preferences.getFILTER_BY_LOCATION());
         priceButton.setChecked(Preferences.getFILTER_BY_PRICE());
+        filterSwitch.setChecked(Preferences.getFILTER_LOW_TO_HIGH());
 
         float currentValue = ((float) (Preferences.getDISTANCE()-1 )/ 100);
         if(currentValue>1)
@@ -107,6 +116,7 @@ public class SettingsActivity extends AppCompatActivity {
                 Preferences.setFILTER_BY_AGE(ageButton.isChecked());
                 Preferences.setFILTER_BY_LOCATION(locationButton.isChecked());
                 Preferences.setFILTER_BY_PRICE(priceButton.isChecked());
+                Preferences.setFILTER_LOW_TO_HIGH(filterSwitch.isChecked());
 
 
 

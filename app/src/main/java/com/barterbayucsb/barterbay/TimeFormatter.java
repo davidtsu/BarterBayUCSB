@@ -40,7 +40,9 @@ public class TimeFormatter {
     public static int compareAges(Offer O1, Offer O2){
         TimeFormatter T1 = new TimeFormatter(O1.id);
         TimeFormatter T2 = new TimeFormatter(O2.id);
+        if(SettingsActivity.Preferences.getFILTER_LOW_TO_HIGH())
         return Integer.compare(T1.getDiff(),T2.getDiff());
+        else return Integer.compare(T2.getDiff(), T1.getDiff());
     }
 
     protected String formattedAge(String timestamp)

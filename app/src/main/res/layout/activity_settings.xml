@@ -91,6 +91,31 @@
 
     </RadioGroup>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="114dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <Switch
+            android:id="@+id/switch2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.09"
+            android:paddingLeft="4dp"
+            android:text="Low to High" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.09"
+            android:gravity="right"
+            android:text="High to Low"
+            android:textAppearance="@android:style/TextAppearance.Material.Body1"
+            android:textSize="14sp" />
+    </LinearLayout>
+
     <Space
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

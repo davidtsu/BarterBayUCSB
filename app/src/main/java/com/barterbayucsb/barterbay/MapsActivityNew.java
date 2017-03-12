@@ -143,17 +143,17 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
                     snip = snip.substring(0,23) + "...";
                 mo.position(o.getLocation()).title(o.getName()).snippet(snip);
                 m = mMap.addMarker(mo);
-                m.showInfoWindow();
+                //m.showInfoWindow();
                 m.setTag(o);
                 markerArrayList.add(m);
 
             }
         }
         //mMap.addMarker(new MarkerOptions().position(UCSB).title("UCSB"));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(l.getLatitude(),l.getLongitude()), 14.0f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(l.getLatitude(),l.getLongitude()), 12.0f));
         mMap.addCircle(new CircleOptions().center(
                 new LatLng(l.getLatitude(),l.getLongitude()))
-                .radius((int)10*(1+SettingsActivity.Preferences.getDISTANCE()))
+                .radius((float)10*(1+SettingsActivity.Preferences.getDISTANCE()))
                 .strokeColor(Color.argb(0xFF,0x21,0x07,0x6d))
                 .fillColor(Color.argb(0x22,0x21,0x07,0x6d)));   //adds a circle that is radius 10000 (units?) with border color that is the accent color and fill color that is a translucent accent color
     }
@@ -161,7 +161,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
     public static void showInfoWindows() //without this the info windows go away every time the view post is dismissed
     {
         for (Marker m:markerArrayList
-             ) {m.showInfoWindow();
+             ) {//m.showInfoWindow();
 
         }
     }

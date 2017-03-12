@@ -18,20 +18,22 @@ import static android.os.Environment.getExternalStorageDirectory;
  */
 
 class SerializableSettings implements java.io.Serializable{
-    private boolean FILTER_BY_AGE = false,FILTER_BY_LOCATION = false,FILTER_BY_PRICE = false;
+    private boolean FILTER_BY_AGE = false,FILTER_BY_LOCATION = false,FILTER_BY_PRICE = false,FILTER_LOW_TO_HIGH = false;
     private int DISTANCE = 0;
 
     private final long serialVersionUID = ObjectStreamClass.lookup(this.getClass()).getSerialVersionUID();
 
-    public SerializableSettings(int DISTANCE, boolean FILTER_BY_AGE, boolean FILTER_BY_LOCATION, boolean FILTER_BY_PRICE) {
+    public SerializableSettings(int DISTANCE, boolean FILTER_BY_AGE, boolean FILTER_BY_LOCATION, boolean FILTER_BY_PRICE, boolean FILTER_LOW_TO_HIGH) {
         this.DISTANCE = DISTANCE;
         this.FILTER_BY_AGE = FILTER_BY_AGE;
         this.FILTER_BY_LOCATION = FILTER_BY_LOCATION;
         this.FILTER_BY_PRICE = FILTER_BY_PRICE;
+        this.FILTER_LOW_TO_HIGH = FILTER_LOW_TO_HIGH;
     }
 
     public SerializableSettings() {
     }
+    public boolean getFILTER_LOW_TO_HIGH() {return FILTER_LOW_TO_HIGH;}
     public boolean getFILTER_BY_AGE(){
         return FILTER_BY_AGE;
     }
@@ -53,6 +55,7 @@ class SerializableSettings implements java.io.Serializable{
     {
         FILTER_BY_PRICE = b;
     }
+    public void setFILTER_LOW_TO_HIGH(boolean b){FILTER_LOW_TO_HIGH = b;}
     public void setDISTANCE(int i)
     {
         DISTANCE = i;
