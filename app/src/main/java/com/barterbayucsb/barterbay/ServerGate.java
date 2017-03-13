@@ -150,7 +150,6 @@ class ServerGate {
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         while ((line = br.readLine()) != null) {
             line = line.replaceAll("\\s","");
-            System.out.println(line);
             if(line.contains("micropost-")) {
                 int index = line.indexOf("micropost-");
                 String part = line.substring(index+10);
