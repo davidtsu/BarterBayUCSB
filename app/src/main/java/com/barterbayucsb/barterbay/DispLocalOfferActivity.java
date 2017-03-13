@@ -68,6 +68,8 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         nextButton = (Button) findViewById(R.id.nextButton);
         pageNo = (TextView) findViewById(R.id.pageNoTextView);
 
+        SettingsActivity.initializePreferences(thisView);//need to make sure settings are loaded
+
         initializeTextsAndImages();
         getDevicePosts(thisView);
         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -148,6 +150,47 @@ public class DispLocalOfferActivity extends AppCompatActivity {
             return;
         }
         int i = 0;
+        while (ContextCompat.checkSelfPermission(thisActivity, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            //if (ActivityCompat.shouldShowRequestPermissionRationale(thisActivity,
+            //android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+            // Show an explanation to the user *asynchronously* -- don't block
+            // this thread waiting for the user's response! After the user
+            // sees the explanation, try again to request the permission.
+
+            //} else {
+
+            // No explanation needed, we can request the permission.
+
+            ActivityCompat.requestPermissions(thisActivity, new String[]{ACCESS_FINE_LOCATION}, PostActivity.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+
+        }
+        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        final Location l;
+        lm.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        }, null);
+        l =  lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
         for (File f : _offers.listFiles()) {
             try {
 
@@ -155,6 +198,14 @@ public class DispLocalOfferActivity extends AppCompatActivity {
                 Offer newOffer = SerializableOffer.readOffer(f);
                 if(newOffer.image==null)
                     newOffer.image = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
+                Location L1 = new Location("");
+                L1.setLatitude(newOffer.getLocation().latitude);
+                L1.setLongitude(newOffer.getLocation().longitude);
+                float distance = l.distanceTo(L1);
+                float distancePrefs = SettingsActivity.Preferences.getDISTANCEfloat()*10.0f;
+                if((distance <= SettingsActivity.Preferences.getDISTANCEfloat()*10.0f + 1000.0f))
+
+
                 LocalOffers.add(i,newOffer);
 
                 i++;
