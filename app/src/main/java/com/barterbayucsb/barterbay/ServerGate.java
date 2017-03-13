@@ -2,7 +2,6 @@ package com.barterbayucsb.barterbay;
 
 import android.util.Log;
 
-import com.android.internal.http.multipart.MultipartEntity;
 
 
 import org.json.JSONObject;
@@ -44,6 +43,9 @@ class ServerGate {
     final static String SERVER_URL = "http://nameless-temple-44705.herokuapp.com";
     //final static String SERVER_URL = "http://0.0.0.0:3000";
     final static String LOGIN_PATH = "/login";
+    final static String UPLOAD_OFFER_PATH = "/upload_offer";
+    final static String OFFER_JSON_PATH = "/offer_json";
+    final static String USER_JSON_PATH = "/user_json";
     //define server result code here
     private static int RESULT_OK = 0;
     private static String HEADER_USER_AGENT_VALUE= "android";
@@ -88,8 +90,9 @@ class ServerGate {
         }
     }
 
+
     private String post_userJson_url(){
-        return "http://nameless-temple-44705.herokuapp.com/user_json";
+        return SERVER_URL + USER_JSON_PATH;
     }
     /*
     retrieve user is a function to get user information from server.
@@ -139,7 +142,37 @@ class ServerGate {
         }
     }
 
-   static ArrayList<Offer> retrieve_offer(String user_id) throws IOException {
+    public Offer retrieve_offer_by_id( String offer_id ){
+        try {
+            String ad = "http://nameless-temple-44705.herokuapp.com/offer_json";
+            URL url = new URL(ad);
+            HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+            String charset = "utf-8";
+            //String user_id = URLEncoder.encode("user[id]", CHARSET) + "=" + URLEncoder.encode("1", CHARSET);
+            String offer_id_encoded = URLEncoder.encode("id", CHARSET) + "=" + URLEncoder.encode(offer_id, CHARSET);
+            String utf8 = "utf8=%E2%9C%93";
+            String s[] = {utf8, offer_id_encoded};
+            ArrayList<String> params = new ArrayList<String>(Arrays.asList(s));
+            String encoded = encode_list(params);
+            System.out.println(encoded);
+            performPost(urlc, encoded);
+            String json = read_url_response(urlc);
+            System.out.println("Json here:");
+            System.out.println(json);
+            JSONObject json_obj = new JSONObject(json);
+            System.out.println(json_obj.toString());
+            Offer offer = jsonToOffer(json);
+            System.out.println(offer.toString());
+            return offer;
+        }
+
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+   static ArrayList<Offer> retrieve_offers(String user_id) throws IOException {
         ArrayList<Offer> offers = new ArrayList<Offer>();
         String offer_id = "", description = "", line = "";
         int counter = 0;
@@ -170,9 +203,6 @@ class ServerGate {
         }
         return offers;
     }
-
-    //todo: add more methods here for interacting with server if needed
-    //todo: params above like offer_id, user_id is not absolutely needed, you can change it if need
 
     static int upload_offer(Offer offer) {
         return RESULT_OK;
@@ -234,13 +264,14 @@ class ServerGate {
             in = new BufferedReader(new InputStreamReader(urlc.getInputStream()), 8096);
             String response;
             // write html to System.out for debug
-            response = in.readLine();
+            response = "";
             String temp = response;
             while (temp != null) {
-                temp = in.readLine();
                 response += temp;
+                temp = in.readLine();
             }
             System.out.println(response);
+
             Map<String, List<String>> map = urlc.getHeaderFields();
 
             System.out.println("Printing Response Header...\n");
@@ -260,6 +291,20 @@ class ServerGate {
                     ex.printStackTrace();
                 }
             }
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    static public String read_picture_encoded_string(String pic_url){
+        try {
+            URL url = new URL(pic_url);
+            HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+
+            return null;
+
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -287,7 +332,53 @@ class ServerGate {
             return null;
         }
     }
+
+    public static Offer jsonToOffer(String json_s){
+        JSONObject json = null;
+        try {
+            json = new JSONObject(json_s);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        try {
+            String content = json.getString("content");
+            String id = json.getString("id");
+            String user_id = json.getString("user_id");
+            Offer offer = new Offer(id, user_id, content, null);
+            return offer;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static void main(String[] args) throws Exception{
+        String offer_id = "4";
+        try {
+            String ad = "http://nameless-temple-44705.herokuapp.com/offer_json";
+            URL url = new URL(ad);
+            HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+            String charset = "utf-8";
+            //String user_id = URLEncoder.encode("user[id]", CHARSET) + "=" + URLEncoder.encode("1", CHARSET);
+            String offer_id_encoded = URLEncoder.encode("id", CHARSET) + "=" + URLEncoder.encode(offer_id, CHARSET);
+            String utf8 = "utf8=%E2%9C%93";
+            String s[] = {utf8, offer_id_encoded};
+            ArrayList<String> params = new ArrayList<String>(Arrays.asList(s));
+            String encoded = encode_list(params);
+            System.out.println(encoded);
+            performPost(urlc, encoded);
+            String json = read_url_response(urlc);
+            System.out.println("Json here:");
+            System.out.println(json);
+
+        }
+
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 }

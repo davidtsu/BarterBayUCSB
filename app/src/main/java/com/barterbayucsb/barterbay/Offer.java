@@ -15,10 +15,15 @@ import java.io.IOException;
 class Offer { // since bitmap can't be serialized, we need a helper class for saving a post to a file.
     private String name = "";
     private String description = "";
+    private String user_id;
+    private String picture_url;
     private int value;
     private String path = "";
     private double latitude;
     private double longitude;
+    private static double DEFAULT_LATITUDE = 34.4140;
+    private static double DEFAULT_LONGITUTDE = -119.8489;
+    static public int TOTAL_OFFER_NUM = 10;
     Bitmap image;
     String id;
 
@@ -46,6 +51,15 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
        
     }
 
+    public Offer(String id, String user_id, String content, String picture_url){
+        latitude = DEFAULT_LATITUDE;
+        longitude = DEFAULT_LONGITUTDE;
+        this.id = id;
+        this.user_id = user_id;
+        description = content;
+        this.picture_url = picture_url;
+
+    }
     public String getPath()
     {
         return path;
@@ -90,6 +104,11 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
     public LatLng getLocation()
     {
         return new LatLng(latitude,longitude);
+    }
+
+    public String toString(){
+        String res = "\nid=" + id + "\nuser_id" + user_id + "\n########\n";
+        return res;
     }
    /* public void writeOffer(View view, Context c) throws IOException {   //This class doesn't write anymore since bitmaps aren't serializable.
         String path = getPath();

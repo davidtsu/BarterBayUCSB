@@ -1,5 +1,11 @@
 package com.barterbayucsb.barterbay;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.util.Base64;
+
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
@@ -17,6 +23,21 @@ import javax.security.cert.X509Certificate;
 
 
 public class Utils {
+    public Bitmap StringToBitMap(String encodedString) {
+        try {
+            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch (Exception e) {
+            e.getMessage();
+            return null;
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        ServerGate gate = new ServerGate();
+    }
+
 
 
 }

@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -29,6 +30,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.READ_CALENDAR;
 import static android.os.Environment.getExternalStorageDirectory;
 
 /**
@@ -131,7 +133,38 @@ public class DispLocalOfferActivity extends AppCompatActivity {
     }
 
 
+    public class RetrieveOffersTask extends AsyncTask<Void, Void, ArrayList<Offer>> {
 
+
+        private String id;
+
+        RetrieveOffersTask() {
+            this.id = id;
+        }
+
+        @Override
+        protected ArrayList<Offer> doInBackground(Void... params) {
+            ServerGate gate = new ServerGate();
+            ArrayList<Offer> offers = new ArrayList<Offer>();
+
+
+            for (int id = 1; id < Offer.TOTAL_OFFER_NUM; id ++){
+                Offer offer = gate.retrieve_offer_by_id((new Integer(id)).toString());
+                if  (offer==null)continue;
+                System.out.println("good offer");
+                offers.add(offer);
+            }
+
+            return offers;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Offer> offers) {
+            for (Offer offer : offers) {
+                LocalOffers.add(offer);
+            }
+        }
+    }
 
     protected void getDevicePosts(View view) {
         File _offers = new File(getExternalStorageDirectory().toString() + "/offers/");
@@ -221,6 +254,9 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
 
         }
+
+        RetrieveOffersTask rt = new RetrieveOffersTask();
+        rt.execute();
         //displayPostsOld(t);
         sortPosts();
 
