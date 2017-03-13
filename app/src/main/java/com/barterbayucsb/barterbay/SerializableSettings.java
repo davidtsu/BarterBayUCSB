@@ -65,7 +65,7 @@ class SerializableSettings implements java.io.Serializable{
     }
     public float getDISTANCEfloat()
     {
-        return ((float)DISTANCE/100);
+        return ((float)DISTANCE);
     }
 
     public static String getPath(){
@@ -90,7 +90,7 @@ class SerializableSettings implements java.io.Serializable{
         Snackbar.make(view, "Wrote settings to "+getPath(), Snackbar.LENGTH_SHORT).show();
 
     }
-    public static SerializableSettings readOffer(File f) throws IOException, ClassNotFoundException {
+    public static SerializableSettings readSettings(File f) throws IOException, ClassNotFoundException {
         FileInputStream fileIn = new FileInputStream(f.getPath());
         ObjectInputStream in = new ObjectInputStream(fileIn);
         SerializableSettings ss = (SerializableSettings) in.readObject();

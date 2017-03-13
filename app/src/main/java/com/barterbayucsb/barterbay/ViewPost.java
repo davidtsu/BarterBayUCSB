@@ -1,13 +1,23 @@
 package com.barterbayucsb.barterbay;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 /**
  * Created by Daniel on 2/18/2017.
@@ -18,6 +28,9 @@ public class ViewPost extends AppCompatActivity {
     TextView DescriptionTV;
     TextView ValueTV;
     TextView TimeTV;
+    TextView DistanceTV;
+    protected Activity thisActivity = this;
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,17 +44,68 @@ public class ViewPost extends AppCompatActivity {
         DescriptionTV = (TextView) findViewById(R.id.descriptionTextView);
         ValueTV = (TextView) findViewById(R.id.ValueTextView);
         TimeTV = (TextView) findViewById(R.id.TimeTextView);
+        DistanceTV = (TextView) findViewById(R.id.DistanceTextView);
         Button contactPosterButton = (Button) findViewById(R.id.contactPoster);
         Button doneButton = (Button) findViewById(R.id.doneButton);
+
+        //uses location, so it needs a permissions check
+        while (ContextCompat.checkSelfPermission(thisActivity, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            //if (ActivityCompat.shouldShowRequestPermissionRationale(thisActivity,
+            //android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+            // Show an explanation to the user *asynchronously* -- don't block
+            // this thread waiting for the user's response! After the user
+            // sees the explanation, try again to request the permission.
+
+            //} else {
+
+            // No explanation needed, we can request the permission.
+
+            ActivityCompat.requestPermissions(thisActivity, new String[]{ACCESS_FINE_LOCATION}, PostActivity.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+
+        }
+        //get current location
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Location l;
+        lm.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        }, null);
+        l =  lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Location L1 = new Location("");
+        L1.setLatitude(DispLocalOfferActivity.currentOffer.getLocation().latitude);
+        L1.setLongitude(DispLocalOfferActivity.currentOffer.getLocation().longitude);
+
+
+
+
 
         //display info in currentOffer
         IV.setImageBitmap(DispLocalOfferActivity.currentOffer.image);
         TitleTV.setText(DispLocalOfferActivity.currentOffer.getName());
         DescriptionTV.setText(DispLocalOfferActivity.currentOffer.getDescription());
         ValueTV.setText("Estimated Value: "+PostActivity.valueStrings[DispLocalOfferActivity.currentOffer.getValue()]+".");
-        //TimeTV.setText("Submitted on "+DispLocalOfferActivity.currentOffer.id);
         TimeTV.setText(new TimeFormatter().formattedAge(DispLocalOfferActivity.currentOffer.id));
-
+        //DistanceTV.setText(new DecimalFormat("#.##").format(l.distanceTo(L1))+" km away.");
+        DistanceTV.setText("");
         doneButton.setOnClickListener(new View.OnClickListener() {//end activity, clear currentOffer
             @Override
             public void onClick(View view) {

@@ -122,13 +122,12 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         });
 
 
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
-            public boolean onMarkerClick(Marker m) {
+            public void onInfoWindowClick(Marker m) {
                 Intent intent = new Intent(MapsActivityNew.this, ViewPost.class);
                 startActivity(intent);
                 DispLocalOfferActivity.currentOffer = (Offer) m.getTag();
-                return true;
             }
         });
 
@@ -153,7 +152,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(l.getLatitude(),l.getLongitude()), 12.0f));
         mMap.addCircle(new CircleOptions().center(
                 new LatLng(l.getLatitude(),l.getLongitude()))
-                .radius((float)10*(1+SettingsActivity.Preferences.getDISTANCE()))
+                .radius((float)10*(100+SettingsActivity.Preferences.getDISTANCEfloat()))
                 .strokeColor(Color.argb(0xFF,0x21,0x07,0x6d))
                 .fillColor(Color.argb(0x22,0x21,0x07,0x6d)));   //adds a circle that is radius 10000 (units?) with border color that is the accent color and fill color that is a translucent accent color
     }

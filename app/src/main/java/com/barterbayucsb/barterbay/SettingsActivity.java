@@ -45,42 +45,9 @@ public class SettingsActivity extends AppCompatActivity {
         final RadioButton priceButton = (RadioButton) findViewById(R.id.priceButton);
         final Switch filterSwitch = (Switch) findViewById(R.id.switch2);
 
+        initializePreferences(view);
 
 
-
-        File settingsPath = new File(SerializableSettings.getPath());
-        if(settingsPath.exists()) {
-            try {
-                Preferences = SerializableSettings.readOffer(settingsPath);
-            } catch (IOException e) {
-                e.printStackTrace();
-                Snackbar.make(view, "Error reading from " + SerializableSettings.getPath()+ ". Initialized default settings.", Snackbar.LENGTH_LONG).show();
-                SerializableSettings defaultConfig = new SerializableSettings(1000, true, false, false, true); //default configs are 10.0km, filter by age, filter low to high
-                Preferences = defaultConfig;
-
-
-            } catch (ClassNotFoundException e) {
-
-                e.printStackTrace();
-                Snackbar.make(view, "Error reading from " + SerializableSettings.getPath() +". Initialized default settings.", Snackbar.LENGTH_SHORT).show();
-                SerializableSettings defaultConfig = new SerializableSettings(1000, true, false, false, true); //default configs are 10.0km, filter by age, filter low to high
-                Preferences = defaultConfig;
-
-            }
-        }
-        else {
-            SerializableSettings defaultConfig = new SerializableSettings(1000, true, false, false, true); //default configs are 10.0km, filter by age, filter low to high
-            Preferences = defaultConfig;
-            try {
-                defaultConfig.writeSettings(view);
-                Snackbar.make(view, "Wrote default settings to " + SerializableSettings.getPath(), Snackbar.LENGTH_LONG).show();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                Snackbar.make(view, "Error writing default settings to " + SerializableSettings.getPath(), Snackbar.LENGTH_LONG).show();
-
-            }
-        }
 
         //final TextView sliderLabel = (TextView) findViewById(R.id.sliderLabelText);
 
@@ -172,5 +139,42 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
+    public static void initializePreferences(View view)
+    {
+        File settingsPath = new File(SerializableSettings.getPath());
+        if(settingsPath.exists()) {
+            try {
+                Preferences = SerializableSettings.readSettings(settingsPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Snackbar.make(view, "Error reading from " + SerializableSettings.getPath()+ ". Initialized default settings.", Snackbar.LENGTH_LONG).show();
+                SerializableSettings defaultConfig = new SerializableSettings(1000, true, false, false, true); //default configs are 10.0km, filter by age, filter low to high
+                Preferences = defaultConfig;
 
+
+            } catch (ClassNotFoundException e) {
+
+                e.printStackTrace();
+                Snackbar.make(view, "Error reading from " + SerializableSettings.getPath() +". Initialized default settings.", Snackbar.LENGTH_SHORT).show();
+                SerializableSettings defaultConfig = new SerializableSettings(1000, true, false, false, true); //default configs are 10.0km, filter by age, filter low to high
+                Preferences = defaultConfig;
+
+            }
+        }
+        else {
+            SerializableSettings defaultConfig = new SerializableSettings(1000, true, false, false, true); //default configs are 10.0km, filter by age, filter low to high
+            Preferences = defaultConfig;
+            try {
+                defaultConfig.writeSettings(view);
+                Snackbar.make(view, "Wrote default settings to " + SerializableSettings.getPath(), Snackbar.LENGTH_LONG).show();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                Snackbar.make(view, "Error writing default settings to " + SerializableSettings.getPath(), Snackbar.LENGTH_LONG).show();
+
+            }
+        }
+
+
+    }
 }
