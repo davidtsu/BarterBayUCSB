@@ -139,48 +139,13 @@ class ServerGate {
         }
     }
 
-   static ArrayList<Offer> retrieve_offer(String user_id) throws IOException {
-        ArrayList<Offer> offers = new ArrayList<Offer>();
-        String offer_id = "", description = "", line = "";
-        Bitmap bmp;
-        int counter = 0;
-        String temp = SERVER_URL + "/users/" + user_id;
-        URL url = new URL(temp);
-        URLConnection con = url.openConnection();
-        InputStream is = con.getInputStream();
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
-        while ((line = br.readLine()) != null) {
-            line = line.replaceAll("\\s","");
-            System.out.println(line);
-            if(line.contains("micropost-")) {
-                int index = line.indexOf("micropost-");
-                String part = line.substring(index+10);
-                int quote = part.indexOf("\"");
-                offer_id = part.substring(0, quote);
-            }
-            else if(line.equals("<spanclass=\"content\">")) {
-                line = br.readLine().trim();
-                description = line;
-            }
-            else if(line.contains("amazonaws")) {
-                int index = line.indexOf("http");
-                String part = line.substring(index+5);
-                int quote = part.indexOf("\"");
-                String link = "http" + part.substring(0, quote);
-                offers.add(new Offer(description, offer_id));
-            }
-        }
-        return new ArrayList<Offer>();
-    }
+    
+   
 
     //todo: add more methods here for interacting with server if needed
     //todo: params above like offer_id, user_id is not absolutely needed, you can change it if need
 
-    static int upload_offer(Offer offer) {
-        return RESULT_OK;
-    }
-
-    
+   
 
     static public void performPost(HttpURLConnection urlc, String encodedData) {
         OutputStreamWriter out = null;

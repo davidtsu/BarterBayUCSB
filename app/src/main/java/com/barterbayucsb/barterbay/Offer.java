@@ -36,6 +36,16 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
         image = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
     }
 
+    public Offer(String description, String id) {
+        this.description = description;
+        this.id = id;
+        name = "test title";
+        value = 1;
+        latitude = 34.4140;
+        longitude = -119.8489;
+	image = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
+    }
+
     public String getPath()
     {
         return path;
