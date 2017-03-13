@@ -2,8 +2,14 @@ package com.barterbayucsb.barterbay;
 
 import android.util.Log;
 
+import com.android.internal.http.multipart.MultipartEntity;
+
+
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -35,7 +41,8 @@ class ServerGate {
      */
     User test_user = new User();
     Offer test_offer = new Offer();
-    final static String SERVER_URL = "https://nameless-temple-44705.herokuapp.com";
+    final static String SERVER_URL = "http://nameless-temple-44705.herokuapp.com";
+    //final static String SERVER_URL = "http://0.0.0.0:3000";
     final static String LOGIN_PATH = "/login";
     //define server result code here
     private static int RESULT_OK = 0;
@@ -67,7 +74,8 @@ class ServerGate {
             performPost(urlc, encoded);
             int res_code = urlc.getResponseCode();
             if (res_code == 302) {
-                User user = new User();
+                User user = retrieve_user_by_email(user_email);
+                Log.i("user info", user.dump_info());
                 return user;
             }
             else {
@@ -78,16 +86,57 @@ class ServerGate {
             e.printStackTrace();
             return null;
         }
-
     }
 
+    private String post_userJson_url(){
+        return "http://nameless-temple-44705.herokuapp.com/user_json";
+    }
     /*
     retrieve user is a function to get user information from server.
     it sends an http request to user
      */
-    User retrieve_user(String  user_id){
-        //todo: implement this function
-        return test_user;
+    User retrieve_user_by_id(String  user_id){
+        try {
+            URL url = new URL(post_userJson_url());
+            HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+            String charset = "utf-8";
+            //String user_id = URLEncoder.encode("user[id]", CHARSET) + "=" + URLEncoder.encode("1", CHARSET);
+            String user_id_encoded = URLEncoder.encode("id", CHARSET) + "=" + URLEncoder.encode(user_id, CHARSET);
+            String utf8 = "utf8=%E2%9C%93";
+            String s[] = {utf8, user_id_encoded};
+            ArrayList<String> params = new ArrayList<String>(Arrays.asList(s));
+            String encoded = encode_list(params);
+            System.out.println(encoded);
+            performPost(urlc, encoded);
+            String json = read_url_response(urlc);
+            return jsonToUser(json);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    User retrieve_user_by_email(String  user_email){
+        try {
+            URL url = new URL(post_userJson_url());
+            HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+            String charset = "utf-8";
+            //String user_id = URLEncoder.encode("user[id]", CHARSET) + "=" + URLEncoder.encode("1", CHARSET);
+            String user_email_encoded = URLEncoder.encode("email", CHARSET) + "=" + URLEncoder.encode(user_email, CHARSET);
+            String utf8 = "utf8=%E2%9C%93";
+            String s[] = {utf8, user_email_encoded};
+            ArrayList<String> params = new ArrayList<String>(Arrays.asList(s));
+            String encoded = encode_list(params);
+            System.out.println(encoded);
+            performPost(urlc, encoded);
+            String json = read_url_response(urlc);
+            return jsonToUser(json);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /*
@@ -107,7 +156,7 @@ class ServerGate {
     static public void performPost(HttpURLConnection urlc, String encodedData) {
         OutputStreamWriter out = null;
         DataOutputStream dataout = null;
-        BufferedReader in = null;
+        System.out.println(urlc.getURL());
         try {
 
             urlc.setRequestMethod("POST");
@@ -121,26 +170,7 @@ class ServerGate {
             dataout = new DataOutputStream(urlc.getOutputStream());
             // perform POST operation
             dataout.writeBytes(encodedData);
-            int responseCode = urlc.getResponseCode();
-            System.out.println("response code:" + (new Integer(responseCode)).toString());
-            in = new BufferedReader(new InputStreamReader(urlc.getInputStream()),8096);
-            String response;
-            // write html to System.out for debug
-            response = in.readLine();
-            while(response != null){
-                System.out.println(response);
-                response = in.readLine();
-            }
-            Map<String, List<String>> map = urlc.getHeaderFields();
 
-            System.out.println("Printing Response Header...\n");
-
-            for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-                System.out.println("Key : " + entry.getKey()
-                        + " ,Value : " + entry.getValue());
-            }
-
-            in.close();
         } catch (ProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -155,13 +185,7 @@ class ServerGate {
                     e.printStackTrace();
                 }
             }
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+
         }
     }
 
@@ -173,27 +197,70 @@ class ServerGate {
         }
         return res;
     }
+
+    static public String read_url_response(HttpURLConnection urlc){
+        BufferedReader in = null;
+        try {
+
+            int responseCode = urlc.getResponseCode();
+            System.out.println("response code:" + (new Integer(responseCode)).toString());
+            in = new BufferedReader(new InputStreamReader(urlc.getInputStream()), 8096);
+            String response;
+            // write html to System.out for debug
+            response = in.readLine();
+            String temp = response;
+            while (temp != null) {
+                temp = in.readLine();
+                response += temp;
+            }
+            System.out.println(response);
+            Map<String, List<String>> map = urlc.getHeaderFields();
+
+            System.out.println("Printing Response Header...\n");
+
+            for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+                System.out.println("Key : " + entry.getKey()
+                        + " ,Value : " + entry.getValue());
+            }
+            in.close();
+            return response;
+        }
+        catch (Exception e){
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static User jsonToUser(String json_s){
+        JSONObject json = null;
+        try {
+            json = new JSONObject(json_s);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        try {
+            String name = json.getString("name");
+            String id = json.getString("id");
+            String email = json.getString("email");
+            User res_user = new User(id, name, email, null);
+            res_user.dump_info();
+            return res_user;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
     public static void main(String[] args) throws Exception{
 
-        System.out.println("Hello World!");
-        String httpURL = SERVER_URL + LOGIN_PATH;
-
-
-        //utf8=%E2%9C%93&session%5Bemail%5D=dummtindex%40gmail.com&session%5Bpassword%5D=123123&session%5Bremember_me%5D=0&commit=Log+in
-        URL url = new URL(get_login_url());
-        HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-        String user_email = "dummtindex@gmail.com";
-        String user_password = "123123";
-        String charset = "utf-8";
-        String email = "session%5Bemail%5D=" + URLEncoder.encode(user_email, CHARSET);
-        String password = "session%5Bpassword%5D=" + URLEncoder.encode(user_password, CHARSET);
-        String utf8 = "utf8=%E2%9C%93";
-        String remember_me = "session%5Bremember_me%5D=" + "0";
-        String commit = "commit=Log+in";
-        String s[] = { utf8, email, password, remember_me, commit };
-        ArrayList<String> params = new ArrayList<String>(Arrays.asList(s));
-        String encoded = encode_list(params);
-        System.out.println(encoded);
-        performPost(urlc, encoded);
     }
 }
