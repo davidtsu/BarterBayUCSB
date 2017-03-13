@@ -168,7 +168,7 @@ class ServerGate {
                 offers.add(new Offer(description, offer_id));
             }
         }
-        return new ArrayList<Offer>();
+        return offers;
     }
 
     //todo: add more methods here for interacting with server if needed
