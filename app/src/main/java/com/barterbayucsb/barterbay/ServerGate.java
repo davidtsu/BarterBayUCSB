@@ -142,7 +142,6 @@ class ServerGate {
    static ArrayList<Offer> retrieve_offer(String user_id) throws IOException {
         ArrayList<Offer> offers = new ArrayList<Offer>();
         String offer_id = "", description = "", line = "";
-        Bitmap bmp;
         int counter = 0;
         String temp = SERVER_URL + "/users/" + user_id;
         URL url = new URL(temp);
