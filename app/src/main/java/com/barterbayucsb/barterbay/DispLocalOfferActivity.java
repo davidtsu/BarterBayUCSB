@@ -83,7 +83,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(page>=maxPage)
+                if(page >= maxPage)
                     return;
                 page ++;
                 displayPosts();
@@ -175,98 +175,90 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
     protected void getDevicePosts(View view) {
         RetrieveOffersTask rt = new RetrieveOffersTask();
-
+        LocalOffers = new ArrayList<Offer>();
         File _offers = new File(getExternalStorageDirectory().toString() + "/offers/");
         Snackbar.make(view, "got offers from" + getExternalStorageDirectory().toString() + "/offers/", Snackbar.LENGTH_SHORT).show();
 
-        if (!_offers.isDirectory()) {
+        if (!_offers.isDirectory() || _offers.listFiles() == null) {
             displayPosts();
             updateButtons();
-            return;
         }
-        //File[] allOffers = _offers.listFiles();
-        if (_offers.listFiles() == null) {
-            displayPosts();
-            updateButtons();
-            return;
-        }
-        int i = 0;
-        while (ContextCompat.checkSelfPermission(thisActivity, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            //if (ActivityCompat.shouldShowRequestPermissionRationale(thisActivity,
-            //android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+        else {
+            int i = 0;
+            while (ContextCompat.checkSelfPermission(thisActivity, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                //if (ActivityCompat.shouldShowRequestPermissionRationale(thisActivity,
+                //android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 
-            // Show an explanation to the user *asynchronously* -- don't block
-            // this thread waiting for the user's response! After the user
-            // sees the explanation, try again to request the permission.
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
 
-            //} else {
+                //} else {
 
-            // No explanation needed, we can request the permission.
+                // No explanation needed, we can request the permission.
 
-            ActivityCompat.requestPermissions(thisActivity, new String[]{ACCESS_FINE_LOCATION}, PostActivity.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                ActivityCompat.requestPermissions(thisActivity, new String[]{ACCESS_FINE_LOCATION}, PostActivity.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
 
-
-        }
-        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        final Location l;
-        lm.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
 
             }
+            final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            final Location l;
+            lm.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
 
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {
+                }
 
-            }
+                @Override
+                public void onStatusChanged(String s, int i, Bundle bundle) {
 
-            @Override
-            public void onProviderEnabled(String s) {
+                }
 
-            }
+                @Override
+                public void onProviderEnabled(String s) {
 
-            @Override
-            public void onProviderDisabled(String s) {
+                }
 
-            }
-        }, null);
-        l =  lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                @Override
+                public void onProviderDisabled(String s) {
 
-        for (File f : _offers.listFiles()) {
-            try {
+                }
+            }, null);
+            l = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            for (File f : _offers.listFiles()) {
+                try {
 
 //                LocalOffers.add(LocalOffers.size(), SerializableOffer.readOffer(f));
-                Offer newOffer = SerializableOffer.readOffer(f);
-                if(newOffer.image==null)
-                    newOffer.image = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
-                Location L1 = new Location("");
-                L1.setLatitude(newOffer.getLocation().latitude);
-                L1.setLongitude(newOffer.getLocation().longitude);
-                float distance = l.distanceTo(L1);
-                float distancePrefs = SettingsActivity.Preferences.getDISTANCEfloat()*10.0f;
-                if((distance <= SettingsActivity.Preferences.getDISTANCEfloat()*10.0f + 1000.0f))
+                    Offer newOffer = SerializableOffer.readOffer(f);
+                    if (newOffer.image == null)
+                        newOffer.image = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
+                    Location L1 = new Location("");
+                    L1.setLatitude(newOffer.getLocation().latitude);
+                    L1.setLongitude(newOffer.getLocation().longitude);
+                    float distance = l.distanceTo(L1);
+                    float distancePrefs = SettingsActivity.Preferences.getDISTANCEfloat() * 10.0f;
+                    if ((distance <= SettingsActivity.Preferences.getDISTANCEfloat() * 10.0f + 1000.0f))
+                        LocalOffers.add(i, newOffer);
+                    i++;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Snackbar.make(view, "Error reading from " + f.getPath(), Snackbar.LENGTH_LONG).show();
 
+                } catch (ClassNotFoundException e) {
 
-                LocalOffers.add(i,newOffer);
+                    e.printStackTrace();
+                    Snackbar.make(view, "Error reading from " + f.getPath(), Snackbar.LENGTH_SHORT).show();
+                }
 
-                i++;
-            } catch (IOException e) {
-                e.printStackTrace();
-                Snackbar.make(view, "Error reading from " + f.getPath(), Snackbar.LENGTH_LONG).show();
-
-            } catch (ClassNotFoundException e) {
-
-                e.printStackTrace();
-                Snackbar.make(view, "Error reading from " + f.getPath(), Snackbar.LENGTH_SHORT).show();
             }
-
-
         }
 
         try {
 
-            rt.execute(LocalOffers).get(10, TimeUnit.SECONDS);
+            rt.execute(LocalOffers).get(100, TimeUnit.SECONDS);
             for (Offer offer : LocalOffers){
+                System.out.println("An offer in getdevice:");
                 System.out.println(offer);
             }
         }
@@ -409,11 +401,10 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         for (int i = 1; i < 7 ; i++) {
             if ( i + 7 * (page - 1) >= LocalOffers.size()) break;
             Offer offer = LocalOffers.get(i + 7 * (page - 1));
-            if (!LocalOffers.get(i + 7 * (page - 1)).id.equals("test id")) {
-                info_texts.get(i).setText(LocalOffers.get(i + 7 * (page - 1)).getName());
+            if (!offer.id.equals("test id")) {
+                info_texts.get(i).setText(offer.getName());
                 images.get(i).setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(i + 7 * (page - 1)).image), 100, 100, false));
                 cards.get(i).setVisibility(View.VISIBLE);
-
                 info_texts.get(i).setClickable(true);
                 cards.get(i).animate();
             } else {
@@ -557,8 +548,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
     protected void updateButtons()
     {
-        maxPage = LocalOffers.size()/7;
-        if (maxPage % 7 != 0) maxPage += 1;
+        maxPage = (LocalOffers.size()+6)/7;
 
         if(page>=maxPage)
         {

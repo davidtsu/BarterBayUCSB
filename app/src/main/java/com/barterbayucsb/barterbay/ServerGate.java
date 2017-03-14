@@ -167,7 +167,7 @@ class ServerGate {
         }
     }
 
-    private int TIME_LIMIT = 10;
+    private int TIME_LIMIT = 1000;
     public User retrieve_user_by_id(String id){
         try {
             new RetrieveTasks("retrieve_user_by_id", id).execute().get(TIME_LIMIT, TimeUnit.SECONDS);
@@ -180,7 +180,7 @@ class ServerGate {
 
     public Offer retrieve_offer_by_id(String id){
         try {
-            new RetrieveTasks("retrieve_offer_by_id", id).execute().get(TIME_LIMIT, TimeUnit.SECONDS);
+            new RetrieveTasks("retrieve_offer_by_id", id).execute().get(TIME_LIMIT, TimeUnit.MICROSECONDS);
         }
         catch(Exception e){
             e.printStackTrace();
@@ -389,6 +389,7 @@ class ServerGate {
             String created_at = json.getString("created_at");
             String updated_at = json.getString("updated_at");
             String picture_url = json.getJSONObject("picture").getString("url");
+            picture_url = picture_url.replace("https", "http");
             Bitmap offer_pic = read_image_to_bitmap(picture_url);
             Offer offer = new Offer(id, user_id, content, picture_url, updated_at, created_at, offer_pic);
             return offer;
@@ -404,6 +405,7 @@ class ServerGate {
             URL url = new URL(picture_url);
             HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
             urlc.setRequestMethod("GET");
+            urlc.setRequestProperty("Host", "barterbay.s3.amazonaws.com");
             urlc.setDoOutput(true);
             urlc.setDoInput(true);
             //urlc.setUseCaches(false);
