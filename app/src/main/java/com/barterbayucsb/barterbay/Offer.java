@@ -73,8 +73,8 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
         this.updated_at = updated_at;
         this.created_at = created_at;
 
-        //this.name = this.description + " by " + mGate.retrieve_user_by_id(user_id).get_name();
-        this.name = "default name";
+        this.name = this.description + " by " + (new ServerGate()).retrieve_user_by_id_direct(user_id).get_name();
+        //this.name = "default name";
         if (offer_pic == null){
             System.out.println("online offer using default pic");
             this.image = DEFAULT_BITMAP;
