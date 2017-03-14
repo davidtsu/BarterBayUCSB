@@ -57,12 +57,12 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         LocalOffers = new ArrayList<Offer>();
         setContentView(R.layout.localoffersnew);
         super.onCreate(savedInstanceState);
-
+        /*
         for(int i=0; i<8; i++) {
 
             LocalOffers.add(new Offer()); //so that we don't try to display offers that don't exist
 
-        }
+        }*/
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingMapButton);
         Button DELETE = (Button) findViewById(R.id.deletebutton);
 
@@ -75,6 +75,8 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
         initializeTextsAndImages();
         getDevicePosts(thisView);
+        displayPosts();
+        updateButtons();
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
