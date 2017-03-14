@@ -1,5 +1,6 @@
 package com.barterbayucsb.barterbay;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Ming Chen on 2/7/2017.
@@ -41,6 +43,8 @@ class ServerGate {
     private static String HEADER_USER_AGENT_VALUE= "android";
     private static String HEADER_USER_AGENT= "User-Agent";
     private static String CHARSET = "utf-8";
+    private User mUser = null;
+    private Offer mOffer = null;
 
     static public  String get_login_url(){
         return SERVER_URL + LOGIN_PATH;
@@ -88,7 +92,7 @@ class ServerGate {
     retrieve user is a function to get user information from server.
     it sends an http request to user
      */
-    User retrieve_user_by_id(String  user_id){
+    User retrieve_user_by_id_direct(String  user_id){
         try {
             URL url = new URL(post_userJson_url());
             HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
@@ -132,7 +136,7 @@ class ServerGate {
         }
     }
 
-    public Offer retrieve_offer_by_id( String offer_id ){
+    public Offer retrieve_offer_by_id_direct( String offer_id ){
         try {
             String ad = "http://nameless-temple-44705.herokuapp.com/offer_json";
             URL url = new URL(ad);
@@ -162,6 +166,50 @@ class ServerGate {
         }
     }
 
+    private int TIME_LIMIT = 10;
+    public User retrieve_user_by_id(String id){
+        try {
+            new RetrieveTasks("retrieve_user_by_id", id).execute().get(TIME_LIMIT, TimeUnit.SECONDS);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return mUser;
+    }
+
+    public Offer retrieve_offer_by_id(String id){
+        try {
+            new RetrieveTasks("retrieve_offer_by_id", id).execute().get(TIME_LIMIT, TimeUnit.SECONDS);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return mOffer;
+    }
+    
+    public class RetrieveTasks extends AsyncTask<String, Void, Void> {
+
+
+        private String task;
+        private String id;
+
+        RetrieveTasks(String task, String id) {
+            this.task = task;
+            this.id = id;
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+            if (task == "retrieve_user_by_id"){
+                mUser = retrieve_user_by_id_direct(id);
+            }
+            if (task == "retrieve_offer_by_id"){
+                mOffer = retrieve_offer_by_id_direct(id);
+            }
+            return null;
+        }
+
+    }
     static ArrayList<Offer> retrieve_offers(String user_id) throws IOException {
         ArrayList<Offer> offers = new ArrayList<Offer>();
         String offer_id = "", description = "", line = "";
