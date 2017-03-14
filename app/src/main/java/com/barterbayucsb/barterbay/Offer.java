@@ -73,18 +73,17 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
         this.updated_at = updated_at;
         this.created_at = created_at;
 
-
         //this.name = this.description + " by " + mGate.retrieve_user_by_id(user_id).get_name();
         this.name = "default name";
         if (offer_pic == null){
+            System.out.println("online offer using default pic");
             this.image = DEFAULT_BITMAP;
         }
         else {
             this.image = Bitmap.createScaledBitmap(offer_pic, PICTURE_SIZE, PICTURE_SIZE, false);
         }
-
-
     }
+
     public String get_time_stamp(){
         return this.updated_at;
     }
@@ -118,6 +117,7 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
     public void setDescription(String s) {
         description = s;
     }
+
     public void writeOffer(View view) throws IOException {
         SerializableOffer SO = new SerializableOffer(this);
         SO.writeOffer(view);

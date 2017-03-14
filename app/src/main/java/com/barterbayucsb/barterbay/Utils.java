@@ -29,7 +29,7 @@ public class Utils {
             Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
             return bitmap;
         } catch (Exception e) {
-            e.getMessage();
+            e.printStackTrace();
             return null;
         }
     }

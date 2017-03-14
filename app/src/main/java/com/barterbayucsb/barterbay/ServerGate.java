@@ -1,6 +1,9 @@
 package com.barterbayucsb.barterbay;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -403,17 +406,7 @@ class ServerGate {
     static public Bitmap read_image_to_bitmap(String picture_url){
         try {
             URL url = new URL(picture_url);
-            HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-            urlc.setRequestMethod("GET");
-            urlc.setRequestProperty("Host", "barterbay.s3.amazonaws.com");
-            urlc.setDoOutput(true);
-            urlc.setDoInput(true);
-            //urlc.setUseCaches(false);
-            urlc.setInstanceFollowRedirects(false);
-            urlc.setAllowUserInteraction(false);
-            urlc.setRequestProperty(HEADER_USER_AGENT, HEADER_USER_AGENT_VALUE);
-            String output = read_url_response(urlc);
-            Bitmap bitmap = Utils.StringToBitMap(output);
+            Bitmap bitmap =  BitmapFactory.decodeStream(url.openConnection().getInputStream());
             return bitmap;
         }
 
