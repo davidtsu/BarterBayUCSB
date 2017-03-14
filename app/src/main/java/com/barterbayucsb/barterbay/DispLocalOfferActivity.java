@@ -179,6 +179,17 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         LocalOffers = new ArrayList<Offer>();
         File _offers = new File(getExternalStorageDirectory().toString() + "/offers/");
         Snackbar.make(view, "got offers from" + getExternalStorageDirectory().toString() + "/offers/", Snackbar.LENGTH_SHORT).show();
+        try {
+            RetrieveOffersTask rt = new RetrieveOffersTask();
+            rt.execute(LocalOffers).get(100, TimeUnit.SECONDS);
+            for (Offer offer : LocalOffers){
+                System.out.println("An offer in getdevice:");
+                System.out.println(offer);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
         if (!_offers.isDirectory() || _offers.listFiles() == null) {
             displayPosts();
@@ -240,7 +251,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
                     float distance = l.distanceTo(L1);
                     float distancePrefs = SettingsActivity.Preferences.getDISTANCEfloat() * 10.0f;
                     if ((distance <= SettingsActivity.Preferences.getDISTANCEfloat() * 10.0f + 1000.0f)) {
-                        LocalOffers.add(i, newOffer);
+                        LocalOffers.add(newOffer);
                     }
                     i++;
                 } catch (IOException e) {
@@ -256,17 +267,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
             }
         }
 
-        try {
-            RetrieveOffersTask rt = new RetrieveOffersTask();
-            rt.execute(LocalOffers).get(100, TimeUnit.SECONDS);
-            for (Offer offer : LocalOffers){
-                System.out.println("An offer in getdevice:");
-                System.out.println(offer);
-            }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+
         //displayPostsOld(t);
         sortPosts();
 
