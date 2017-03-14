@@ -9,6 +9,8 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static com.barterbayucsb.barterbay.DispLocalOfferActivity.newArray;
+
 /**
  * Created by Ming Chen on 2/7/2017.
  */
@@ -30,6 +32,7 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
     private String created_at = null;
     private String TEST_UPDATE_TIME = "2017-03-12T23:30:19.214Z";
     Bitmap image;
+    Bitmap DEFAULT_BITMAP = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
 
     String id;
 
@@ -45,7 +48,7 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
         longitude = -119.8489;
         updated_at = TEST_UPDATE_TIME;
 
-        image = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
+        image = DEFAULT_BITMAP;
     }
 
     public Offer(String description, String id) {
@@ -56,6 +59,7 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
         latitude = 34.4140;
         longitude = -119.8489;
         updated_at = TEST_UPDATE_TIME;
+        this.image = DEFAULT_BITMAP;
        
     }
 
@@ -72,6 +76,7 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
 
         //this.name = this.description + " by " + mGate.retrieve_user_by_id(user_id).get_name();
         this.name = "default name";
+        this.image = DEFAULT_BITMAP;
 
 
     }
