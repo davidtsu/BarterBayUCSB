@@ -151,11 +151,12 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         @Override
         protected ArrayList<Offer> doInBackground(ArrayList<Offer>... params) {
             ServerGate gate = new ServerGate();
-            ArrayList<Offer> offers = params[0];
+            ArrayList<Offer> offers = LocalOffers;
 
 
             for (int id = 1; id < Offer.TOTAL_OFFER_NUM; id ++){
-                Offer offer = gate.retrieve_offer_by_id((new Integer(id)).toString());
+                System.out.println("getting offer id=" + (new Integer(id)).toString());
+                Offer offer = gate.retrieve_offer_by_id_direct((new Integer(id)).toString());
                 if  (offer==null)continue;
                 System.out.println("good offer: " + offer.toString());
                 offers.add(offer);
@@ -174,7 +175,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
     }
 
     protected void getDevicePosts(View view) {
-        RetrieveOffersTask rt = new RetrieveOffersTask();
+
         LocalOffers = new ArrayList<Offer>();
         File _offers = new File(getExternalStorageDirectory().toString() + "/offers/");
         Snackbar.make(view, "got offers from" + getExternalStorageDirectory().toString() + "/offers/", Snackbar.LENGTH_SHORT).show();
@@ -238,8 +239,9 @@ public class DispLocalOfferActivity extends AppCompatActivity {
                     L1.setLongitude(newOffer.getLocation().longitude);
                     float distance = l.distanceTo(L1);
                     float distancePrefs = SettingsActivity.Preferences.getDISTANCEfloat() * 10.0f;
-                    if ((distance <= SettingsActivity.Preferences.getDISTANCEfloat() * 10.0f + 1000.0f))
+                    if ((distance <= SettingsActivity.Preferences.getDISTANCEfloat() * 10.0f + 1000.0f)) {
                         LocalOffers.add(i, newOffer);
+                    }
                     i++;
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -255,7 +257,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         }
 
         try {
-
+            RetrieveOffersTask rt = new RetrieveOffersTask();
             rt.execute(LocalOffers).get(100, TimeUnit.SECONDS);
             for (Offer offer : LocalOffers){
                 System.out.println("An offer in getdevice:");
@@ -360,7 +362,6 @@ public class DispLocalOfferActivity extends AppCompatActivity {
                 public int compare(Offer O1, Offer O2)
                 {
                     if(O1.id.equals("test id")||O2.id.equals("test id")) return 0;
-
                     return TimeFormatter.compareAges(O1, O2);
                 }
             });
@@ -379,8 +380,9 @@ public class DispLocalOfferActivity extends AppCompatActivity {
     }
     protected void displayPosts()
     {
-        if (LocalOffers.isEmpty()){
-            info_text1.setText("No local offers \uD83D\uDE1E");
+        System.out.println("in display posts");
+        if (LocalOffers.size() <= 7 * (page - 1)){
+            info_text1.setText("No local offers here \uD83D\uDE1E");
             info_text1.setClickable(false);
             return;
         }
@@ -399,7 +401,11 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         }
 
         for (int i = 1; i < 7 ; i++) {
-            if ( i + 7 * (page - 1) >= LocalOffers.size()) break;
+            if ( i + 7 * (page - 1) >= LocalOffers.size()){
+                cards.get(i).setVisibility(View.GONE);
+                info_texts.get(i).setClickable(false);
+                continue;
+            }
             Offer offer = LocalOffers.get(i + 7 * (page - 1));
             if (!offer.id.equals("test id")) {
                 info_texts.get(i).setText(offer.getName());
@@ -408,6 +414,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
                 info_texts.get(i).setClickable(true);
                 cards.get(i).animate();
             } else {
+
                 cards.get(i).setVisibility(View.GONE);
                 info_texts.get(i).setClickable(false);
             }

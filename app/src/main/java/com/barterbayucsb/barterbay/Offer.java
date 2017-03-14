@@ -76,7 +76,12 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
 
         //this.name = this.description + " by " + mGate.retrieve_user_by_id(user_id).get_name();
         this.name = "default name";
-        this.image = Bitmap.createScaledBitmap(offer_pic, PICTURE_SIZE, PICTURE_SIZE, false);
+        if (offer_pic == null){
+            this.image = DEFAULT_BITMAP;
+        }
+        else {
+            this.image = Bitmap.createScaledBitmap(offer_pic, PICTURE_SIZE, PICTURE_SIZE, false);
+        }
 
 
     }

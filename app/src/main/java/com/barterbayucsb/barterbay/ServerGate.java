@@ -167,10 +167,10 @@ class ServerGate {
         }
     }
 
-    private int TIME_LIMIT = 1000;
+    private int TIME_LIMIT = 100;
     public User retrieve_user_by_id(String id){
         try {
-            new RetrieveTasks("retrieve_user_by_id", id).execute().get(TIME_LIMIT, TimeUnit.SECONDS);
+            new RetrieveTasks("retrieve_user_by_id", id).execute().get(TIME_LIMIT, TimeUnit.MILLISECONDS);
         }
         catch(Exception e){
             e.printStackTrace();
@@ -180,7 +180,7 @@ class ServerGate {
 
     public Offer retrieve_offer_by_id(String id){
         try {
-            new RetrieveTasks("retrieve_offer_by_id", id).execute().get(TIME_LIMIT, TimeUnit.MICROSECONDS);
+            new RetrieveTasks("retrieve_offer_by_id", id).execute().get(TIME_LIMIT, TimeUnit.MILLISECONDS);
         }
         catch(Exception e){
             e.printStackTrace();
@@ -311,7 +311,7 @@ class ServerGate {
                 temp = in.readLine();
             }
             System.out.println(response);
-
+            /*
             Map<String, List<String>> map = urlc.getHeaderFields();
 
             System.out.println("Printing Response Header...\n");
@@ -319,7 +319,7 @@ class ServerGate {
             for (Map.Entry<String, List<String>> entry : map.entrySet()) {
                 System.out.println("Key : " + entry.getKey()
                         + " ,Value : " + entry.getValue());
-            }
+            }*/
             in.close();
             return response;
         }
