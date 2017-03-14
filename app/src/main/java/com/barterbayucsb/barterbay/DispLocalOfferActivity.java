@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.concurrent.TimeUnit;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.os.Environment.getExternalStorageDirectory;
@@ -123,6 +122,13 @@ public class DispLocalOfferActivity extends AppCompatActivity {
                     Snackbar.make(view, "Error wiping " + getExternalStorageDirectory().toString() + "/offers/", Snackbar.LENGTH_SHORT).show();
 
                 }
+                LocalOffers = new ArrayList<Offer>(); //should implement this change when switching branches
+                for(int i=0; i<8; i++) {
+
+                    LocalOffers.add(new Offer()); //so that we don't try to display offers that don't exist
+
+                }
+
                 getDevicePosts(thisView);
                 sortPosts();
                 displayPosts();
@@ -169,7 +175,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
     }
 
     protected void getDevicePosts(View view) {
-        RetrieveOffersTask rt = new RetrieveOffersTask();
+        //RetrieveOffersTask rt = new RetrieveOffersTask();
 
         File _offers = new File(getExternalStorageDirectory().toString() + "/offers/");
         Snackbar.make(view, "got offers from" + getExternalStorageDirectory().toString() + "/offers/", Snackbar.LENGTH_SHORT).show();
@@ -226,48 +232,52 @@ public class DispLocalOfferActivity extends AppCompatActivity {
             }
         }, null);
         l =  lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-        for (File f : _offers.listFiles()) {
-            try {
-
+        try {
+            for (File f : _offers.listFiles()) {
+                try {
+                    //commented out for sysdemo //TODO: Fix implementation in formatting
 //                LocalOffers.add(LocalOffers.size(), SerializableOffer.readOffer(f));
-                Offer newOffer = SerializableOffer.readOffer(f);
-                if(newOffer.image==null)
-                    newOffer.image = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
-                Location L1 = new Location("");
-                L1.setLatitude(newOffer.getLocation().latitude);
-                L1.setLongitude(newOffer.getLocation().longitude);
-                float distance = l.distanceTo(L1);
-                float distancePrefs = SettingsActivity.Preferences.getDISTANCEfloat()*10.0f;
-                if((distance <= SettingsActivity.Preferences.getDISTANCEfloat()*10.0f + 1000.0f))
+                    Offer newOffer = SerializableOffer.readOffer(f);
+                    if (newOffer.image == null)
+                        newOffer.image = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
+                    Location L1 = new Location("");
+                    L1.setLatitude(newOffer.getLocation().latitude);
+                    L1.setLongitude(newOffer.getLocation().longitude);
+                    float distance = l.distanceTo(L1);
+                    float distancePrefs = SettingsActivity.Preferences.getDISTANCEfloat() * 10.0f;
+                    if ((distance <= SettingsActivity.Preferences.getDISTANCEfloat() * 10.0f + 1000.0f))
 
 
-                LocalOffers.add(i,newOffer);
+                        LocalOffers.add(i, newOffer);
 
-                i++;
-            } catch (IOException e) {
-                e.printStackTrace();
-                Snackbar.make(view, "Error reading from " + f.getPath(), Snackbar.LENGTH_LONG).show();
+                    i++;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Snackbar.make(view, "Error reading from " + f.getPath(), Snackbar.LENGTH_LONG).show();
 
-            } catch (ClassNotFoundException e) {
+                } catch (ClassNotFoundException e) {
 
-                e.printStackTrace();
-                Snackbar.make(view, "Error reading from " + f.getPath(), Snackbar.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                    Snackbar.make(view, "Error reading from " + f.getPath(), Snackbar.LENGTH_SHORT).show();
+                }
+
+
             }
-
+        }
+        catch(Exception e){
 
         }
-
-        try {
+        //commented out for sysdemo //TODO: Fix implementation in formatting
+        /*try {
 
             rt.execute(LocalOffers).get(10, TimeUnit.SECONDS);
             for (Offer offer : LocalOffers){
                 System.out.println(offer);
             }
-        }
+        }*
         catch (Exception e){
             e.printStackTrace();
-        }
+        }*/
         //displayPostsOld(t);
         sortPosts();
 
@@ -390,11 +400,12 @@ public class DispLocalOfferActivity extends AppCompatActivity {
             info_text1.setClickable(true);
             card1.animate();
         }
-        else if(LocalOffers.size() <= 7)
+        else if(LocalOffers.size() == 8 && LocalOffers.get(0).id.equals("test id"))
         {
             //card1.setVisibility(View.GONE);
             info_text1.setText("No local offers \uD83D\uDE1E");
-
+            image1.setImageBitmap(Bitmap.createBitmap(
+                    new int[]{0x00000000, 0x00000000, 0x00000000, 0x00000000}, 2, 2, Bitmap.Config.ALPHA_8)); // should implement this change when switching branches.
             info_text1.setClickable(false);
         }
 
@@ -583,8 +594,8 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
     protected void updateButtons()
     {
-        maxPage = LocalOffers.size()/7;
-
+        maxPage = (LocalOffers.size()-2)/7;
+        if(maxPage==0)maxPage = 1;
         if(page>=maxPage)
         {
             nextButton.setEnabled(false);
