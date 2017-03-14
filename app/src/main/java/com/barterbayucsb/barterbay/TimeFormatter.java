@@ -28,13 +28,14 @@ public class TimeFormatter {
     }
     public TimeFormatter(String timestamp)
     {
-        year = Integer.parseInt(timestamp.substring(0,4));
-        month = Integer.parseInt(timestamp.substring(5,7));
-        day = Integer.parseInt(timestamp.substring(8,10));
-        hour = Integer.parseInt(timestamp.substring(11,13));
-        minute = Integer.parseInt(timestamp.substring(14,16));
-        second = Integer.parseInt(timestamp.substring(17,19));
-
+        if(timestamp.length() > 3) {
+            year = Integer.parseInt(timestamp.substring(0, 4));
+            month = Integer.parseInt(timestamp.substring(5, 7));
+            day = Integer.parseInt(timestamp.substring(8, 10));
+            hour = Integer.parseInt(timestamp.substring(11, 13));
+            minute = Integer.parseInt(timestamp.substring(14, 16));
+            second = Integer.parseInt(timestamp.substring(17, 19));
+        }
 
     }
     public static int compareAges(Offer O1, Offer O2){

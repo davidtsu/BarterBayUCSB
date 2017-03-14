@@ -5,44 +5,33 @@
     android:weightSum="1">
 
     <TextView
-        android:text="Maximum Distance"
+        android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView2"
         android:padding="4dp"
+        android:text="Maximum Distance"
         android:textAppearance="@android:style/TextAppearance.Material.Body1"
         android:textSize="16sp" />
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <GridLayout
         android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:weightSum="1"
-        android:layout_weight="0.00">
+        android:layout_height="32dp">
 
         <TextView
-            android:text="0"
-            android:layout_width="wrap_content"
-            android:layout_height="31dp"
             android:id="@+id/sliderLabelText"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:layout_weight="0.35"
-            android:gravity="center_vertical|center_horizontal" />
+            android:layout_width="67dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.53"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="0" />
 
         <SeekBar
-            android:layout_width="294dp"
-            android:layout_height="match_parent"
             android:id="@+id/seekBar"
-            android:layout_gravity="right"
-            android:layout_weight="0.67" />
-
-    </LinearLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.04" />
+            android:layout_width="271dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.21" />
+    </GridLayout>
 
     <View
         android:layout_width="match_parent"
@@ -63,39 +52,40 @@
 
 
     <RadioGroup
+        android:id="@+id/radioGroup"
         android:layout_width="match_parent"
         android:layout_height="135dp"
-        android:paddingLeft="4dp"
-        android:id="@+id/radioGroup">
+        android:paddingLeft="4dp">
 
         <RadioButton
-            android:text="Age"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/ageButton"
-            android:layout_weight="1" />
-
-        <RadioButton
-            android:text="Location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Age" />
+
+        <RadioButton
             android:id="@+id/locationButton"
-            android:layout_weight="1" />
-
-        <RadioButton
-            android:text="Price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Distance" />
+
+        <RadioButton
             android:id="@+id/priceButton"
-            android:layout_weight="1" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Price" />
 
     </RadioGroup>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="114dp"
+        android:layout_height="35dp"
         android:orientation="horizontal"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:layout_weight="0.11">
 
         <Switch
             android:id="@+id/switch2"
@@ -116,10 +106,36 @@
             android:textSize="14sp" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.09"
+        android:paddingBottom="4dp"
+        android:paddingLeft="4dp"
+        android:paddingTop="12dp"
+        android:text="Your Phone Number"
+        android:textAppearance="@android:style/TextAppearance.Material.Body1"
+        android:textSize="16sp" />
+
+    <EditText
+        android:hint="(123) 456-7890"
+        android:id="@+id/editPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:maxLength="14"
+        android:inputType="phone" />
+
     <Space
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.95" />
+        android:layout_weight="0.80" />
 
     <Button
         android:text="DONE"

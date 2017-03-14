@@ -21,18 +21,30 @@ class SerializableSettings implements java.io.Serializable{
     private boolean FILTER_BY_AGE = false,FILTER_BY_LOCATION = false,FILTER_BY_PRICE = false,FILTER_LOW_TO_HIGH = false;
     private int DISTANCE = 0;
 
+
+    private String PhoneNo = "(123) 456-7890";
+
     private final long serialVersionUID = ObjectStreamClass.lookup(this.getClass()).getSerialVersionUID();
 
-    public SerializableSettings(int DISTANCE, boolean FILTER_BY_AGE, boolean FILTER_BY_LOCATION, boolean FILTER_BY_PRICE, boolean FILTER_LOW_TO_HIGH) {
+    public SerializableSettings(int DISTANCE, boolean FILTER_BY_AGE, boolean FILTER_BY_LOCATION, boolean FILTER_BY_PRICE, boolean FILTER_LOW_TO_HIGH, String PhoneNo) {
         this.DISTANCE = DISTANCE;
         this.FILTER_BY_AGE = FILTER_BY_AGE;
         this.FILTER_BY_LOCATION = FILTER_BY_LOCATION;
         this.FILTER_BY_PRICE = FILTER_BY_PRICE;
         this.FILTER_LOW_TO_HIGH = FILTER_LOW_TO_HIGH;
+        this.PhoneNo = PhoneNo;
     }
 
     public SerializableSettings() {
     }
+    public String getPhoneNo() {
+        return PhoneNo;
+    }
+
+    public void setPhoneNo(String phoneNo) {
+        PhoneNo = phoneNo;
+    }
+
     public boolean getFILTER_LOW_TO_HIGH() {return FILTER_LOW_TO_HIGH;}
     public boolean getFILTER_BY_AGE(){
         return FILTER_BY_AGE;
@@ -69,7 +81,6 @@ class SerializableSettings implements java.io.Serializable{
     }
 
     public static String getPath(){
-        //return (getExternalStorageDirectory().toString().substring(0,getExternalStorageDirectory().toString().length()-1)+"offers/"+id+".offer");  //there's probably a better way to do this
         return (getExternalStorageDirectory().toString() + "/settings/default.config");
 
     }
@@ -79,7 +90,6 @@ class SerializableSettings implements java.io.Serializable{
         File myFile = new File(path);
         myFile.getParentFile().mkdirs();                                //makes the directory for file with path obtained from getPath
         Boolean created = myFile.createNewFile();       //if the file doesn't already exist it makes the file, stores if it created a file in created (not yet being used by anything)
-        //this line always causes a java.io.IOException: No such file or directory
 
         FileOutputStream out = new FileOutputStream(myFile.toString());
         //FileOutputStream out = c.openFileOutput(getPath(), Context.MODE_PRIVATE);

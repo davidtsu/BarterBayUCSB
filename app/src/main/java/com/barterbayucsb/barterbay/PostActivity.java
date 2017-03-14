@@ -52,7 +52,7 @@ public class PostActivity extends AppCompatActivity {
         Button uploadButton = (Button) findViewById(R.id.uploadButton);
         Button doneButton = (Button) findViewById(R.id.doneButton);
 
-        final AutoCompleteTextView titleTextView = (AutoCompleteTextView) findViewById(R.id.titleTextView);
+        final AutoCompleteTextView titleTextView = (AutoCompleteTextView) findViewById(R.id.reviewTextView);
         final AutoCompleteTextView descriptionTextView = (AutoCompleteTextView) findViewById(R.id.descriptionTextView);
 
         np = (NumberPicker) findViewById(R.id.numberPicker);

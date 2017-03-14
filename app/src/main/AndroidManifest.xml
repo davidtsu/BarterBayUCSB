@@ -50,6 +50,8 @@
         <activity android:name=".PostActivity" />
         <activity android:name=".UploadPicActivity" />
         <activity android:name=".ViewPost" />
+        <activity android:name=".ReviewActivity" />
+
 
         <meta-data
             android:name="com.google.android.gms.version"

@@ -40,7 +40,7 @@ public class ViewPost extends AppCompatActivity {
 
         //initializations
         IV = (ImageView) findViewById(R.id.postImg) ;
-        TitleTV = (TextView) findViewById(R.id.titleTextView);
+        TitleTV = (TextView) findViewById(R.id.reviewTextView);
         DescriptionTV = (TextView) findViewById(R.id.descriptionTextView);
         ValueTV = (TextView) findViewById(R.id.ValueTextView);
         TimeTV = (TextView) findViewById(R.id.TimeTextView);

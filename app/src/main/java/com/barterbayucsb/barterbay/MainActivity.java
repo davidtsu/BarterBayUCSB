@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         Button local_button = (Button)findViewById(R.id.local_button);
         Button myoffers_button = (Button)findViewById(R.id.myoffers_button);
         Button legal_button = (Button)findViewById(R.id.legal_button);
+        Button review_button = (Button)findViewById(R.id.review_button);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +56,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        review_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,ReviewActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override

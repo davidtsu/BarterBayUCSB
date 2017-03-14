@@ -54,9 +54,18 @@ class SerializableOffer implements java.io.Serializable{
         description = offer.getDescription();
         value = offer.getValue();
         path = offer.getPath();
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        offer.image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        image = stream.toByteArray();
+        try {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            offer.image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            image = stream.toByteArray();
+
+        }
+        catch(Exception e)
+        {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            Bitmap.createBitmap(new int[]{0xffffffff, 0x00000000, 0x00000000, 0xffffffff}, 2, 2, Bitmap.Config.ALPHA_8).compress(Bitmap.CompressFormat.PNG, 100, stream);
+            image = stream.toByteArray();
+        }
         latitude = offer.getLocation().latitude;
         longitude = offer.getLocation().longitude;
 

@@ -2,13 +2,10 @@ package com.barterbayucsb.barterbay;
 
 import android.util.Log;
 
-
-
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,17 +15,10 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
 
 /**
  * Created by Ming Chen on 2/7/2017.
@@ -172,7 +162,7 @@ class ServerGate {
         }
     }
 
-   static ArrayList<Offer> retrieve_offers(String user_id) throws IOException {
+    static ArrayList<Offer> retrieve_offers(String user_id) throws IOException {
         ArrayList<Offer> offers = new ArrayList<Offer>();
         String offer_id = "", description = "", line = "";
         int counter = 0;
@@ -208,7 +198,7 @@ class ServerGate {
         return RESULT_OK;
     }
 
-    
+
 
     static public void performPost(HttpURLConnection urlc, String encodedData) {
         OutputStreamWriter out = null;

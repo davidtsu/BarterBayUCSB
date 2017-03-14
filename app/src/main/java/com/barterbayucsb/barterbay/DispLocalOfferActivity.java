@@ -31,7 +31,6 @@ import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.Manifest.permission.READ_CALENDAR;
 import static android.os.Environment.getExternalStorageDirectory;
 
 /**
@@ -155,6 +154,9 @@ public class DispLocalOfferActivity extends AppCompatActivity {
                 if  (offer==null)continue;
                 System.out.println("good offer: " + offer.toString());
                 offers.add(offer);
+                try{new SerializableOffer(offer).writeOffer(thisView);}
+                catch(IOException e){e.printStackTrace();}
+
             }
 
             return offers;
@@ -167,6 +169,8 @@ public class DispLocalOfferActivity extends AppCompatActivity {
     }
 
     protected void getDevicePosts(View view) {
+        RetrieveOffersTask rt = new RetrieveOffersTask();
+
         File _offers = new File(getExternalStorageDirectory().toString() + "/offers/");
         Snackbar.make(view, "got offers from" + getExternalStorageDirectory().toString() + "/offers/", Snackbar.LENGTH_SHORT).show();
 
@@ -254,7 +258,6 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
         }
 
-        RetrieveOffersTask rt = new RetrieveOffersTask();
         try {
 
             rt.execute(LocalOffers).get(10, TimeUnit.SECONDS);
@@ -387,7 +390,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
             info_text1.setClickable(true);
             card1.animate();
         }
-        else
+        else if(LocalOffers.size() <= 7)
         {
             //card1.setVisibility(View.GONE);
             info_text1.setText("No local offers \uD83D\uDE1E");

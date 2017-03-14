@@ -7,8 +7,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -44,29 +46,31 @@ public class SettingsActivity extends AppCompatActivity {
         final RadioButton locationButton = (RadioButton) findViewById(R.id.locationButton);
         final RadioButton priceButton = (RadioButton) findViewById(R.id.priceButton);
         final Switch filterSwitch = (Switch) findViewById(R.id.switch2);
-
+        final EditText phoneInput = (EditText) findViewById(R.id.editPhone);
         initializePreferences(view);
 
 
 
         //final TextView sliderLabel = (TextView) findViewById(R.id.sliderLabelText);
 
-        sb.setMax(10100);
+        sb.setMax(10001);
         //sb.incrementProgressBy(1);
         sb.setProgress(Preferences.getDISTANCE());
 
+        phoneInput.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
 
-        ageButton.setChecked(Preferences.getFILTER_BY_AGE());
+                ageButton.setChecked(Preferences.getFILTER_BY_AGE());
         locationButton.setChecked(Preferences.getFILTER_BY_LOCATION());
         priceButton.setChecked(Preferences.getFILTER_BY_PRICE());
         filterSwitch.setChecked(Preferences.getFILTER_LOW_TO_HIGH());
+        phoneInput.setText(Preferences.getPhoneNo());
 
         float currentValue = ((float) (Preferences.getDISTANCE()-1 )/ 100);
         if(currentValue>1)
             sliderLabel.setText(Float.toString(currentValue) + " km");
         else
-            sliderLabel.setText("1 km");
+            sliderLabel.setText("1.00 km");
 
 
 
@@ -84,6 +88,7 @@ public class SettingsActivity extends AppCompatActivity {
                 Preferences.setFILTER_BY_LOCATION(locationButton.isChecked());
                 Preferences.setFILTER_BY_PRICE(priceButton.isChecked());
                 Preferences.setFILTER_LOW_TO_HIGH(filterSwitch.isChecked());
+                Preferences.setPhoneNo(phoneInput.getText().toString());
 
 
 
@@ -128,7 +133,7 @@ public class SettingsActivity extends AppCompatActivity {
                 if(currentValue>1)
                     sliderLabel.setText(Float.toString(currentValue) + " km");
                 else
-                    sliderLabel.setText("1 km");
+                    sliderLabel.setText("1.00 km");
             }
 
             @Override
@@ -148,7 +153,7 @@ public class SettingsActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
                 Snackbar.make(view, "Error reading from " + SerializableSettings.getPath()+ ". Initialized default settings.", Snackbar.LENGTH_LONG).show();
-                SerializableSettings defaultConfig = new SerializableSettings(1000, true, false, false, true); //default configs are 10.0km, filter by age, filter low to high
+                SerializableSettings defaultConfig = new SerializableSettings(1000, true, false, false, true, "(123) 456-7890"); //default configs are 10.0km, filter by age, filter low to high
                 Preferences = defaultConfig;
 
 
@@ -156,13 +161,13 @@ public class SettingsActivity extends AppCompatActivity {
 
                 e.printStackTrace();
                 Snackbar.make(view, "Error reading from " + SerializableSettings.getPath() +". Initialized default settings.", Snackbar.LENGTH_SHORT).show();
-                SerializableSettings defaultConfig = new SerializableSettings(1000, true, false, false, true); //default configs are 10.0km, filter by age, filter low to high
+                SerializableSettings defaultConfig = new SerializableSettings(1000, true, false, false, true, "(123) 456-7890"); //default configs are 10.0km, filter by age, filter low to high
                 Preferences = defaultConfig;
 
             }
         }
         else {
-            SerializableSettings defaultConfig = new SerializableSettings(1000, true, false, false, true); //default configs are 10.0km, filter by age, filter low to high
+            SerializableSettings defaultConfig = new SerializableSettings(1000, true, false, false, true, "(123) 456-7890"); //default configs are 10.0km, filter by age, filter low to high
             Preferences = defaultConfig;
             try {
                 defaultConfig.writeSettings(view);
