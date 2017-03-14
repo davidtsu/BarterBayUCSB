@@ -336,7 +336,10 @@ class ServerGate {
             String content = json.getString("content");
             String id = json.getString("id");
             String user_id = json.getString("user_id");
-            Offer offer = new Offer(id, user_id, content, null);
+            String created_at = json.getString("created_at");
+            String updated_at = json.getString("updated_at");
+            String picture_url = json.getJSONObject("picture").getString("url");
+            Offer offer = new Offer(id, user_id, content, picture_url, updated_at, created_at);
             return offer;
         }
         catch (Exception e){

@@ -103,7 +103,7 @@ public class ViewPost extends AppCompatActivity {
         TitleTV.setText(DispLocalOfferActivity.currentOffer.getName());
         DescriptionTV.setText(DispLocalOfferActivity.currentOffer.getDescription());
         ValueTV.setText("Estimated Value: "+PostActivity.valueStrings[DispLocalOfferActivity.currentOffer.getValue()]+".");
-        TimeTV.setText(new TimeFormatter().formattedAge(DispLocalOfferActivity.currentOffer.id));
+        TimeTV.setText(new TimeFormatter().formattedAge(DispLocalOfferActivity.currentOffer.get_time_stamp()));
         //DistanceTV.setText(new DecimalFormat("#.##").format(l.distanceTo(L1))+" km away.");
         DistanceTV.setText("");
         doneButton.setOnClickListener(new View.OnClickListener() {//end activity, clear currentOffer
