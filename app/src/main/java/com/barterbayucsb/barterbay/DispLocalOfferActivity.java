@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.concurrent.TimeUnit;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.os.Environment.getExternalStorageDirectory;
@@ -49,6 +50,9 @@ public class DispLocalOfferActivity extends AppCompatActivity {
     protected TextView info_text1, info_text2, info_text3, info_text4, info_text5, info_text6, info_text7, pageNo;
     protected ImageView image1, image2, image3, image4, image5, image6, image7;
     protected CardView card1, card2, card3, card4, card5, card6, card7;
+    ArrayList<TextView> info_texts;
+    ArrayList<ImageView> images;
+    ArrayList<CardView> cards;
 
     private boolean add_offer_complete_flag = false;
     @Override
@@ -56,12 +60,12 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         LocalOffers = new ArrayList<Offer>();
         setContentView(R.layout.localoffersnew);
         super.onCreate(savedInstanceState);
-
+        /*
         for(int i=0; i<8; i++) {
 
             LocalOffers.add(new Offer()); //so that we don't try to display offers that don't exist
 
-        }
+        }*/
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingMapButton);
         Button DELETE = (Button) findViewById(R.id.deletebutton);
 
@@ -74,10 +78,12 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
         initializeTextsAndImages();
         getDevicePosts(thisView);
+        displayPosts();
+        updateButtons();
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(page>=maxPage)
+                if(page >= maxPage)
                     return;
                 page ++;
                 displayPosts();
@@ -122,13 +128,6 @@ public class DispLocalOfferActivity extends AppCompatActivity {
                     Snackbar.make(view, "Error wiping " + getExternalStorageDirectory().toString() + "/offers/", Snackbar.LENGTH_SHORT).show();
 
                 }
-                LocalOffers = new ArrayList<Offer>(); //should implement this change when switching branches
-                for(int i=0; i<8; i++) {
-
-                    LocalOffers.add(new Offer()); //so that we don't try to display offers that don't exist
-
-                }
-
                 getDevicePosts(thisView);
                 sortPosts();
                 displayPosts();
@@ -152,11 +151,12 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         @Override
         protected ArrayList<Offer> doInBackground(ArrayList<Offer>... params) {
             ServerGate gate = new ServerGate();
-            ArrayList<Offer> offers = params[0];
+            ArrayList<Offer> offers = LocalOffers;
 
 
             for (int id = 1; id < Offer.TOTAL_OFFER_NUM; id ++){
-                Offer offer = gate.retrieve_offer_by_id((new Integer(id)).toString());
+                System.out.println("getting offer id=" + (new Integer(id)).toString());
+                Offer offer = gate.retrieve_offer_by_id_direct((new Integer(id)).toString());
                 if  (offer==null)continue;
                 System.out.println("good offer: " + offer.toString());
                 offers.add(offer);
@@ -175,67 +175,72 @@ public class DispLocalOfferActivity extends AppCompatActivity {
     }
 
     protected void getDevicePosts(View view) {
-        //RetrieveOffersTask rt = new RetrieveOffersTask();
 
+        LocalOffers = new ArrayList<Offer>();
         File _offers = new File(getExternalStorageDirectory().toString() + "/offers/");
         Snackbar.make(view, "got offers from" + getExternalStorageDirectory().toString() + "/offers/", Snackbar.LENGTH_SHORT).show();
-
-        if (!_offers.isDirectory()) {
-            displayPosts();
-            updateButtons();
-            return;
-        }
-        //File[] allOffers = _offers.listFiles();
-        if (_offers.listFiles() == null) {
-            displayPosts();
-            updateButtons();
-            return;
-        }
-        int i = 0;
-        while (ContextCompat.checkSelfPermission(thisActivity, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            //if (ActivityCompat.shouldShowRequestPermissionRationale(thisActivity,
-            //android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-            // Show an explanation to the user *asynchronously* -- don't block
-            // this thread waiting for the user's response! After the user
-            // sees the explanation, try again to request the permission.
-
-            //} else {
-
-            // No explanation needed, we can request the permission.
-
-            ActivityCompat.requestPermissions(thisActivity, new String[]{ACCESS_FINE_LOCATION}, PostActivity.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-
-
-        }
-        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        final Location l;
-        lm.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-
-            }
-
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String s) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String s) {
-
-            }
-        }, null);
-        l =  lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         try {
+            RetrieveOffersTask rt = new RetrieveOffersTask();
+            rt.execute(LocalOffers).get(100, TimeUnit.SECONDS);
+            for (Offer offer : LocalOffers){
+                System.out.println("An offer in getdevice:");
+                System.out.println(offer);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if (!_offers.isDirectory() || _offers.listFiles() == null) {
+            displayPosts();
+            updateButtons();
+        }
+        else {
+            int i = 0;
+            while (ContextCompat.checkSelfPermission(thisActivity, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                //if (ActivityCompat.shouldShowRequestPermissionRationale(thisActivity,
+                //android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+                //} else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(thisActivity, new String[]{ACCESS_FINE_LOCATION}, PostActivity.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+
+            }
+            final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            final Location l;
+            lm.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+
+                }
+
+                @Override
+                public void onStatusChanged(String s, int i, Bundle bundle) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String s) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String s) {
+
+                }
+            }, null);
+            l = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
             for (File f : _offers.listFiles()) {
                 try {
-                    //commented out for sysdemo //TODO: Fix implementation in formatting
+
 //                LocalOffers.add(LocalOffers.size(), SerializableOffer.readOffer(f));
                     Offer newOffer = SerializableOffer.readOffer(f);
                     if (newOffer.image == null)
@@ -245,11 +250,9 @@ public class DispLocalOfferActivity extends AppCompatActivity {
                     L1.setLongitude(newOffer.getLocation().longitude);
                     float distance = l.distanceTo(L1);
                     float distancePrefs = SettingsActivity.Preferences.getDISTANCEfloat() * 10.0f;
-                    if ((distance <= SettingsActivity.Preferences.getDISTANCEfloat() * 10.0f + 1000.0f))
-
-
-                        LocalOffers.add(i, newOffer);
-
+                    if ((distance <= SettingsActivity.Preferences.getDISTANCEfloat() * 10.0f + 1000.0f)) {
+                        LocalOffers.add(newOffer);
+                    }
                     i++;
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -261,23 +264,10 @@ public class DispLocalOfferActivity extends AppCompatActivity {
                     Snackbar.make(view, "Error reading from " + f.getPath(), Snackbar.LENGTH_SHORT).show();
                 }
 
-
             }
         }
-        catch(Exception e){
 
-        }
-        //commented out for sysdemo //TODO: Fix implementation in formatting
-        /*try {
 
-            rt.execute(LocalOffers).get(10, TimeUnit.SECONDS);
-            for (Offer offer : LocalOffers){
-                System.out.println(offer);
-            }
-        }*
-        catch (Exception e){
-            e.printStackTrace();
-        }*/
         //displayPostsOld(t);
         sortPosts();
 
@@ -373,7 +363,6 @@ public class DispLocalOfferActivity extends AppCompatActivity {
                 public int compare(Offer O1, Offer O2)
                 {
                     if(O1.id.equals("test id")||O2.id.equals("test id")) return 0;
-
                     return TimeFormatter.compareAges(O1, O2);
                 }
             });
@@ -392,100 +381,47 @@ public class DispLocalOfferActivity extends AppCompatActivity {
     }
     protected void displayPosts()
     {
-        if(!LocalOffers.get(0+7*(page-1)).id.equals("test id")) { //we don't want to display the debug filler posts.
+        System.out.println("in display posts");
+        if (LocalOffers.size() <= 7 * (page - 1)){
+            info_text1.setText("No local offers here \uD83D\uDE1E");
+            info_text1.setClickable(false);
+            return;
+        }
+
+        if (!LocalOffers.get(0 + 7 * (page - 1)).id.equals("test id")) { //we don't want to display the debug filler posts.
             info_text1.setText(LocalOffers.get(0 + 7 * (page - 1)).getName());
             image1.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(0 + 7 * (page - 1)).image), 100, 100, false));
             card1.setVisibility(View.VISIBLE);
 
             info_text1.setClickable(true);
             card1.animate();
-        }
-        else if(LocalOffers.size() == 8 && LocalOffers.get(0).id.equals("test id"))
-        {
+        } else if (LocalOffers.size() <= 7) {
             //card1.setVisibility(View.GONE);
             info_text1.setText("No local offers \uD83D\uDE1E");
-            image1.setImageBitmap(Bitmap.createBitmap(
-                    new int[]{0x00000000, 0x00000000, 0x00000000, 0x00000000}, 2, 2, Bitmap.Config.ALPHA_8)); // should implement this change when switching branches.
             info_text1.setClickable(false);
         }
 
-        if(!LocalOffers.get(1+7*(page-1)).id.equals("test id")) {
-            info_text2.setText(LocalOffers.get(1 + 7 * (page - 1)).getName());
-            image2.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(1 + 7 * (page - 1)).image), 100, 100, false));
-            card2.setVisibility(View.VISIBLE);
+        for (int i = 1; i < 7 ; i++) {
+            if ( i + 7 * (page - 1) >= LocalOffers.size()){
+                cards.get(i).setVisibility(View.GONE);
+                info_texts.get(i).setClickable(false);
+                continue;
+            }
+            Offer offer = LocalOffers.get(i + 7 * (page - 1));
+            if (!offer.id.equals("test id")) {
+                info_texts.get(i).setText(offer.getName());
+                images.get(i).setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(i + 7 * (page - 1)).image), 100, 100, false));
+                cards.get(i).setVisibility(View.VISIBLE);
+                info_texts.get(i).setClickable(true);
+                cards.get(i).animate();
+            } else {
 
-            info_text2.setClickable(true);
-            card2.animate();
-        }
-        else
-        {
-            card2.setVisibility(View.GONE);
-            info_text2.setClickable(false);
-        }
-        if(!LocalOffers.get(2+7*(page-1)).id.equals("test id")) {
-            info_text3.setText(LocalOffers.get(2 + 7 * (page - 1)).getName());
-            image3.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(2 + 7 * (page - 1)).image), 100, 100, false));
-            card3.setVisibility(View.VISIBLE);
+                cards.get(i).setVisibility(View.GONE);
+                info_texts.get(i).setClickable(false);
+            }
 
-            info_text3.setClickable(true);
-            card3.animate();
         }
-        else
-        {
-            card3.setVisibility(View.GONE);
-            info_text3.setClickable(false);
-        }
-        if(!LocalOffers.get(3+7*(page-1)).id.equals("test id")) {
-            info_text4.setText(LocalOffers.get(3 + 7 * (page - 1)).getName());
-            image4.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(3 + 7 * (page - 1)).image), 100, 100, false));
-            card4.setVisibility(View.VISIBLE);
 
-            info_text4.setClickable(true);
-            card4.animate();
-        }
-        else
-        {
-            card4.setVisibility(View.GONE);
-            info_text4.setClickable(false);
-        }
-        if(!LocalOffers.get(4+7*(page-1)).id.equals("test id")) {
-            info_text5.setText(LocalOffers.get(4 + 7 * (page - 1)).getName());
-            image5.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(4 + 7 * (page - 1)).image), 100, 100, false));
-            card5.setVisibility(View.VISIBLE);
-
-            info_text5.setClickable(true);
-            card5.animate();
-        }
-        else
-        {
-            card5.setVisibility(View.GONE);
-            info_text5.setClickable(false);
-        }
-        if(!LocalOffers.get(5+7*(page-1)).id.equals("test id")) {
-            info_text6.setText(LocalOffers.get(5 + 7 * (page - 1)).getName());
-            image6.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(5 + 7 * (page - 1)).image), 100, 100, false));
-            card6.setVisibility(View.VISIBLE);
-
-            info_text6.setClickable(true);
-            card6.animate();
-        }
-        else
-        {
-            card6.setVisibility(View.GONE);
-            info_text6.setClickable(false);
-        }
-        if(!LocalOffers.get(6+7*(page-1)).id.equals("test id")) {
-            info_text7.setText(LocalOffers.get(6 + 7 * (page - 1)).getName());
-            image7.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(6 + 7 * (page - 1)).image), 100, 100, false));
-            card7.setVisibility(View.VISIBLE);
-            info_text7.setClickable(true);
-            card7.animate();
-        }
-        else
-        {
-            card7.setVisibility(View.GONE);
-            info_text7.setClickable(false);
-        }
     }
 
 
@@ -511,6 +447,32 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         card5 = (CardView) findViewById(R.id.card_view5);
         card6 = (CardView) findViewById(R.id.card_view6);
         card7 = (CardView) findViewById(R.id.card_view7);
+        if (info_texts == null) info_texts = new ArrayList<TextView>();
+        if (images == null) images = new ArrayList<ImageView>();
+        if (cards == null) cards = new ArrayList<CardView>();
+        info_texts.add(info_text1);
+        info_texts.add(info_text2);
+        info_texts.add(info_text3);
+        info_texts.add(info_text4);
+        info_texts.add(info_text5);
+        info_texts.add(info_text6);
+        info_texts.add(info_text7);
+
+        images.add(image1);
+        images.add(image2);
+        images.add(image3);
+        images.add(image4);
+        images.add(image5);
+        images.add(image6);
+        images.add(image7);
+
+        cards.add(card1);
+        cards.add(card2);
+        cards.add(card3);
+        cards.add(card4);
+        cards.add(card5);
+        cards.add(card6);
+        cards.add(card7);
 
         info_text1.setOnClickListener(new View.OnClickListener() {
 
@@ -594,8 +556,8 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
     protected void updateButtons()
     {
-        maxPage = (LocalOffers.size()-2)/7;
-        if(maxPage==0)maxPage = 1;
+        maxPage = (LocalOffers.size()+6)/7;
+
         if(page>=maxPage)
         {
             nextButton.setEnabled(false);

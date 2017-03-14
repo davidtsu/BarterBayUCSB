@@ -116,7 +116,7 @@ public class UploadPicActivity extends AppCompatActivity {
                 //String[] filePathColumn = {MediaStore.Images.Media.DATA};
                 ImageView imageView = (ImageView) findViewById(R.id.imgView);
                 Log.i("picture path:", picturePath);
-                currentBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(picturePath),512,512,false); //makes it easier to fetch the image at when the post is submitted
+                currentBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(picturePath),Offer.PICTURE_SIZE,Offer.PICTURE_SIZE,false); //makes it easier to fetch the image at when the post is submitted
                 imageView.setImageBitmap(currentBitmap);    //shows the user a preview
                 opened = 1; //PostActivity can now see if there is an image
                 //TODO: handle the edge case that the image is not locally available (happens with google photos app)

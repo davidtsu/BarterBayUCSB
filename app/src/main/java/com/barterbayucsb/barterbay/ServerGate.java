@@ -1,5 +1,8 @@
 package com.barterbayucsb.barterbay;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -17,8 +20,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Ming Chen on 2/7/2017.
@@ -41,6 +43,8 @@ class ServerGate {
     private static String HEADER_USER_AGENT_VALUE= "android";
     private static String HEADER_USER_AGENT= "User-Agent";
     private static String CHARSET = "utf-8";
+    private User mUser = null;
+    private Offer mOffer = null;
 
     static public  String get_login_url(){
         return SERVER_URL + LOGIN_PATH;
@@ -88,7 +92,7 @@ class ServerGate {
     retrieve user is a function to get user information from server.
     it sends an http request to user
      */
-    User retrieve_user_by_id(String  user_id){
+    User retrieve_user_by_id_direct(String  user_id){
         try {
             URL url = new URL(post_userJson_url());
             HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
@@ -132,7 +136,7 @@ class ServerGate {
         }
     }
 
-    public Offer retrieve_offer_by_id( String offer_id ){
+    public Offer retrieve_offer_by_id_direct( String offer_id ){
         try {
             String ad = "http://nameless-temple-44705.herokuapp.com/offer_json";
             URL url = new URL(ad);
@@ -162,6 +166,50 @@ class ServerGate {
         }
     }
 
+    private int TIME_LIMIT = 100;
+    public User retrieve_user_by_id(String id){
+        try {
+            new RetrieveTasks("retrieve_user_by_id", id).execute().get(TIME_LIMIT, TimeUnit.MILLISECONDS);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return mUser;
+    }
+
+    public Offer retrieve_offer_by_id(String id){
+        try {
+            new RetrieveTasks("retrieve_offer_by_id", id).execute().get(TIME_LIMIT, TimeUnit.MILLISECONDS);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return mOffer;
+    }
+
+    public class RetrieveTasks extends AsyncTask<String, Void, Void> {
+
+
+        private String task;
+        private String id;
+
+        RetrieveTasks(String task, String id) {
+            this.task = task;
+            this.id = id;
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+            if (task == "retrieve_user_by_id"){
+                mUser = retrieve_user_by_id_direct(id);
+            }
+            if (task == "retrieve_offer_by_id"){
+                mOffer = retrieve_offer_by_id_direct(id);
+            }
+            return null;
+        }
+
+    }
     static ArrayList<Offer> retrieve_offers(String user_id) throws IOException {
         ArrayList<Offer> offers = new ArrayList<Offer>();
         String offer_id = "", description = "", line = "";
@@ -247,6 +295,7 @@ class ServerGate {
 
     static public String read_url_response(HttpURLConnection urlc){
         BufferedReader in = null;
+        System.out.println("In reasd url response phase");
         try {
 
             int responseCode = urlc.getResponseCode();
@@ -261,7 +310,7 @@ class ServerGate {
                 temp = in.readLine();
             }
             System.out.println(response);
-
+            /*
             Map<String, List<String>> map = urlc.getHeaderFields();
 
             System.out.println("Printing Response Header...\n");
@@ -269,7 +318,7 @@ class ServerGate {
             for (Map.Entry<String, List<String>> entry : map.entrySet()) {
                 System.out.println("Key : " + entry.getKey()
                         + " ,Value : " + entry.getValue());
-            }
+            }*/
             in.close();
             return response;
         }
@@ -336,7 +385,12 @@ class ServerGate {
             String content = json.getString("content");
             String id = json.getString("id");
             String user_id = json.getString("user_id");
-            Offer offer = new Offer(id, user_id, content, null);
+            String created_at = json.getString("created_at");
+            String updated_at = json.getString("updated_at");
+            String picture_url = json.getJSONObject("picture").getString("url");
+            picture_url = picture_url.replace("https", "http");
+            Bitmap offer_pic = read_image_to_bitmap(picture_url);
+            Offer offer = new Offer(id, user_id, content, picture_url, updated_at, created_at, offer_pic);
             return offer;
         }
         catch (Exception e){
@@ -345,30 +399,36 @@ class ServerGate {
         }
     }
 
-    public static void main(String[] args) throws Exception{
-        String offer_id = "4";
+    static public Bitmap read_image_to_bitmap(String picture_url){
         try {
-            String ad = "http://nameless-temple-44705.herokuapp.com/offer_json";
+            URL url = new URL(picture_url);
+            Bitmap bitmap =  BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            return bitmap;
+        }
+
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public static void main(String[] args) throws Exception{
+        try {
+            String ad = "https://barterbay.s3.amazonaws.com/uploads/micropost/picture/4/baby_weasel.jpg";
             URL url = new URL(ad);
             HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-            String charset = "utf-8";
-            //String user_id = URLEncoder.encode("user[id]", CHARSET) + "=" + URLEncoder.encode("1", CHARSET);
-            String offer_id_encoded = URLEncoder.encode("id", CHARSET) + "=" + URLEncoder.encode(offer_id, CHARSET);
-            String utf8 = "utf8=%E2%9C%93";
-            String s[] = {utf8, offer_id_encoded};
-            ArrayList<String> params = new ArrayList<String>(Arrays.asList(s));
-            String encoded = encode_list(params);
-            System.out.println(encoded);
-            performPost(urlc, encoded);
-            String json = read_url_response(urlc);
-            System.out.println("Json here:");
-            System.out.println(json);
-
+            urlc.setRequestMethod("GET");
+            urlc.setDoOutput(true);
+            urlc.setDoInput(true);
+            //urlc.setUseCaches(false);
+            urlc.setInstanceFollowRedirects(false);
+            urlc.setAllowUserInteraction(false);
+            urlc.setRequestProperty(HEADER_USER_AGENT, HEADER_USER_AGENT_VALUE);
+            String output = read_url_response(urlc);
+            Bitmap bitmap = Utils.StringToBitMap(output);
         }
 
         catch (Exception e){
             e.printStackTrace();
         }
-
     }
 }

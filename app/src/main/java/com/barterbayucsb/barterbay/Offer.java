@@ -7,6 +7,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 
+import static com.barterbayucsb.barterbay.DispLocalOfferActivity.newArray;
+
 /**
  * Created by Ming Chen on 2/7/2017.
  */
@@ -24,7 +26,12 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
     private static double DEFAULT_LATITUDE = 34.4140;
     private static double DEFAULT_LONGITUTDE = -119.8489;
     static public int TOTAL_OFFER_NUM = 10;
+    private String updated_at = null;
+    private String created_at = null;
+    private String TEST_UPDATE_TIME = "2017-03-12T23:30:19.214Z";
     Bitmap image;
+    Bitmap DEFAULT_BITMAP = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
+    public static int PICTURE_SIZE = 512;
     String id;
 
 
@@ -37,8 +44,9 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
         value = 1;
         latitude = 34.4140;
         longitude = -119.8489;
+        updated_at = TEST_UPDATE_TIME;
 
-        image = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
+        image = DEFAULT_BITMAP;
     }
 
     public Offer(String description, String id) {
@@ -48,17 +56,34 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
         value = 1;
         latitude = 34.4140;
         longitude = -119.8489;
+        updated_at = TEST_UPDATE_TIME;
+        this.image = DEFAULT_BITMAP;
        
     }
 
-    public Offer(String id, String user_id, String content, String picture_url){
+    public Offer(String id, String user_id, String content, String picture_url, String updated_at , String created_at, Bitmap offer_pic){
         latitude = DEFAULT_LATITUDE;
         longitude = DEFAULT_LONGITUTDE;
         this.id = id;
         this.user_id = user_id;
         description = content;
         this.picture_url = picture_url;
+        this.updated_at = updated_at;
+        this.created_at = created_at;
 
+        this.name = this.description + " by " + (new ServerGate()).retrieve_user_by_id_direct(user_id).get_name();
+        //this.name = "default name";
+        if (offer_pic == null){
+            System.out.println("online offer using default pic");
+            this.image = DEFAULT_BITMAP;
+        }
+        else {
+            this.image = Bitmap.createScaledBitmap(offer_pic, PICTURE_SIZE, PICTURE_SIZE, false);
+        }
+    }
+
+    public String get_time_stamp(){
+        return this.updated_at;
     }
     public String getPath()
     {
@@ -90,6 +115,7 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
     public void setDescription(String s) {
         description = s;
     }
+
     public void writeOffer(View view) throws IOException {
         SerializableOffer SO = new SerializableOffer(this);
         SO.writeOffer(view);
@@ -107,7 +133,10 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
     }
 
     public String toString(){
-        String res = "\nid=" + id + "\nuser_id" + user_id + "\n########\n";
+        String res = "\nid=" + id + "\nuser_id=" + user_id ;
+        res += "\n pic_url=" + picture_url;
+        res += "\n updated at=" + updated_at;
+        res += "\n########\n";
         return res;
     }
    /* public void writeOffer(View view, Context c) throws IOException {   //This class doesn't write anymore since bitmaps aren't serializable.

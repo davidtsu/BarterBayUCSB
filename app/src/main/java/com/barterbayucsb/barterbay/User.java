@@ -16,6 +16,9 @@ final class User {
     private String session;
     private String cookie_key;
 
+    public String get_name(){
+        return name;
+    }
     public User() {
         offers = new ArrayList<Offer>();
         name = "test user";

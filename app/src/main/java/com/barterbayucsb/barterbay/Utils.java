@@ -23,13 +23,13 @@ import javax.security.cert.X509Certificate;
 
 
 public class Utils {
-    public Bitmap StringToBitMap(String encodedString) {
+    static public Bitmap StringToBitMap(String encodedString) {
         try {
             byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
             return bitmap;
         } catch (Exception e) {
-            e.getMessage();
+            e.printStackTrace();
             return null;
         }
     }
