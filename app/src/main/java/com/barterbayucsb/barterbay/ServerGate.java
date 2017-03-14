@@ -1,5 +1,6 @@
 package com.barterbayucsb.barterbay;
 
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -186,7 +187,7 @@ class ServerGate {
         }
         return mOffer;
     }
-    
+
     public class RetrieveTasks extends AsyncTask<String, Void, Void> {
 
 
@@ -295,6 +296,7 @@ class ServerGate {
 
     static public String read_url_response(HttpURLConnection urlc){
         BufferedReader in = null;
+        System.out.println("In reasd url response phase");
         try {
 
             int responseCode = urlc.getResponseCode();
@@ -387,7 +389,8 @@ class ServerGate {
             String created_at = json.getString("created_at");
             String updated_at = json.getString("updated_at");
             String picture_url = json.getJSONObject("picture").getString("url");
-            Offer offer = new Offer(id, user_id, content, picture_url, updated_at, created_at);
+            Bitmap offer_pic = read_image_to_bitmap(picture_url);
+            Offer offer = new Offer(id, user_id, content, picture_url, updated_at, created_at, offer_pic);
             return offer;
         }
         catch (Exception e){
@@ -396,30 +399,45 @@ class ServerGate {
         }
     }
 
-    public static void main(String[] args) throws Exception{
-        String offer_id = "4";
+    static public Bitmap read_image_to_bitmap(String picture_url){
         try {
-            String ad = "http://nameless-temple-44705.herokuapp.com/offer_json";
+            URL url = new URL(picture_url);
+            HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+            urlc.setRequestMethod("GET");
+            urlc.setDoOutput(true);
+            urlc.setDoInput(true);
+            //urlc.setUseCaches(false);
+            urlc.setInstanceFollowRedirects(false);
+            urlc.setAllowUserInteraction(false);
+            urlc.setRequestProperty(HEADER_USER_AGENT, HEADER_USER_AGENT_VALUE);
+            String output = read_url_response(urlc);
+            Bitmap bitmap = Utils.StringToBitMap(output);
+            return bitmap;
+        }
+
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public static void main(String[] args) throws Exception{
+        try {
+            String ad = "https://barterbay.s3.amazonaws.com/uploads/micropost/picture/4/baby_weasel.jpg";
             URL url = new URL(ad);
             HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-            String charset = "utf-8";
-            //String user_id = URLEncoder.encode("user[id]", CHARSET) + "=" + URLEncoder.encode("1", CHARSET);
-            String offer_id_encoded = URLEncoder.encode("id", CHARSET) + "=" + URLEncoder.encode(offer_id, CHARSET);
-            String utf8 = "utf8=%E2%9C%93";
-            String s[] = {utf8, offer_id_encoded};
-            ArrayList<String> params = new ArrayList<String>(Arrays.asList(s));
-            String encoded = encode_list(params);
-            System.out.println(encoded);
-            performPost(urlc, encoded);
-            String json = read_url_response(urlc);
-            System.out.println("Json here:");
-            System.out.println(json);
-
+            urlc.setRequestMethod("GET");
+            urlc.setDoOutput(true);
+            urlc.setDoInput(true);
+            //urlc.setUseCaches(false);
+            urlc.setInstanceFollowRedirects(false);
+            urlc.setAllowUserInteraction(false);
+            urlc.setRequestProperty(HEADER_USER_AGENT, HEADER_USER_AGENT_VALUE);
+            String output = read_url_response(urlc);
+            Bitmap bitmap = Utils.StringToBitMap(output);
         }
 
         catch (Exception e){
             e.printStackTrace();
         }
-
     }
 }

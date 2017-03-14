@@ -33,7 +33,7 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
     private String TEST_UPDATE_TIME = "2017-03-12T23:30:19.214Z";
     Bitmap image;
     Bitmap DEFAULT_BITMAP = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
-
+    public static int PICTURE_SIZE = 512;
     String id;
 
 
@@ -63,7 +63,7 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
        
     }
 
-    public Offer(String id, String user_id, String content, String picture_url, String updated_at , String created_at){
+    public Offer(String id, String user_id, String content, String picture_url, String updated_at , String created_at, Bitmap offer_pic){
         latitude = DEFAULT_LATITUDE;
         longitude = DEFAULT_LONGITUTDE;
         this.id = id;
@@ -76,7 +76,7 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
 
         //this.name = this.description + " by " + mGate.retrieve_user_by_id(user_id).get_name();
         this.name = "default name";
-        this.image = DEFAULT_BITMAP;
+        this.image = Bitmap.createScaledBitmap(offer_pic, PICTURE_SIZE, PICTURE_SIZE, false);
 
 
     }

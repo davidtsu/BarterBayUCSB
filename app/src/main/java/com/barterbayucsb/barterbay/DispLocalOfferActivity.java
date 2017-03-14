@@ -50,6 +50,9 @@ public class DispLocalOfferActivity extends AppCompatActivity {
     protected TextView info_text1, info_text2, info_text3, info_text4, info_text5, info_text6, info_text7, pageNo;
     protected ImageView image1, image2, image3, image4, image5, image6, image7;
     protected CardView card1, card2, card3, card4, card5, card6, card7;
+    ArrayList<TextView> info_texts;
+    ArrayList<ImageView> images;
+    ArrayList<CardView> cards;
 
     private boolean add_offer_complete_flag = false;
     @Override
@@ -384,99 +387,42 @@ public class DispLocalOfferActivity extends AppCompatActivity {
     }
     protected void displayPosts()
     {
-        if(!LocalOffers.get(0+7*(page-1)).id.equals("test id")) { //we don't want to display the debug filler posts.
+        if (LocalOffers.isEmpty()){
+            info_text1.setText("No local offers \uD83D\uDE1E");
+            info_text1.setClickable(false);
+            return;
+        }
+
+        if (!LocalOffers.get(0 + 7 * (page - 1)).id.equals("test id")) { //we don't want to display the debug filler posts.
             info_text1.setText(LocalOffers.get(0 + 7 * (page - 1)).getName());
             image1.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(0 + 7 * (page - 1)).image), 100, 100, false));
             card1.setVisibility(View.VISIBLE);
 
             info_text1.setClickable(true);
             card1.animate();
-        }
-        else if(LocalOffers.size() <= 7)
-        {
+        } else if (LocalOffers.size() <= 7) {
             //card1.setVisibility(View.GONE);
             info_text1.setText("No local offers \uD83D\uDE1E");
-
             info_text1.setClickable(false);
         }
 
-        if(!LocalOffers.get(1+7*(page-1)).id.equals("test id")) {
-            info_text2.setText(LocalOffers.get(1 + 7 * (page - 1)).getName());
-            image2.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(1 + 7 * (page - 1)).image), 100, 100, false));
-            card2.setVisibility(View.VISIBLE);
+        for (int i = 1; i < 7 ; i++) {
+            if ( i + 7 * (page - 1) >= LocalOffers.size()) break;
+            Offer offer = LocalOffers.get(i + 7 * (page - 1));
+            if (!LocalOffers.get(i + 7 * (page - 1)).id.equals("test id")) {
+                info_texts.get(i).setText(LocalOffers.get(i + 7 * (page - 1)).getName());
+                images.get(i).setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(i + 7 * (page - 1)).image), 100, 100, false));
+                cards.get(i).setVisibility(View.VISIBLE);
 
-            info_text2.setClickable(true);
-            card2.animate();
-        }
-        else
-        {
-            card2.setVisibility(View.GONE);
-            info_text2.setClickable(false);
-        }
-        if(!LocalOffers.get(2+7*(page-1)).id.equals("test id")) {
-            info_text3.setText(LocalOffers.get(2 + 7 * (page - 1)).getName());
-            image3.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(2 + 7 * (page - 1)).image), 100, 100, false));
-            card3.setVisibility(View.VISIBLE);
+                info_texts.get(i).setClickable(true);
+                cards.get(i).animate();
+            } else {
+                cards.get(i).setVisibility(View.GONE);
+                info_texts.get(i).setClickable(false);
+            }
 
-            info_text3.setClickable(true);
-            card3.animate();
         }
-        else
-        {
-            card3.setVisibility(View.GONE);
-            info_text3.setClickable(false);
-        }
-        if(!LocalOffers.get(3+7*(page-1)).id.equals("test id")) {
-            info_text4.setText(LocalOffers.get(3 + 7 * (page - 1)).getName());
-            image4.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(3 + 7 * (page - 1)).image), 100, 100, false));
-            card4.setVisibility(View.VISIBLE);
 
-            info_text4.setClickable(true);
-            card4.animate();
-        }
-        else
-        {
-            card4.setVisibility(View.GONE);
-            info_text4.setClickable(false);
-        }
-        if(!LocalOffers.get(4+7*(page-1)).id.equals("test id")) {
-            info_text5.setText(LocalOffers.get(4 + 7 * (page - 1)).getName());
-            image5.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(4 + 7 * (page - 1)).image), 100, 100, false));
-            card5.setVisibility(View.VISIBLE);
-
-            info_text5.setClickable(true);
-            card5.animate();
-        }
-        else
-        {
-            card5.setVisibility(View.GONE);
-            info_text5.setClickable(false);
-        }
-        if(!LocalOffers.get(5+7*(page-1)).id.equals("test id")) {
-            info_text6.setText(LocalOffers.get(5 + 7 * (page - 1)).getName());
-            image6.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(5 + 7 * (page - 1)).image), 100, 100, false));
-            card6.setVisibility(View.VISIBLE);
-
-            info_text6.setClickable(true);
-            card6.animate();
-        }
-        else
-        {
-            card6.setVisibility(View.GONE);
-            info_text6.setClickable(false);
-        }
-        if(!LocalOffers.get(6+7*(page-1)).id.equals("test id")) {
-            info_text7.setText(LocalOffers.get(6 + 7 * (page - 1)).getName());
-            image7.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(6 + 7 * (page - 1)).image), 100, 100, false));
-            card7.setVisibility(View.VISIBLE);
-            info_text7.setClickable(true);
-            card7.animate();
-        }
-        else
-        {
-            card7.setVisibility(View.GONE);
-            info_text7.setClickable(false);
-        }
     }
 
 
@@ -502,6 +448,32 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         card5 = (CardView) findViewById(R.id.card_view5);
         card6 = (CardView) findViewById(R.id.card_view6);
         card7 = (CardView) findViewById(R.id.card_view7);
+        if (info_texts == null) info_texts = new ArrayList<TextView>();
+        if (images == null) images = new ArrayList<ImageView>();
+        if (cards == null) cards = new ArrayList<CardView>();
+        info_texts.add(info_text1);
+        info_texts.add(info_text2);
+        info_texts.add(info_text3);
+        info_texts.add(info_text4);
+        info_texts.add(info_text5);
+        info_texts.add(info_text6);
+        info_texts.add(info_text7);
+
+        images.add(image1);
+        images.add(image2);
+        images.add(image3);
+        images.add(image4);
+        images.add(image5);
+        images.add(image6);
+        images.add(image7);
+
+        cards.add(card1);
+        cards.add(card2);
+        cards.add(card3);
+        cards.add(card4);
+        cards.add(card5);
+        cards.add(card6);
+        cards.add(card7);
 
         info_text1.setOnClickListener(new View.OnClickListener() {
 
@@ -586,6 +558,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
     protected void updateButtons()
     {
         maxPage = LocalOffers.size()/7;
+        if (maxPage % 7 != 0) maxPage += 1;
 
         if(page>=maxPage)
         {
