@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.concurrent.TimeUnit;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.READ_CALENDAR;
@@ -51,6 +52,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
     protected ImageView image1, image2, image3, image4, image5, image6, image7;
     protected CardView card1, card2, card3, card4, card5, card6, card7;
 
+    private boolean add_offer_complete_flag = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         LocalOffers = new ArrayList<Offer>();
@@ -133,7 +135,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
     }
 
 
-    public class RetrieveOffersTask extends AsyncTask<Void, Void, ArrayList<Offer>> {
+    public class RetrieveOffersTask extends AsyncTask<ArrayList<Offer>, Void, ArrayList<Offer>> {
 
 
         private String id;
@@ -143,15 +145,15 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         }
 
         @Override
-        protected ArrayList<Offer> doInBackground(Void... params) {
+        protected ArrayList<Offer> doInBackground(ArrayList<Offer>... params) {
             ServerGate gate = new ServerGate();
-            ArrayList<Offer> offers = new ArrayList<Offer>();
+            ArrayList<Offer> offers = params[0];
 
 
             for (int id = 1; id < Offer.TOTAL_OFFER_NUM; id ++){
                 Offer offer = gate.retrieve_offer_by_id((new Integer(id)).toString());
                 if  (offer==null)continue;
-                System.out.println("good offer");
+                System.out.println("good offer: " + offer.toString());
                 offers.add(offer);
             }
 
@@ -160,9 +162,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(ArrayList<Offer> offers) {
-            for (Offer offer : offers) {
-                LocalOffers.add(offer);
-            }
+
         }
     }
 
@@ -174,7 +174,6 @@ public class DispLocalOfferActivity extends AppCompatActivity {
             displayPosts();
             updateButtons();
             return;
-
         }
         //File[] allOffers = _offers.listFiles();
         if (_offers.listFiles() == null) {
@@ -256,7 +255,16 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         }
 
         RetrieveOffersTask rt = new RetrieveOffersTask();
-        rt.execute();
+        try {
+
+            rt.execute(LocalOffers).get(10, TimeUnit.SECONDS);
+            for (Offer offer : LocalOffers){
+                System.out.println(offer);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         //displayPostsOld(t);
         sortPosts();
 
