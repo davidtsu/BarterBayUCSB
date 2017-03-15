@@ -3,7 +3,10 @@ package com.barterbayucsb.barterbay;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Base64;
 import android.util.Log;
+
+import com.google.firebase.storage.UploadTask;
 
 import org.json.JSONObject;
 
@@ -45,10 +48,15 @@ class ServerGate {
     private static String CHARSET = "utf-8";
     private User mUser = null;
     private Offer mOffer = null;
+    private int mResult = -10;
 
     static public  String get_login_url(){
         return SERVER_URL + LOGIN_PATH;
     }
+
+    static public String upload_offer_url() {
+        //return SERVER_URL + UPLOAD_OFFER_PATH;
+        return "http://10.0.2.2:3000/upload_offer" ;}
     public ServerGate(){
     }
 
@@ -210,6 +218,22 @@ class ServerGate {
         }
 
     }
+    public class UploadTasks extends AsyncTask<String, Void, Void> {
+
+
+        private Offer offer;
+
+        UploadTasks(Offer offer) {
+            this.offer = offer;
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+            mOffer = upload_offer_direct(offer);
+            return null;
+        }
+
+    }
     static ArrayList<Offer> retrieve_offers(String user_id) throws IOException {
         ArrayList<Offer> offers = new ArrayList<Offer>();
         String offer_id = "", description = "", line = "";
@@ -242,9 +266,6 @@ class ServerGate {
         return offers;
     }
 
-    static int upload_offer(Offer offer) {
-        return RESULT_OK;
-    }
 
 
 
@@ -265,6 +286,41 @@ class ServerGate {
             dataout = new DataOutputStream(urlc.getOutputStream());
             // perform POST operation
             dataout.writeBytes(encodedData);
+
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e){
+
+        }finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+    }
+    static public void performPostJSON(HttpURLConnection urlc, String json) {
+        OutputStreamWriter out = null;
+        DataOutputStream dataout = null;
+        System.out.println(urlc.getURL());
+        try {
+
+            urlc.setRequestMethod("POST");
+            urlc.setDoOutput(true);
+            urlc.setDoInput(true);
+            //urlc.setUseCaches(false);
+            urlc.setInstanceFollowRedirects(false);
+            urlc.setAllowUserInteraction(false);
+            urlc.setRequestProperty(HEADER_USER_AGENT, HEADER_USER_AGENT_VALUE);
+            urlc.setRequestProperty("Content-Type","application/json");
+            dataout = new DataOutputStream(urlc.getOutputStream());
+            // perform POST operation
+            dataout.writeBytes(json);
 
         } catch (ProtocolException e) {
             e.printStackTrace();
@@ -411,24 +467,67 @@ class ServerGate {
             return null;
         }
     }
-    public static void main(String[] args) throws Exception{
-        try {
-            String ad = "https://barterbay.s3.amazonaws.com/uploads/micropost/picture/4/baby_weasel.jpg";
-            URL url = new URL(ad);
-            HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-            urlc.setRequestMethod("GET");
-            urlc.setDoOutput(true);
-            urlc.setDoInput(true);
-            //urlc.setUseCaches(false);
-            urlc.setInstanceFollowRedirects(false);
-            urlc.setAllowUserInteraction(false);
-            urlc.setRequestProperty(HEADER_USER_AGENT, HEADER_USER_AGENT_VALUE);
-            String output = read_url_response(urlc);
-            Bitmap bitmap = Utils.StringToBitMap(output);
-        }
 
+    static public Offer upload_offer_direct(Offer offer){
+        System.out.println("in uploading offer");
+        try {
+            String content = offer.getDescription();
+            Bitmap image = offer.getImage();
+            URL url = new URL(upload_offer_url());
+            HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+
+            Bitmap.CompressFormat compressFormat = Bitmap.CompressFormat.JPEG;
+            int quality = 100;
+
+            String myBase64Image = Utils.encodeToBase64(image, Bitmap.CompressFormat.JPEG, 100);
+
+            JSONObject json = new JSONObject();
+            json.put("picture", myBase64Image);
+            json.put("content", content);
+            json.put("user_id", offer.getUserId());
+
+            System.out.println(json);
+            performPostJSON(urlc, json.toString());
+            String json_s = read_url_response(urlc);
+
+            return jsonToOffer(json_s);
+        }
         catch (Exception e){
             e.printStackTrace();
+            return null;
         }
+    }
+
+    public final int UPLOAD_TIME_LIMIT = 10000;
+    public Offer upload_offer(Offer offer){
+        try {
+            (new UploadTasks(offer)).execute().get(UPLOAD_TIME_LIMIT, TimeUnit.MILLISECONDS);
+            return mOffer;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+    public static void main(String[] args) throws Exception{
+        Offer offer = new Offer();
+        String content = offer.getDescription();
+        Bitmap image = offer.getImage();
+        URL url = new URL("http://10.0.2.2:3000/upload_offer");
+        HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+
+        Bitmap.CompressFormat compressFormat = Bitmap.CompressFormat.JPEG;
+        int quality = 100;
+
+        String myBase64Image = Utils.encodeToBase64(image, Bitmap.CompressFormat.JPEG, 100);
+
+        JSONObject json = new JSONObject();
+        json.put("picture", myBase64Image);
+
+        System.out.println(json);
+        performPost(urlc, json.toString());
+        read_url_response(urlc);
+
     }
 }

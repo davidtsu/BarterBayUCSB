@@ -15,10 +15,12 @@ final class User {
     private ArrayList<Review> reviews;
     private String session;
     private String cookie_key;
+    static User CURRENT_USER = null;
 
     public String get_name(){
         return name;
     }
+    public String getId() {return id; };
     public User() {
         offers = new ArrayList<Offer>();
         name = "test user";

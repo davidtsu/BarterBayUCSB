@@ -45,13 +45,18 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
         latitude = 34.4140;
         longitude = -119.8489;
         updated_at = TEST_UPDATE_TIME;
-
+        if (User.CURRENT_USER != null) {
+            this.user_id = User.CURRENT_USER.getId();
+        }
         image = DEFAULT_BITMAP;
     }
 
     public Offer(String description, String id) {
         this.description = description;
         this.id = id;
+        if (User.CURRENT_USER != null) {
+            this.user_id = User.CURRENT_USER.getId();
+        }
         name = "test title";
         value = 1;
         latitude = 34.4140;
@@ -100,6 +105,14 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
 
     public String getDescription() {
         return description;
+    }
+
+    public Bitmap getImage(){
+        return this.image;
+    }
+
+    public String getUserId(){
+        return this.user_id;
     }
 
     public void setValue(int i){

@@ -311,6 +311,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             ServerGate gate = new ServerGate();
             User user = gate.user_login(mEmail, mPassword);
+            User.CURRENT_USER = user;
             return user != null;
 
             // TODO: register the new account here.
@@ -323,6 +324,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+                ServerGate gate = new ServerGate();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
