@@ -198,8 +198,12 @@ public class PostActivity extends AppCompatActivity {
                         newOffer.image = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8); //prevents the LocalActivity crash
 
                     newOffer.id = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.US).format(new Date()); //prepares our post to be saved to a file named after the current timestamp
-                    if(ServerGate.upload_offer(newOffer)!=RESULT_OK)
+                    ServerGate gate = new ServerGate();
+                    Offer offer = gate.upload_offer(newOffer);
+                    if(offer==null) {
                         Snackbar.make(view, "Error uploading!", Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
 
 
                     // modified from https://developer.android.com/training/permissions/requesting.html
