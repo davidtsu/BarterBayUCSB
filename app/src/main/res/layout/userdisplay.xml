@@ -107,7 +107,7 @@
             android:weightSum="1">
 
             <TextView
-                android:id="@+id/reviewSampleText"
+                android:id="@+id/reviewText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

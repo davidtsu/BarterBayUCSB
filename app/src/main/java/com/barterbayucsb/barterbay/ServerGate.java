@@ -3,10 +3,7 @@ package com.barterbayucsb.barterbay;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.util.Base64;
 import android.util.Log;
-
-import com.google.firebase.storage.UploadTask;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -129,14 +126,14 @@ class ServerGate {
     }
 
 
-    private String post_userJson_url(){
+    private static String post_userJson_url(){
         return SERVER_URL + USER_JSON_PATH;
     }
     /*
     retrieve user is a function to get user information from server.
     it sends an http request to user
      */
-    User retrieve_user_by_id_direct(String  user_id){
+    public static User retrieve_user_by_id_direct(String  user_id){
         try {
             URL url = new URL(post_userJson_url());
             HttpURLConnection urlc = (HttpURLConnection) url.openConnection();

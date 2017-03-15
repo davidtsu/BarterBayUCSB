@@ -16,12 +16,11 @@ import android.widget.TextView;
  */
 public class ViewUserActivity extends AppCompatActivity {
     public static User CurrentUser;
+    public static Review CurrentReview;
     ImageView IV;
-    TextView TitleTV;
-    TextView DescriptionTV;
-    TextView ValueTV;
-    TextView TimeTV;
-    TextView DistanceTV;
+    TextView usernameTV;
+    TextView emailTV;
+    TextView reviewTV;
     RatingBar Rb1, Rb2;
     protected Activity thisActivity = this;
 
@@ -30,18 +29,15 @@ public class ViewUserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.userdisplay);
-
-
+        CurrentUser = ServerGate.retrieve_user_by_id_direct( DispLocalOfferActivity.currentOffer.getUserId() );
+        CurrentReview = new Review();
 
         Rb1 = (RatingBar) findViewById(R.id.ratingBarUser);
         Rb2 = (RatingBar) findViewById(R.id.ratingBarReviewDisplay);
-        //initializations
-        IV = (ImageView) findViewById(R.id.postImg) ;
-        TitleTV = (TextView) findViewById(R.id.usernameTextView);
-        //DescriptionTV = (TextView) findViewById(R.id.descriptionTextView);
-        //ValueTV = (TextView) findViewById(R.id.ValueTextView);
-        TimeTV = (TextView) findViewById(R.id.TimeTextView);
-        DistanceTV = (TextView) findViewById(R.id.DistanceTextView);
+        IV = (ImageView) findViewById(R.id.profilePic) ;
+        usernameTV = (TextView) findViewById(R.id.usernameTextView);
+        emailTV = (TextView) findViewById(R.id.DistanceTextView);
+        reviewTV = (TextView) findViewById(R.id.reviewText);
         Button contactUserButton = (Button) findViewById(R.id.contactUserButton);
         Button doneButton = (Button) findViewById(R.id.doneButtonUser);
         Button reviewUserButton = (Button) findViewById(R.id.ReviewUserButton);
