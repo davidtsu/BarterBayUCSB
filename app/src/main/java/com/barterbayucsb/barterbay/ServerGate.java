@@ -41,6 +41,7 @@ class ServerGate {
     final static String UPLOAD_OFFER_PATH = "/upload_offer";
     final static String OFFER_JSON_PATH = "/offer_json";
     final static String USER_JSON_PATH = "/user_json";
+    final static String UCSB_LOGIN_PATH = "/ucsb_login";
     //define server result code here
     private static int RESULT_OK = 0;
     private static String HEADER_USER_AGENT_VALUE= "android";
@@ -58,9 +59,34 @@ class ServerGate {
         return SERVER_URL + UPLOAD_OFFER_PATH;
         //return "http://10.0.2.2:3000/upload_offer" ;
     }
+    static public String post_ucsb_login_url(){
+        return SERVER_URL + UCSB_LOGIN_PATH;
+        //return "http://10.0.2.2:3000/ucsb_login";
+    }
     public ServerGate(){
     }
 
+    User ucsb_login(String netid, String password){
+        System.out.println("in ucsb login");
+        try {
+
+            URL url = new URL(post_ucsb_login_url());
+            HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+            JSONObject json = new JSONObject();
+            json.put("netid", netid);
+            json.put("password", password);
+
+            System.out.println(json);
+            performPostJSON(urlc, json.toString());
+            String json_s = read_url_response(urlc);
+
+            return jsonToUser(json_s);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
     User user_login(String user_email, String user_password) {
         try {
             //utf8=%E2%9C%93&session%5Bemail%5D=dummtindex%40gmail.com&session%5Bpassword%5D=123123&session%5Bremember_me%5D=0&commit=Log+in
@@ -511,24 +537,7 @@ class ServerGate {
         }
 
     }
-    public static void main(String[] args) throws Exception{
-        Offer offer = new Offer();
-        String content = offer.getDescription();
-        Bitmap image = offer.getImage();
-        URL url = new URL("http://10.0.2.2:3000/upload_offer");
-        HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-
-        Bitmap.CompressFormat compressFormat = Bitmap.CompressFormat.JPEG;
-        int quality = 100;
-
-        String myBase64Image = Utils.encodeToBase64(image, Bitmap.CompressFormat.JPEG, 100);
-
-        JSONObject json = new JSONObject();
-        json.put("picture", myBase64Image);
-
-        System.out.println(json);
-        performPost(urlc, json.toString());
-        read_url_response(urlc);
+    public static void main(String[] args) throws Exception {
 
     }
 }

@@ -38,7 +38,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class UCSBLoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -62,14 +62,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private TextView mUcsbLogin;
-
+    private TextView mLogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_ucsblogin);
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.netid);
         populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -83,16 +82,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
         });
-        mUcsbLogin = (TextView) findViewById(R.id.switch_ucsb_login_button);
-        mUcsbLogin.setOnClickListener(new OnClickListener() {
+        mLogin = (TextView) findViewById(R.id.switch_email_login_button);
+        mLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, UCSBLoginActivity.class);
+                Intent intent = new Intent(UCSBLoginActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
-
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -203,7 +201,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return true;
     }
 
     private boolean isPasswordValid(String password) {
@@ -284,7 +282,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
+                new ArrayAdapter<>(UCSBLoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
@@ -319,14 +317,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            ServerGate gate = new ServerGate();
-            User user = gate.user_login(mEmail, mPassword);
-            User.CURRENT_USER = user;
-            return user != null;
+            try {
+               ServerGate gate = new ServerGate();
+                User.CURRENT_USER = gate.ucsb_login(mEmail, mPassword);
 
-            // TODO: register the new account here.
 
-        }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            if (User.CURRENT_USER != null){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
 
         @Override
         protected void onPostExecute(final Boolean success) {
@@ -334,7 +340,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                Intent intent = new Intent(UCSBLoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             } else {

@@ -53,8 +53,6 @@
         <activity android:name=".ReviewActivity" />
         <activity android:name=".ViewUserActivity" />
 
-
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -73,7 +71,10 @@
         <activity
             android:name=".MapsActivityNew"
             android:label="@string/title_activity_maps_new" />
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".SettingsActivity" />
+        <activity
+            android:name=".UCSBLoginActivity"
+            android:label="@string/title_activity_ucsblogin"></activity>
     </application>
 
 </manifest>
