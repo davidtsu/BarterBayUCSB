@@ -139,57 +139,16 @@ public class DispLocalOfferActivity extends AppCompatActivity {
     }
 
 
-    public class RetrieveOffersTask extends AsyncTask<ArrayList<Offer>, Void, ArrayList<Offer>> {
 
-
-        private String id;
-
-        RetrieveOffersTask() {
-            this.id = id;
-        }
-
-        @Override
-        protected ArrayList<Offer> doInBackground(ArrayList<Offer>... params) {
-            ServerGate gate = new ServerGate();
-            ArrayList<Offer> offers = LocalOffers;
-
-
-            for (int id = 1; id < Offer.TOTAL_OFFER_NUM; id ++){
-                System.out.println("getting offer id=" + (new Integer(id)).toString());
-                Offer offer = gate.retrieve_offer_by_id_direct((new Integer(id)).toString());
-                if  (offer==null)continue;
-                System.out.println("good offer: " + offer.toString());
-                offers.add(offer);
-                try{new SerializableOffer(offer).writeOffer(thisView);}
-                catch(IOException e){e.printStackTrace();}
-
-            }
-
-            return offers;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Offer> offers) {
-
-        }
-    }
 
     protected void getDevicePosts(View view) {
-
-        LocalOffers = new ArrayList<Offer>();
+        ServerGate gate = new ServerGate();
+        LocalOffers = gate.retrieve_all_offers();
+        if (LocalOffers == null){
+            LocalOffers = new ArrayList<Offer>();
+        }
         File _offers = new File(getExternalStorageDirectory().toString() + "/offers/");
         Snackbar.make(view, "got offers from" + getExternalStorageDirectory().toString() + "/offers/", Snackbar.LENGTH_SHORT).show();
-        try {
-            RetrieveOffersTask rt = new RetrieveOffersTask();
-            rt.execute(LocalOffers).get(100, TimeUnit.SECONDS);
-            for (Offer offer : LocalOffers){
-                System.out.println("An offer in getdevice:");
-                System.out.println(offer);
-            }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
 
         if (!_offers.isDirectory() || _offers.listFiles() == null) {
             displayPosts();

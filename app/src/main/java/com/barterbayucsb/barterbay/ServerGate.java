@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.google.firebase.storage.UploadTask;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -42,6 +43,7 @@ class ServerGate {
     final static String OFFER_JSON_PATH = "/offer_json";
     final static String USER_JSON_PATH = "/user_json";
     final static String UCSB_LOGIN_PATH = "/ucsb_login";
+    final static String SHOW_ALL_OFFER_PATH = "/show_all_offers";
     //define server result code here
     private static int RESULT_OK = 0;
     private static String HEADER_USER_AGENT_VALUE= "android";
@@ -49,6 +51,7 @@ class ServerGate {
     private static String CHARSET = "utf-8";
     private User mUser = null;
     private Offer mOffer = null;
+    private ArrayList<Offer> mOffers = null;
     private int mResult = -10;
 
     static public  String get_login_url(){
@@ -86,6 +89,10 @@ class ServerGate {
             e.printStackTrace();
             return null;
         }
+    }
+    String get_all_offers_url(){
+        return SERVER_URL + SHOW_ALL_OFFER_PATH;
+        //return "http://10.0.2.2:3000/show_all_offers";
     }
     User user_login(String user_email, String user_password) {
         try {
@@ -173,11 +180,10 @@ class ServerGate {
 
     public Offer retrieve_offer_by_id_direct( String offer_id ){
         try {
-            String ad = "http://nameless-temple-44705.herokuapp.com/offer_json";
-            URL url = new URL(ad);
+            String addr = "http://nameless-temple-44705.herokuapp.com/offer_json";
+            URL url = new URL(addr);
             HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
             String charset = "utf-8";
-            //String user_id = URLEncoder.encode("user[id]", CHARSET) + "=" + URLEncoder.encode("1", CHARSET);
             String offer_id_encoded = URLEncoder.encode("id", CHARSET) + "=" + URLEncoder.encode(offer_id, CHARSET);
             String utf8 = "utf8=%E2%9C%93";
             String s[] = {utf8, offer_id_encoded};
@@ -201,7 +207,7 @@ class ServerGate {
         }
     }
 
-    private int OFFER_TIME_LIMIT = 100;
+    private int OFFER_TIME_LIMIT = 5000;
     private int USER_TIME_LIMIT = 100;
     public User retrieve_user_by_id(String id){
         try {
@@ -223,6 +229,43 @@ class ServerGate {
         return mOffer;
     }
 
+    public  ArrayList<Offer> retrieve_all_offers() {
+        RetrieveOffersTask task = new RetrieveOffersTask();
+        try{
+            task.execute().get(OFFER_TIME_LIMIT, TimeUnit.MILLISECONDS);
+            return mOffers;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public ArrayList<Offer> retrieve_all_offers_direct(){
+        ArrayList<Offer> res = new ArrayList<Offer>();
+        System.out.println("getting all offers");
+        try {
+            URL url = new URL(get_all_offers_url());
+            HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+            urlc.setRequestMethod("GET");
+            //urlc.setUseCaches(false);
+            urlc.setInstanceFollowRedirects(false);
+            urlc.setAllowUserInteraction(false);
+            urlc.setRequestProperty(HEADER_USER_AGENT, HEADER_USER_AGENT_VALUE);
+            String json_s = read_url_response(urlc);
+            JSONArray json = new JSONArray(json_s);
+            for(int i = 0; i < json.length() ; i++){
+                Offer offer = jsonToOffer(json.getJSONObject(i).toString());
+                res.add( offer );
+                System.out.println(offer);
+            }
+            return res;
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return res;
+        }
+
+    }
     public class RetrieveTasks extends AsyncTask<String, Void, Void> {
 
 
@@ -246,6 +289,28 @@ class ServerGate {
         }
 
     }
+    public class RetrieveOffersTask extends AsyncTask<ArrayList<Offer>, Void, ArrayList<Offer>> {
+
+
+        private String id;
+
+        RetrieveOffersTask() {
+            this.id = id;
+        }
+
+        @Override
+        protected ArrayList<Offer> doInBackground(ArrayList<Offer>... params) {
+
+
+            mOffers = retrieve_all_offers_direct();
+            return mOffers;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Offer> offers) {
+
+        }
+    }
     public class UploadTasks extends AsyncTask<String, Void, Void> {
 
 
@@ -262,7 +327,7 @@ class ServerGate {
         }
 
     }
-    static ArrayList<Offer> retrieve_offers(String user_id) throws IOException {
+    static ArrayList<Offer> retrieve_all_offers_by_user(String user_id) throws IOException {
         ArrayList<Offer> offers = new ArrayList<Offer>();
         String offer_id = "", description = "", line = "";
         int counter = 0;
@@ -538,6 +603,7 @@ class ServerGate {
 
     }
     public static void main(String[] args) throws Exception {
-
+        ServerGate gate = new ServerGate();
+        gate.retrieve_all_offers_direct();
     }
 }

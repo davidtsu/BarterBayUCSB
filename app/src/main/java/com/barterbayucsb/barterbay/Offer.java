@@ -25,7 +25,6 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
     private double longitude;
     private static double DEFAULT_LATITUDE = 34.4140;
     private static double DEFAULT_LONGITUTDE = -119.8489;
-    static public int TOTAL_OFFER_NUM = 20;
     private String updated_at = null;
     private String created_at = null;
     private String TEST_UPDATE_TIME = "2017-03-12T23:30:19.214Z";
@@ -71,7 +70,7 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
         longitude = DEFAULT_LONGITUTDE;
         this.id = id;
         this.user_id = user_id;
-        description = content;
+        this.description = content;
         this.picture_url = picture_url;
         this.updated_at = updated_at;
         this.created_at = created_at;
