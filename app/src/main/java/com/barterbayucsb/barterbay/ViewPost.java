@@ -2,12 +2,12 @@ package com.barterbayucsb.barterbay;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -40,7 +40,7 @@ public class ViewPost extends AppCompatActivity {
 
         //initializations
         IV = (ImageView) findViewById(R.id.postImg) ;
-        TitleTV = (TextView) findViewById(R.id.reviewTextView);
+        TitleTV = (TextView) findViewById(R.id.usernameTextView);
         DescriptionTV = (TextView) findViewById(R.id.descriptionTextView);
         ValueTV = (TextView) findViewById(R.id.ValueTextView);
         TimeTV = (TextView) findViewById(R.id.TimeTextView);
@@ -119,7 +119,11 @@ public class ViewPost extends AppCompatActivity {
         contactPosterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view,"123-456-7890", Snackbar.LENGTH_LONG).show(); //TODO: once user is implemented in Offer make this get the user's phone number (and potentially rewrite it so it can be copied to the clipboard)
+                //Snackbar.make(view,"123-456-7890", Snackbar.LENGTH_LONG).show(); //TODO: tell ViewUserActivity what do display...
+//                ViewUserActivity.setCurrentUser(ServerGate.retrieve_user_by_id(DispLocalOfferActivity.currentOffer.getUser_id())); TODO: uncomment this after these functions are implemented
+                Intent intent = new Intent(ViewPost.this, ViewUserActivity.class);
+                startActivity(intent);
+
 
             }
         });

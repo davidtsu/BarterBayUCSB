@@ -9,7 +9,7 @@
         android:text="TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/reviewTextView"
+        android:id="@+id/usernameTextView"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
         android:textSize="24sp"
         android:textAllCaps="false"
@@ -70,11 +70,11 @@
         android:textAppearance="@android:style/TextAppearance.Material.Small" />
 
     <Button
-        android:text="Contact Poster"
+        android:id="@+id/contactPoster"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/contactPoster"
-        android:layout_gravity="center"></Button>
+        android:layout_gravity="center"
+        android:text="View User"></Button>
 
     <Button
         android:text="done"

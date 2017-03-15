@@ -51,6 +51,8 @@
         <activity android:name=".UploadPicActivity" />
         <activity android:name=".ViewPost" />
         <activity android:name=".ReviewActivity" />
+        <activity android:name=".ViewUserActivity" />
+
 
 
         <meta-data

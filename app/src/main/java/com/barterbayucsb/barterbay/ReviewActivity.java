@@ -34,7 +34,7 @@ public class ReviewActivity extends AppCompatActivity {
         Button doneButton = (Button) findViewById(R.id.doneButtonReview);
         final RatingBar rating = (RatingBar) findViewById(R.id.ratingBar);
 
-        final AutoCompleteTextView reviewTextView = (AutoCompleteTextView) findViewById(R.id.reviewTextView);
+        final AutoCompleteTextView reviewTextView = (AutoCompleteTextView) findViewById(R.id.usernameTextView);
 
         // modified from https://developer.android.com/training/permissions/requesting.html
 
@@ -59,11 +59,11 @@ public class ReviewActivity extends AppCompatActivity {
                 else {//cases 2 and 3
 
 
-                    Review review = new Review("1",text,rating.getNumStars() );
+                    Review review = new Review(reviewTextView.getText().toString(),text,rating.getNumStars() );
 
 
 
-
+                    //might not need permission in this activity, but it's here anyways
                     if (ContextCompat.checkSelfPermission(thisActivity, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {//case 2
                         //if (ActivityCompat.shouldShowRequestPermissionRationale(thisActivity,
                         //android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -81,11 +81,12 @@ public class ReviewActivity extends AppCompatActivity {
                         try{
                             //newOffer.writeOffer(view);
                             //Snackbar.make(view, "Successfully wrote to" + newOffer.getPath(), Snackbar.LENGTH_SHORT).show();
-
+                            ViewUserActivity.CurrentUser.addToReviews(review);
                             finish();
 
                         } catch (Exception e) {
                             e.printStackTrace();
+                            finish();
                            // Snackbar.make(view, "Error writing to " + newOffer.getPath(), Snackbar.LENGTH_SHORT).show();
 
                         }
