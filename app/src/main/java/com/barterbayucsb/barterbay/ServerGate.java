@@ -44,6 +44,7 @@ class ServerGate {
     final static String USER_JSON_PATH = "/user_json";
     final static String UCSB_LOGIN_PATH = "/ucsb_login";
     final static String SHOW_ALL_OFFER_PATH = "/show_all_offers";
+
     //define server result code here
     private static int RESULT_OK = 0;
     private static String HEADER_USER_AGENT_VALUE= "android";
@@ -65,6 +66,10 @@ class ServerGate {
     static public String post_ucsb_login_url(){
         return SERVER_URL + UCSB_LOGIN_PATH;
         //return "http://10.0.2.2:3000/ucsb_login";
+    }
+    String get_all_offers_url(){
+        return SERVER_URL + SHOW_ALL_OFFER_PATH;
+        //return "http://10.0.2.2:3000/show_all_offers";
     }
     public ServerGate(){
     }
@@ -90,10 +95,7 @@ class ServerGate {
             return null;
         }
     }
-    String get_all_offers_url(){
-        return SERVER_URL + SHOW_ALL_OFFER_PATH;
-        //return "http://10.0.2.2:3000/show_all_offers";
-    }
+
     User user_login(String user_email, String user_password) {
         try {
             //utf8=%E2%9C%93&session%5Bemail%5D=dummtindex%40gmail.com&session%5Bpassword%5D=123123&session%5Bremember_me%5D=0&commit=Log+in
@@ -534,12 +536,13 @@ class ServerGate {
             String content = json.getString("content");
             String id = json.getString("id");
             String user_id = json.getString("user_id");
+            String value = json.getString("value");
             String created_at = json.getString("created_at");
             String updated_at = json.getString("updated_at");
             String picture_url = json.getJSONObject("picture").getString("url");
             picture_url = picture_url.replace("https", "http");
             Bitmap offer_pic = read_image_to_bitmap(picture_url);
-            Offer offer = new Offer(id, user_id, content, picture_url, updated_at, created_at, offer_pic);
+            Offer offer = new Offer(id, user_id, content, picture_url, updated_at, created_at, offer_pic, value);
             return offer;
         }
         catch (Exception e){
@@ -577,6 +580,7 @@ class ServerGate {
             json.put("picture", myBase64Image);
             json.put("content", content);
             json.put("user_id", offer.getUserId());
+            json.put("value", (new Integer(offer.getValue()).toString()));
 
             System.out.println(json);
             performPostJSON(urlc, json.toString());

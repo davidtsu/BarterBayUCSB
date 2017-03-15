@@ -214,7 +214,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
                     float distance = l.distanceTo(L1);
                     float distancePrefs = SettingsActivity.Preferences.getDISTANCEfloat() * 10.0f;
                     if ((distance <= SettingsActivity.Preferences.getDISTANCEfloat() * 10.0f + 1000.0f)) {
-                        LocalOffers.add(newOffer);
+                        //LocalOffers.add(newOffer);
                     }
                     i++;
                 } catch (IOException e) {
