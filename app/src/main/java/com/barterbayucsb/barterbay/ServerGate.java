@@ -209,7 +209,7 @@ class ServerGate {
         }
     }
 
-    private int OFFER_TIME_LIMIT = 5000;
+    private int OFFER_TIME_LIMIT = 10000;
     private int USER_TIME_LIMIT = 100;
     public User retrieve_user_by_id(String id){
         try {
