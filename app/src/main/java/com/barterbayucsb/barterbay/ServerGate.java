@@ -55,8 +55,9 @@ class ServerGate {
     }
 
     static public String upload_offer_url() {
-        //return SERVER_URL + UPLOAD_OFFER_PATH;
-        return "http://10.0.2.2:3000/upload_offer" ;}
+        return SERVER_URL + UPLOAD_OFFER_PATH;
+        //return "http://10.0.2.2:3000/upload_offer" ;
+    }
     public ServerGate(){
     }
 
@@ -480,7 +481,6 @@ class ServerGate {
             int quality = 100;
 
             String myBase64Image = Utils.encodeToBase64(image, Bitmap.CompressFormat.JPEG, 100);
-
             JSONObject json = new JSONObject();
             json.put("picture", myBase64Image);
             json.put("content", content);
