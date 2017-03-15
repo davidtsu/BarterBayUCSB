@@ -115,6 +115,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
 
         });
+        DELETE.setVisibility( View.GONE );
         DELETE.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,6 +130,9 @@ public class DispLocalOfferActivity extends AppCompatActivity {
 
                 }
                 getDevicePosts(thisView);
+                if ( page * 7 > LocalOffers.size()){
+                    page--;
+                }
                 sortPosts();
                 displayPosts();
                 updateButtons();
