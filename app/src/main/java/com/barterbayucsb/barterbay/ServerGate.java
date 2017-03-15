@@ -175,10 +175,11 @@ class ServerGate {
         }
     }
 
-    private int TIME_LIMIT = 100;
+    private int OFFER_TIME_LIMIT = 100;
+    private int USER_TIME_LIMIT = 100;
     public User retrieve_user_by_id(String id){
         try {
-            new RetrieveTasks("retrieve_user_by_id", id).execute().get(TIME_LIMIT, TimeUnit.MILLISECONDS);
+            new RetrieveTasks("retrieve_user_by_id", id).execute().get(USER_TIME_LIMIT, TimeUnit.MILLISECONDS);
         }
         catch(Exception e){
             e.printStackTrace();
@@ -188,7 +189,7 @@ class ServerGate {
 
     public Offer retrieve_offer_by_id(String id){
         try {
-            new RetrieveTasks("retrieve_offer_by_id", id).execute().get(TIME_LIMIT, TimeUnit.MILLISECONDS);
+            new RetrieveTasks("retrieve_offer_by_id", id).execute().get(OFFER_TIME_LIMIT, TimeUnit.MILLISECONDS);
         }
         catch(Exception e){
             e.printStackTrace();

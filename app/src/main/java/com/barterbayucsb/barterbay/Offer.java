@@ -25,7 +25,7 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
     private double longitude;
     private static double DEFAULT_LATITUDE = 34.4140;
     private static double DEFAULT_LONGITUTDE = -119.8489;
-    static public int TOTAL_OFFER_NUM = 10;
+    static public int TOTAL_OFFER_NUM = 20;
     private String updated_at = null;
     private String created_at = null;
     private String TEST_UPDATE_TIME = "2017-03-12T23:30:19.214Z";
