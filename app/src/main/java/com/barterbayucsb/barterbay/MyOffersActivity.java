@@ -122,6 +122,7 @@ public class MyOffersActivity extends AppCompatActivity {
 
 
         });
+        DELETE.setVisibility( View.GONE );
         DELETE.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
