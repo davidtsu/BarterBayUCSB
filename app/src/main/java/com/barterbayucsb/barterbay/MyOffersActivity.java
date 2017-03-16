@@ -364,7 +364,7 @@ public class MyOffersActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 currentOffer = LocalOffers.get(0 + 7*(page-1));
-                Intent intent = new Intent(MyOffersActivity.this, ViewPost.class);
+                Intent intent = new Intent(MyOffersActivity.this, ViewMyPost.class);
                 startActivity(intent);
             }
         });
@@ -375,7 +375,7 @@ public class MyOffersActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 currentOffer = LocalOffers.get(1 + 7*(page-1));
-                Intent intent = new Intent(MyOffersActivity.this, ViewPost.class);
+                Intent intent = new Intent(MyOffersActivity.this, ViewMyPost.class);
                 startActivity(intent);
             }
         });
@@ -386,7 +386,7 @@ public class MyOffersActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 currentOffer = LocalOffers.get(2 + 7*(page-1));
-                Intent intent = new Intent(MyOffersActivity.this, ViewPost.class);
+                Intent intent = new Intent(MyOffersActivity.this, ViewMyPost.class);
                 startActivity(intent);
             }
         });
@@ -397,7 +397,7 @@ public class MyOffersActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 currentOffer = LocalOffers.get(3 + 7*(page-1));
-                Intent intent = new Intent(MyOffersActivity.this, ViewPost.class);
+                Intent intent = new Intent(MyOffersActivity.this, ViewMyPost.class);
                 startActivity(intent);
             }
         });
@@ -408,7 +408,7 @@ public class MyOffersActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 currentOffer = LocalOffers.get(4 + 7*(page-1));
-                Intent intent = new Intent(MyOffersActivity.this, ViewPost.class);
+                Intent intent = new Intent(MyOffersActivity.this, ViewMyPost.class);
                 startActivity(intent);
             }
         });
@@ -419,7 +419,7 @@ public class MyOffersActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 currentOffer = LocalOffers.get(5 + 7*(page-1));
-                Intent intent = new Intent(MyOffersActivity.this, ViewPost.class);
+                Intent intent = new Intent(MyOffersActivity.this, ViewMyPost.class);
                 startActivity(intent);
             }
         });
@@ -430,7 +430,7 @@ public class MyOffersActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 currentOffer = LocalOffers.get(6 + 7*(page-1));
-                Intent intent = new Intent(MyOffersActivity.this, ViewPost.class);
+                Intent intent = new Intent(MyOffersActivity.this, ViewMyPost.class);
                 startActivity(intent);
             }
         });

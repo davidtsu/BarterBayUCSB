@@ -50,6 +50,7 @@
         <activity android:name=".PostActivity" />
         <activity android:name=".UploadPicActivity" />
         <activity android:name=".ViewPost" />
+        <activity android:name=".ViewMyPost" />
         <activity android:name=".ReviewActivity" />
         <activity android:name=".ViewUserActivity" />
 
@@ -74,7 +75,7 @@
         <activity android:name=".SettingsActivity" />
         <activity
             android:name=".UCSBLoginActivity"
-            android:label="@string/title_activity_ucsblogin"></activity>
+            android:label="@string/title_activity_ucsblogin" />
     </application>
 
 </manifest>
