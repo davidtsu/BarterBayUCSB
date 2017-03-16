@@ -57,8 +57,8 @@ class ServerGate {
     }
 
     static public String upload_offer_url() {
-        return SERVER_URL + UPLOAD_OFFER_PATH;
-        //return "http://10.0.2.2:3000/upload_offer" ;
+        //return SERVER_URL + UPLOAD_OFFER_PATH;
+        return "http://10.0.2.2:3000/upload_offer" ;
     }
     static public String post_ucsb_login_url(){
         return SERVER_URL + UCSB_LOGIN_PATH;
@@ -211,11 +211,13 @@ class ServerGate {
     public User retrieve_user_by_id(String id){
         try {
             new RetrieveTasks("retrieve_user_by_id", id).execute().get(USER_TIME_LIMIT, TimeUnit.MILLISECONDS);
+            return mUser;
         }
         catch(Exception e){
             e.printStackTrace();
+            return null;
         }
-        return mUser;
+
     }
 
     public Offer retrieve_offer_by_id(String id){

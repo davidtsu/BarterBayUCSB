@@ -123,6 +123,7 @@ public class ViewMyPost extends AppCompatActivity {
                 //Snackbar.make(view,"123-456-7890", Snackbar.LENGTH_LONG).show(); //TODO: tell ViewUserActivity what do display...
 //                ViewUserActivity.setCurrentUser(ServerGate.retrieve_user_by_id(MyOffersActivity.currentOffer.getUser_id())); TODO: uncomment this after these functions are implemented
                 Intent intent = new Intent(ViewMyPost.this, ViewUserActivity.class);
+                intent.putExtra("user_id", MyOffersActivity.currentOffer.getUserId());
                 startActivity(intent);
 
 

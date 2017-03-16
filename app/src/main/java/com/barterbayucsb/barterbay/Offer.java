@@ -66,8 +66,8 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
     }
 
     public Offer(String id, String user_id, String content, String picture_url, String updated_at , String created_at, Bitmap offer_pic, String value){
-        latitude = DEFAULT_LATITUDE;
-        longitude = DEFAULT_LONGITUTDE;
+        this.latitude = DEFAULT_LATITUDE;
+        this.longitude = DEFAULT_LONGITUTDE;
         this.id = id;
         this.user_id = user_id;
         this.description = content;

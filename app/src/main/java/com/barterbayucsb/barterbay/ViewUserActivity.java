@@ -34,13 +34,15 @@ public class ViewUserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.userdisplay);
-        ServerGate gate = new ServerGate();
-        CurrentUser = gate.retrieve_user_by_id( DispLocalOfferActivity.currentOffer.getUserId() );
 
-        try{System.out.println("Current User=" + CurrentUser.toString());}
-        catch(Exception e) {
-            e.printStackTrace();
+        ServerGate gate = new ServerGate();
+        String user_id = getIntent().getStringExtra("user_id");
+        CurrentUser = gate.retrieve_user_by_id( user_id );
+        if (CurrentUser == null){
+            finish();
+            return;
         }
+
         Rb1 = (RatingBar) findViewById(R.id.ratingBarUser);
         Rb2 = (RatingBar) findViewById(R.id.ratingBarReviewDisplay);
 
