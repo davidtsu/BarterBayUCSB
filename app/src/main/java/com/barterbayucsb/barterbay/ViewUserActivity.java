@@ -21,8 +21,10 @@ public class ViewUserActivity extends AppCompatActivity {
     ImageView IV;
     TextView usernameTV;
     TextView emailTV;
-    TextView reviewTV;
-    RatingBar Rb1, Rb2;
+    static TextView reviewTV;
+    static RatingBar Rb1, Rb2;
+    static Button NextButton, PrevButton;
+    static int currentReview=0,maxReviews=0;
     protected Activity thisActivity = this;
 
     @Override
@@ -33,14 +35,14 @@ public class ViewUserActivity extends AppCompatActivity {
         ServerGate gate = new ServerGate();
         Log.i("user id when retrieve:", DispLocalOfferActivity.currentOffer.getUserId());
         CurrentUser = gate.retrieve_user_by_id( DispLocalOfferActivity.currentOffer.getUserId() );
-        if (CurrentUser == null ){
-            //todo handle the case here
-            finish();
-        }
-        CurrentReview = new Review();
+
         System.out.println("Current User=" + CurrentUser.toString());
         Rb1 = (RatingBar) findViewById(R.id.ratingBarUser);
         Rb2 = (RatingBar) findViewById(R.id.ratingBarReviewDisplay);
+
+        NextButton = (Button) findViewById(R.id.nextReviewButton);
+        PrevButton = (Button) findViewById(R.id.prevReviewButton);
+
         IV = (ImageView) findViewById(R.id.profilePic) ;
         usernameTV = (TextView) findViewById(R.id.UserNameTextView);
         emailTV = (TextView) findViewById(R.id.EmailTextView);
@@ -51,6 +53,11 @@ public class ViewUserActivity extends AppCompatActivity {
 
         usernameTV.setText(CurrentUser.get_name());
         emailTV.setText(CurrentUser.getEmail());
+        if (CurrentUser == null ){
+            //todo handle the case here
+            finish();
+        }
+
 
         //display info in currentOffer
         //IV.setImageBitmap(DispLocalOfferActivity.currentOffer.image);
@@ -65,6 +72,8 @@ public class ViewUserActivity extends AppCompatActivity {
        //Rb2.setEnabled(false);
         Rb1.setAlpha(.5f);
         Rb2.setAlpha(.5f);
+        updateButtons();
+
 
         doneButton.setOnClickListener(new View.OnClickListener() {//end activity, clear currentOffer
             @Override
@@ -89,12 +98,90 @@ public class ViewUserActivity extends AppCompatActivity {
 
             }
 
-    });
+        });
+        NextButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view){
+                currentReview++;
+                updateReviews();
+            }
+        });
+        PrevButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view){
+                currentReview--;
+                updateReviews();
+            }
+        });
+
 
     }
     public static void setCurrentUser(User u)
     {
         CurrentUser = u;
+    }
+
+    public static void updateReviews(){
+
+        try{
+            maxReviews = CurrentUser.getAllReviews().size()-1;
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            reviewTV.setText("No reviews");
+            reviewTV.setEnabled(false);
+            reviewTV.setAlpha(.7f);
+        }
+
+        updateButtons();
+
+    }
+    private static void updateButtons()
+    {
+        if(currentReview==maxReviews)
+        {
+            NextButton.setEnabled(false);
+            NextButton.setAlpha(.5f);
+        }
+        else
+        {
+            NextButton.setEnabled(true);
+            NextButton.setAlpha(1f);
+        }
+        if(currentReview==0)
+        {
+            PrevButton.setEnabled(false);
+            PrevButton.setAlpha(.5f);
+        }
+        else
+        {
+            PrevButton.setEnabled(true);
+            PrevButton.setAlpha(1f);
+        }
+
+
+
+        try{
+            Rb2.setRating(CurrentUser.getAllReviews().get(currentReview).getRating());
+            float sum = 0;
+            float reviews = 0;
+            for (Review r:CurrentUser.getAllReviews()
+                 ) { sum += r.getRating();
+                    reviews++;
+            }
+            Rb1.setRating(sum/reviews);
+            reviewTV.setText(CurrentUser.getAllReviews().get(currentReview).getText());
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            Rb2.setRating(3);
+        }
+
+
     }
 /*
     @Override

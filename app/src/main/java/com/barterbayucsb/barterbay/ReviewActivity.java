@@ -33,7 +33,7 @@ public class ReviewActivity extends AppCompatActivity {
         Button uploadButton = (Button) findViewById(R.id.uploadButton);
         Button doneButton = (Button) findViewById(R.id.doneButtonReview);
         final RatingBar rating = (RatingBar) findViewById(R.id.ratingBar);
-
+        rating.setStepSize(1.0f);
         final AutoCompleteTextView reviewTextView = (AutoCompleteTextView) findViewById(R.id.usernameTextView);
 
         // modified from https://developer.android.com/training/permissions/requesting.html
@@ -58,8 +58,7 @@ public class ReviewActivity extends AppCompatActivity {
                 }
                 else {//cases 2 and 3
 
-
-                    Review review = new Review(reviewTextView.getText().toString(),text,rating.getNumStars() );
+                    //Review review = new Review(reviewTextView.getText().toString(),text,rating.getNumStars() );
 
 
 
@@ -81,7 +80,11 @@ public class ReviewActivity extends AppCompatActivity {
                         try{
                             //newOffer.writeOffer(view);
                             //Snackbar.make(view, "Successfully wrote to" + newOffer.getPath(), Snackbar.LENGTH_SHORT).show();
-                            ViewUserActivity.CurrentUser.addToReviews(review);
+                            ViewUserActivity.CurrentUser.addToReviews(new Review(reviewTextView.getText().toString(),text,Math.round(rating.getRating())));
+                            ViewUserActivity.updateReviews();
+                            System.out.println("added review text: " + reviewTextView.getText().toString());
+
+
                             finish();
 
                         } catch (Exception e) {

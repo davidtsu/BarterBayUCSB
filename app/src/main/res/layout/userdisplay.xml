@@ -93,7 +93,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/prevReviewButton"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -111,9 +111,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_weight="0.99"
                 android:padding="4dp"
-                android:text="sample review"
-                android:layout_weight="0.99" />
+                android:text="No reviews yet 😞" />
 
             <RatingBar
                 android:isIndicator="true"
@@ -130,7 +130,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/nextReviewButton"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
