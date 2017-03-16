@@ -22,7 +22,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 /**
  * Created by Daniel on 2/18/2017.
  */
-public class ViewPost extends AppCompatActivity {
+public class ViewMyPost extends AppCompatActivity {
     ImageView IV;
     TextView TitleTV;
     TextView DescriptionTV;
@@ -92,25 +92,25 @@ public class ViewPost extends AppCompatActivity {
         l =  lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         Location L1 = new Location("");
 
-        L1.setLatitude(DispLocalOfferActivity.currentOffer.getLocation().latitude);
-        L1.setLongitude(DispLocalOfferActivity.currentOffer.getLocation().longitude);
+        L1.setLatitude(MyOffersActivity.currentOffer.getLocation().latitude);
+        L1.setLongitude(MyOffersActivity.currentOffer.getLocation().longitude);
 
 
 
 
 
         //display info in currentOffer
-        IV.setImageBitmap(DispLocalOfferActivity.currentOffer.image);
-        TitleTV.setText(DispLocalOfferActivity.currentOffer.getName());
-        DescriptionTV.setText(DispLocalOfferActivity.currentOffer.getDescription());
-        ValueTV.setText("Estimated Value: "+PostActivity.valueStrings[DispLocalOfferActivity.currentOffer.getValue()]+".");
-        TimeTV.setText(new TimeFormatter().formattedAge(DispLocalOfferActivity.currentOffer.get_time_stamp()));
+        IV.setImageBitmap(MyOffersActivity.currentOffer.image);
+        TitleTV.setText(MyOffersActivity.currentOffer.getName());
+        DescriptionTV.setText(MyOffersActivity.currentOffer.getDescription());
+        ValueTV.setText("Estimated Value: "+PostActivity.valueStrings[MyOffersActivity.currentOffer.getValue()]+".");
+        TimeTV.setText(new TimeFormatter().formattedAge(MyOffersActivity.currentOffer.get_time_stamp()));
         //DistanceTV.setText(new DecimalFormat("#.##").format(l.distanceTo(L1))+" km away.");
         DistanceTV.setText("");
         doneButton.setOnClickListener(new View.OnClickListener() {//end activity, clear currentOffer
             @Override
             public void onClick(View view) {
-                DispLocalOfferActivity.currentOffer = null;
+                MyOffersActivity.currentOffer = null;
                 MapsActivityNew.showInfoWindows();
                 finish();
             }
@@ -121,8 +121,8 @@ public class ViewPost extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Snackbar.make(view,"123-456-7890", Snackbar.LENGTH_LONG).show(); //TODO: tell ViewUserActivity what do display...
-//                ViewUserActivity.setCurrentUser(ServerGate.retrieve_user_by_id(DispLocalOfferActivity.currentOffer.getUser_id())); TODO: uncomment this after these functions are implemented
-                Intent intent = new Intent(ViewPost.this, ViewUserActivity.class);
+//                ViewUserActivity.setCurrentUser(ServerGate.retrieve_user_by_id(MyOffersActivity.currentOffer.getUser_id())); TODO: uncomment this after these functions are implemented
+                Intent intent = new Intent(ViewMyPost.this, ViewUserActivity.class);
                 startActivity(intent);
 
 
