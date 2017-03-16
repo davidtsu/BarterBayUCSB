@@ -31,7 +31,6 @@ public class ViewUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.userdisplay);
         ServerGate gate = new ServerGate();
-        Log.i("user id when retrieve:", DispLocalOfferActivity.currentOffer.getUserId());
         CurrentUser = gate.retrieve_user_by_id( DispLocalOfferActivity.currentOffer.getUserId() );
         if (CurrentUser == null ){
             //todo handle the case here
