@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,17 +31,26 @@ public class ViewUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.userdisplay);
         ServerGate gate = new ServerGate();
+        Log.i("user id when retrieve:", DispLocalOfferActivity.currentOffer.getUserId());
         CurrentUser = gate.retrieve_user_by_id( DispLocalOfferActivity.currentOffer.getUserId() );
+        if (CurrentUser == null ){
+            //todo handle the case here
+            finish();
+        }
         CurrentReview = new Review();
+        System.out.println("Current User=" + CurrentUser.toString());
         Rb1 = (RatingBar) findViewById(R.id.ratingBarUser);
         Rb2 = (RatingBar) findViewById(R.id.ratingBarReviewDisplay);
         IV = (ImageView) findViewById(R.id.profilePic) ;
-        usernameTV = (TextView) findViewById(R.id.usernameTextView);
-        emailTV = (TextView) findViewById(R.id.DistanceTextView);
+        usernameTV = (TextView) findViewById(R.id.UserNameTextView);
+        emailTV = (TextView) findViewById(R.id.EmailTextView);
         reviewTV = (TextView) findViewById(R.id.reviewText);
         Button contactUserButton = (Button) findViewById(R.id.contactUserButton);
         Button doneButton = (Button) findViewById(R.id.doneButtonUser);
         Button reviewUserButton = (Button) findViewById(R.id.ReviewUserButton);
+
+        usernameTV.setText(CurrentUser.get_name());
+        emailTV.setText(CurrentUser.getEmail());
 
         //display info in currentOffer
         //IV.setImageBitmap(DispLocalOfferActivity.currentOffer.image);

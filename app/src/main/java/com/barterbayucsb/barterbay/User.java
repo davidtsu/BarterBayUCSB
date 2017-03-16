@@ -20,6 +20,7 @@ final class User {
     public String get_name(){
         return name;
     }
+    public String getEmail() { return email; }
     public String getId() {return id; };
     public User() {
         offers = new ArrayList<Offer>();
@@ -38,6 +39,10 @@ final class User {
         System.out.println(info);
         return info;
 
+    }
+
+    public String toString(){
+        return dump_info();
     }
     public void addToOffers(Offer offer) {
         offers.add(offer);

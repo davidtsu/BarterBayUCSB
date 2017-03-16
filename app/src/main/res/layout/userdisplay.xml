@@ -31,7 +31,7 @@
             android:weightSum="1">
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/UserNameTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.94"
@@ -59,7 +59,7 @@
                 android:scaleY=".7" />
 
             <TextView
-                android:id="@+id/usernameTextView"
+                android:id="@+id/EmailTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"

@@ -207,7 +207,7 @@ class ServerGate {
     }
 
     private int OFFER_TIME_LIMIT = 100000;
-    private int USER_TIME_LIMIT = 100;
+    private int USER_TIME_LIMIT = 1000;
     public User retrieve_user_by_id(String id){
         try {
             new RetrieveTasks("retrieve_user_by_id", id).execute().get(USER_TIME_LIMIT, TimeUnit.MILLISECONDS);

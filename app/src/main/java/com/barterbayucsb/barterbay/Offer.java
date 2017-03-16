@@ -89,7 +89,7 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
             this.value = (new Integer(value));
         }
         catch (Exception e){
-            e.printStackTrace();
+            System.out.println("Exception, returned user no value, using default value");
             this.value = 0;
         }
     }
