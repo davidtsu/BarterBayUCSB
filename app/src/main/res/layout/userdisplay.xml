@@ -58,6 +58,12 @@
                 android:scaleX=".7"
                 android:scaleY=".7" />
 
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
+
             <TextView
                 android:id="@+id/EmailTextView"
                 android:layout_width="match_parent"
@@ -70,6 +76,7 @@
                 android:text="test@domain.com"
                 android:textAllCaps="false"
                 android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                android:textColor="@color/colorAccent"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -93,7 +100,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/prevReviewButton"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -111,9 +118,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_weight="0.99"
                 android:padding="4dp"
-                android:text="sample review"
-                android:layout_weight="0.99" />
+                android:text="No reviews yet 😞" />
 
             <RatingBar
                 android:isIndicator="true"
@@ -130,7 +137,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/nextReviewButton"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

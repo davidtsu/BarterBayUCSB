@@ -539,7 +539,21 @@ class ServerGate {
             String picture_url = json.getJSONObject("picture").getString("url");
             picture_url = picture_url.replace("https", "http");
             Bitmap offer_pic = read_image_to_bitmap(picture_url);
-            Offer offer = new Offer(id, user_id, content, picture_url, updated_at, created_at, offer_pic, value);
+            Offer offer = new Offer();
+            try{offer = new Offer(id, user_id, content, picture_url, updated_at, created_at, offer_pic, value);}
+            catch(Exception e)
+            {
+                e.printStackTrace();
+                System.out.println("Error writing offer. Trying to write with blank description.");
+                try{
+                    offer = new Offer(id, user_id, "", picture_url, updated_at, created_at, offer_pic, value);
+                }
+                catch(Exception e2)
+                {
+                    e2.printStackTrace();
+                    System.out.println("Different error writing offer.");
+                }
+            }
             return offer;
         }
         catch (Exception e){
@@ -565,7 +579,16 @@ class ServerGate {
         System.out.println("in uploading offer");
         try {
             String content = offer.getDescription();
-            Bitmap image = offer.getImage();
+            Bitmap image =  Bitmap.createBitmap(new int[]{0xffffffff, 0x00000000, 0x00000000, 0xffffffff}, 2, 2, Bitmap.Config.ALPHA_8);
+
+            try {
+                image = offer.getImage();
+            }
+            catch(Exception e)
+            {
+                System.out.println("No image selected. Using default image...");
+
+            }
             URL url = new URL(upload_offer_url());
             HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
 

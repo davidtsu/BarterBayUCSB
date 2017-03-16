@@ -23,6 +23,7 @@ final class User {
     public String getEmail() { return email; }
     public String getId() {return id; };
     public User() {
+        reviews = new ArrayList<>();
         offers = new ArrayList<Offer>();
         name = "test user";
         id = "test id";
@@ -32,6 +33,9 @@ final class User {
         this.name = name;
         this.email = email;
         this.cookie_key = token;
+        this.offers = new ArrayList<>();
+        this.reviews = new ArrayList<>();
+
     }
 
     public String dump_info(){
@@ -49,5 +53,9 @@ final class User {
     }
     public void addToReviews(Review review) {
         reviews.add(review);
+    }
+    public ArrayList<Review> getAllReviews()
+    {
+        return reviews;
     }
 }
