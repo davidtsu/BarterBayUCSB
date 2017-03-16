@@ -38,7 +38,10 @@ public class ViewUserActivity extends AppCompatActivity {
         Log.i("user id when retrieve:", DispLocalOfferActivity.currentOffer.getUserId());
         CurrentUser = gate.retrieve_user_by_id( DispLocalOfferActivity.currentOffer.getUserId() );
 
-        System.out.println("Current User=" + CurrentUser.toString());
+        try{System.out.println("Current User=" + CurrentUser.toString());}
+        catch(Exception e) {
+            e.printStackTrace();
+        }
         Rb1 = (RatingBar) findViewById(R.id.ratingBarUser);
         Rb2 = (RatingBar) findViewById(R.id.ratingBarReviewDisplay);
 
@@ -53,7 +56,12 @@ public class ViewUserActivity extends AppCompatActivity {
         Button doneButton = (Button) findViewById(R.id.doneButtonUser);
         Button reviewUserButton = (Button) findViewById(R.id.ReviewUserButton);
 
-        usernameTV.setText(CurrentUser.get_name());
+        try{usernameTV.setText(CurrentUser.get_name());}
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            usernameTV.setText("Error fetching name!");
+        }
         emailTV.setText(CurrentUser.getEmail());
         if (CurrentUser == null ){
             //todo handle the case here
