@@ -131,11 +131,17 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 String titleTest = titleTextView.getText().toString();
+                String descTest = descriptionTextView.getText().toString();
                 if((titleTest.equals("")||titleTest.equals("Enter title here..."))) { //case 1
 
 
                     Snackbar.make(view,"Please enter a title for your post", Snackbar.LENGTH_SHORT).show();
 
+
+                }
+                else if((descTest.equals(""))||descTest.equals("Enter description here..."))
+                {
+                    Snackbar.make(view,"Please enter a description for your post", Snackbar.LENGTH_SHORT).show();
 
                 }
                 else {//cases 2 and 3
@@ -224,8 +230,8 @@ public class PostActivity extends AppCompatActivity {
                         try {
                             newOffer.writeOffer(view);
                             Snackbar.make(view, "Successfully wrote to" + newOffer.getPath(), Snackbar.LENGTH_SHORT).show();
-
                             finish();
+
 
                         } catch (IOException e) {
                             e.printStackTrace();
