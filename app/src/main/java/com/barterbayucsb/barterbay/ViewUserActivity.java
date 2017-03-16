@@ -1,6 +1,8 @@
 package com.barterbayucsb.barterbay;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -70,8 +72,8 @@ public class ViewUserActivity extends AppCompatActivity {
 
        //Rb1.setEnabled(false);
        //Rb2.setEnabled(false);
-        Rb1.setAlpha(.5f);
-        Rb2.setAlpha(.5f);
+        Rb1.setAlpha(.8f);
+        Rb2.setAlpha(.8f);
         updateButtons();
 
 
@@ -113,6 +115,25 @@ public class ViewUserActivity extends AppCompatActivity {
             public void onClick(View view){
                 currentReview--;
                 updateReviews();
+            }
+        });
+        emailTV.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view){
+                try {
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText(emailTV.getText(), emailTV.getText());
+                    clipboard.setPrimaryClip(clip);
+                    Snackbar.make(view, "Copied email to clipboard", Snackbar.LENGTH_SHORT).show();
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                    Snackbar.make(view,"Error copying email to clipboard", Snackbar.LENGTH_SHORT).show();
+
+                }
+
             }
         });
 
