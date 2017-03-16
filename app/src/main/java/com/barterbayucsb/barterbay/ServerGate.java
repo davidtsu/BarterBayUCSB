@@ -126,14 +126,14 @@ class ServerGate {
     }
 
 
-    private static String post_userJson_url(){
+    private String post_userJson_url(){
         return SERVER_URL + USER_JSON_PATH;
     }
     /*
     retrieve user is a function to get user information from server.
     it sends an http request to user
      */
-    public static User retrieve_user_by_id_direct(String  user_id){
+    User retrieve_user_by_id_direct(String  user_id){
         try {
             URL url = new URL(post_userJson_url());
             HttpURLConnection urlc = (HttpURLConnection) url.openConnection();

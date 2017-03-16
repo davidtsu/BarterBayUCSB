@@ -29,7 +29,8 @@ public class ViewUserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.userdisplay);
-        CurrentUser = ServerGate.retrieve_user_by_id_direct( DispLocalOfferActivity.currentOffer.getUserId() );
+        ServerGate sg = new ServerGate();
+        CurrentUser = sg.retrieve_user_by_id_direct( DispLocalOfferActivity.currentOffer.getUserId() );
         CurrentReview = new Review();
 
         Rb1 = (RatingBar) findViewById(R.id.ratingBarUser);
