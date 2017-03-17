@@ -166,9 +166,12 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
     }
 
     public String toString(){
-        String res = "\nid=" + id + "\nuser_id=" + user_id ;
+        String res = "\n#######\nid=" + id + "\nuser_id=" + user_id ;
         res += "\n pic_url=" + picture_url;
+        res += "\n content=" + description;
         res += "\n updated at=" + updated_at;
+        res += "\n latitude=" + latitude;
+        res += "\n longitude=" + longitude;
         res += "\n########\n";
         return res;
     }

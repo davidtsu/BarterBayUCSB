@@ -33,8 +33,8 @@ class ServerGate {
      */
     User test_user = new User();
     Offer test_offer = new Offer();
-    final static String SERVER_URL = "http://nameless-temple-44705.herokuapp.com";
-    //final static String SERVER_URL = "http://10.0.2.2:3000/";
+    //final static String SERVER_URL = "http://nameless-temple-44705.herokuapp.com";
+    final static String SERVER_URL = "http://10.0.2.2:3000/";
     final static String LOGIN_PATH = "/login";
     final static String UPLOAD_OFFER_PATH = "/upload_offer";
     final static String OFFER_JSON_PATH = "/offer_json";
