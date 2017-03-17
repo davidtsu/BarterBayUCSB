@@ -184,6 +184,41 @@ public class MyOffersActivity extends AppCompatActivity {
             info_text1.setText("No local offers here \uD83D\uDE1E");
             info_text1.setClickable(false);
             for (int i = 1; i < 7 ; i++) {
+
+                cards.get(i).setVisibility(View.GONE);
+                info_texts.get(i).setClickable(false);
+                continue;
+
+            }
+            return;
+        }
+
+
+        for (int i = 1; i < 7 ; i++) {
+            if ( i + 7 * (page - 1) >= LocalOffers.size()){
+                cards.get(i).setVisibility(View.GONE);
+                info_texts.get(i).setClickable(false);
+                continue;
+            }
+            Offer offer = LocalOffers.get(i + 7 * (page - 1));
+            if (!offer.id.equals("test id")) {
+                info_texts.get(i).setText(offer.getName());
+                images.get(i).setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(i + 7 * (page - 1)).image), 100, 100, false));
+                cards.get(i).setVisibility(View.VISIBLE);
+                info_texts.get(i).setClickable(true);
+                cards.get(i).animate();
+            } else {
+                cards.get(i).setVisibility(View.GONE);
+                info_texts.get(i).setClickable(false);
+            }
+
+        }
+        /*
+        System.out.println("in display posts");
+        if (LocalOffers.size() <= 7 * (page - 1)){
+            info_text1.setText("No your offers here \uD83D\uDE1E");
+            info_text1.setClickable(false);
+            for (int i = 1; i < 7 ; i++) {
                 if ( i + 7 * (page - 1) >= LocalOffers.size()){
                     cards.get(i).setVisibility(View.GONE);
                     info_texts.get(i).setClickable(false);
@@ -230,7 +265,7 @@ public class MyOffersActivity extends AppCompatActivity {
 
             finish();
         }
-
+*/
     }
 
 
