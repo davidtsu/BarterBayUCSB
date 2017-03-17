@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +30,7 @@ import static com.barterbayucsb.barterbay.PostActivity.MY_PERMISSIONS_REQUEST_WR
 
 public class SettingsActivity extends AppCompatActivity {
     public static SerializableSettings Preferences = new SerializableSettings();
-
+    final static int DISTANCE_HUGE = 999999999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,8 @@ public class SettingsActivity extends AppCompatActivity {
         final RadioButton priceButton = (RadioButton) findViewById(R.id.priceButton);
         final Switch filterSwitch = (Switch) findViewById(R.id.switch2);
         final EditText phoneInput = (EditText) findViewById(R.id.editPhone);
+        final ToggleButton allToggle = (ToggleButton) findViewById(R.id.toggleButtonDistance);
+        final TextView distanceText = (TextView) findViewById(R.id.textViewMaxDistance);
         initializePreferences(view);
 
 
@@ -65,12 +68,24 @@ public class SettingsActivity extends AppCompatActivity {
         priceButton.setChecked(Preferences.getFILTER_BY_PRICE());
         filterSwitch.setChecked(Preferences.getFILTER_LOW_TO_HIGH());
         phoneInput.setText(Preferences.getPhoneNo());
+        if(Preferences.getDISTANCE()==DISTANCE_HUGE)
+        {
+            //gray stuff out
+            distanceText.setAlpha(0.5f);
+            sb.setAlpha(0.5f);
+            sb.setEnabled(false);
+            sliderLabel.setAlpha(0.5f);
+            allToggle.setChecked(true);
+        }
+        else {
+            float currentValue = ((float) (Preferences.getDISTANCE() - 1) / 100);
 
-        float currentValue = ((float) (Preferences.getDISTANCE()-1 )/ 100);
-        if(currentValue>1)
-            sliderLabel.setText(Float.toString(currentValue) + " km");
-        else
-            sliderLabel.setText("1.00 km");
+            if (currentValue > 1)
+                sliderLabel.setText(Float.toString(currentValue) + " km");
+            else
+                sliderLabel.setText("1.00 km");
+            allToggle.setChecked(false);
+        }
 
 
 
@@ -78,12 +93,33 @@ public class SettingsActivity extends AppCompatActivity {
 
 
 
+        allToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(allToggle.isChecked())
+                {
+                    distanceText.setAlpha(0.5f);
+                    sb.setAlpha(0.5f);
+                    sb.setEnabled(false);
+                    sliderLabel.setAlpha(0.5f);
+                }
+                else
+                {
+                    distanceText.setAlpha(1.0f);
+                    sb.setAlpha(1.0f);
+                    sb.setEnabled(true);
+                    sliderLabel.setAlpha(1.0f);
 
-
+                }
+            }
+        });
         doneButton.setOnClickListener(new View.OnClickListener() {  //handles submitting settings
             @Override
             public void onClick(View view) {
-                Preferences.setDISTANCE(sb.getProgress());
+                if(allToggle.isChecked()){
+                    Preferences.setDISTANCE(DISTANCE_HUGE);
+                }
+                else Preferences.setDISTANCE(sb.getProgress());
                 Preferences.setFILTER_BY_AGE(ageButton.isChecked());
                 Preferences.setFILTER_BY_LOCATION(locationButton.isChecked());
                 Preferences.setFILTER_BY_PRICE(priceButton.isChecked());
