@@ -1,12 +1,5 @@
 package com.barterbayucsb.barterbay;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
-/**
- * Created by David on 1/27/2017.
- */
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -15,9 +8,7 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -35,10 +26,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.concurrent.TimeUnit;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.os.Environment.getExternalStorageDirectory;
+
+/**
+ * Created by David on 1/27/2017.
+ */
 
 /**
  * Created by David on 1/27/2017.
@@ -73,7 +67,6 @@ public class MyOffersActivity extends AppCompatActivity {
             LocalOffers.add(new Offer()); //so that we don't try to display offers that don't exist
 
         }*/
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingMapButton);
         Button DELETE = (Button) findViewById(R.id.deletebutton);
 
         thisView = this.getWindow().getDecorView().findViewById(android.R.id.content);
@@ -109,19 +102,6 @@ public class MyOffersActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MyOffersActivity.this, MapsActivityNew.class);
-                startActivity(intent);
-            }
-
-
-        });
         DELETE.setVisibility( View.GONE );
         DELETE.setOnClickListener(new View.OnClickListener() {
             @Override
