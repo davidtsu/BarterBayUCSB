@@ -3,6 +3,13 @@ CS48 project - G07
 
 README
 -----------------------
+Steps for account creation (required before opening application):
+
+	1. Visit the following website:  https://nameless-temple-44705.herokuapp.com/
+	2. Follow the account creation process
+	3. Verify email address
+	4. (Optional) Customize account on website.
+
 Steps to run:
 
 Option 1: build from Android Studio
@@ -37,12 +44,16 @@ Option 2: Use the provided Debug.apk provided
 
 
 Known bugs:
-	in UploadPicActivity (reachable from main menu's floating action button > PostActivity's upload image button):
-		If an image that is currently in the process of being synced to Google Photos (the thumbnail will still be selectable) is selected, the app can crash
+
+	Hopefully, none!
 
 How to use:
-	When prompted to sign in, enter any (or no) information. This is just a placeholder for now.
-	Press the Local Offers button in the main menu to view all locally stored offers, up to the first 7 in the device's offers directory. If there are less than 7 offers there will be test offers displayed.
-	Press the floating action button in the main menu to create a new post. Submitting this post will save it to the device's offers directory.
+
+	When prompted to sign in, enter information.
+	Press the Local Offers button in the main menu to view all locally stored offers.
+	Press the floating action button in Local Offers to view all offers in the area using maps feature.
+	Press the floating action button in the main menu to create a new post. Submitting this post will save it to the device's offers directory and to the account stored on the server.
+	Press any offer to view its price, a picture, a description, and how to contact the owner.
+	
 	
 
