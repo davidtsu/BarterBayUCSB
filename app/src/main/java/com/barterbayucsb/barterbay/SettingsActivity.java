@@ -147,7 +147,6 @@ public class SettingsActivity extends AppCompatActivity {
                     try {
                         Preferences.writeSettings(view);
                         Snackbar.make(view, "Successfully wrote to" + Preferences.getPath(), Snackbar.LENGTH_SHORT).show();
-
                         finish();
 
                     } catch (IOException e) {

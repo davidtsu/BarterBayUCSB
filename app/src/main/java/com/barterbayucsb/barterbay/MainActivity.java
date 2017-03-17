@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         Button legal_button = (Button)findViewById(R.id.legal_button);
         Button review_button = (Button)findViewById(R.id.review_button);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-
+        review_button.setVisibility(View.GONE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

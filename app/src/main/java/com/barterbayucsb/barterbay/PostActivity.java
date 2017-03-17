@@ -14,11 +14,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -230,6 +232,10 @@ public class PostActivity extends AppCompatActivity {
                         try {
                             newOffer.writeOffer(view);
                             Snackbar.make(view, "Successfully wrote to" + newOffer.getPath(), Snackbar.LENGTH_SHORT).show();
+                            Toast toast= Toast.makeText(PostActivity.super.getBaseContext(), "Successfully submitted offer!", Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.BOTTOM, 0, 150);
+                            toast.show();
+
                             finish();
 
 
