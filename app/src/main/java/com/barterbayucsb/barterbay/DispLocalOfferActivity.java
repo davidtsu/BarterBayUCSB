@@ -151,55 +151,67 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         if (LocalOffers == null){
             LocalOffers = new ArrayList<Offer>();
         }
+        Snackbar.make(view, "got offers from cloud server", Snackbar.LENGTH_SHORT).show();
+        Location L1 = new Location("");
+        int i = 0;
+        while (ContextCompat.checkSelfPermission(thisActivity, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            //if (ActivityCompat.shouldShowRequestPermissionRationale(thisActivity,
+            //android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+            // Show an explanation to the user *asynchronously* -- don't block
+            // this thread waiting for the user's response! After the user
+            // sees the explanation, try again to request the permission.
+
+            //} else {
+
+            // No explanation needed, we can request the permission.
+
+            ActivityCompat.requestPermissions(thisActivity, new String[]{ACCESS_FINE_LOCATION}, PostActivity.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+
+        }
+        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        final Location l;
+        lm.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        }, null);
+        l = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        ArrayList<Offer> temp = new ArrayList<Offer>();
+        for(Offer offer: LocalOffers) {
+            L1.setLatitude(offer.getLocation().latitude);
+            L1.setLongitude(offer.getLocation().longitude);
+            float distance = l.distanceTo(L1);
+            float distancePrefs = SettingsActivity.Preferences.getDISTANCEfloat() * 10.0f;
+            if (true | (distance <= SettingsActivity.Preferences.getDISTANCEfloat() * 10.0f + 1000.0f)) {
+                temp.add(offer);
+            }
+        }
+        LocalOffers = temp;
+        /*
         File _offers = new File(getExternalStorageDirectory().toString() + "/offers/");
         Snackbar.make(view, "got offers from" + getExternalStorageDirectory().toString() + "/offers/", Snackbar.LENGTH_SHORT).show();
 
-        if (!_offers.isDirectory() || _offers.listFiles() == null) {
-            displayPosts();
-            updateButtons();
-        }
+
         else {
-            int i = 0;
-            while (ContextCompat.checkSelfPermission(thisActivity, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                //if (ActivityCompat.shouldShowRequestPermissionRationale(thisActivity,
-                //android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-                //} else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(thisActivity, new String[]{ACCESS_FINE_LOCATION}, PostActivity.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-
-
-            }
-            final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            final Location l;
-            lm.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-
-                }
-
-                @Override
-                public void onStatusChanged(String s, int i, Bundle bundle) {
-
-                }
-
-                @Override
-                public void onProviderEnabled(String s) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String s) {
-
-                }
-            }, null);
-            l = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
             for (File f : _offers.listFiles()) {
                 try {
@@ -228,7 +240,8 @@ public class DispLocalOfferActivity extends AppCompatActivity {
                 }
 
             }
-        }
+            */
+
 
 
         //displayPostsOld(t);
@@ -238,6 +251,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         updateButtons();
 
     }
+
 
     protected void sortPosts() {
         if(SettingsActivity.Preferences.getFILTER_BY_LOCATION()) //TODO: implement location calculations and sorting. Will need a permission check for location
@@ -348,21 +362,16 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         if (LocalOffers.size() <= 7 * (page - 1)){
             info_text1.setText("No local offers here \uD83D\uDE1E");
             info_text1.setClickable(false);
+            for (int i = 1; i < 7 ; i++) {
+
+                cards.get(i).setVisibility(View.GONE);
+                info_texts.get(i).setClickable(false);
+                continue;
+
+            }
             return;
         }
 
-        if (!LocalOffers.get(0 + 7 * (page - 1)).id.equals("test id")) { //we don't want to display the debug filler posts.
-            info_text1.setText(LocalOffers.get(0 + 7 * (page - 1)).getName());
-            image1.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(0 + 7 * (page - 1)).image), 100, 100, false));
-            card1.setVisibility(View.VISIBLE);
-
-            info_text1.setClickable(true);
-            card1.animate();
-        } else if (LocalOffers.size() <= 7) {
-            //card1.setVisibility(View.GONE);
-            info_text1.setText("No local offers \uD83D\uDE1E");
-            info_text1.setClickable(false);
-        }
 
         for (int i = 1; i < 7 ; i++) {
             if ( i + 7 * (page - 1) >= LocalOffers.size()){
@@ -378,7 +387,6 @@ public class DispLocalOfferActivity extends AppCompatActivity {
                 info_texts.get(i).setClickable(true);
                 cards.get(i).animate();
             } else {
-
                 cards.get(i).setVisibility(View.GONE);
                 info_texts.get(i).setClickable(false);
             }

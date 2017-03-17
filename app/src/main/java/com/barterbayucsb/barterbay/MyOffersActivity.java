@@ -161,7 +161,6 @@ public class MyOffersActivity extends AppCompatActivity {
 
             if (offer.getUserId().equals(User.CURRENT_USER.getId())){
                 temp.add(offer);
-                System.out.println("offer:" + offer.toString());
             }
         }
         LocalOffers = temp;
@@ -273,29 +272,21 @@ public class MyOffersActivity extends AppCompatActivity {
             info_text1.setText("No local offers here \uD83D\uDE1E");
             info_text1.setClickable(false);
             for (int i = 1; i < 7 ; i++) {
-                if ( i + 7 * (page - 1) >= LocalOffers.size()){
+
                     cards.get(i).setVisibility(View.GONE);
                     info_texts.get(i).setClickable(false);
                     continue;
-                }
+
             }
             return;
         }
 
-        if (!LocalOffers.get(0 + 7 * (page - 1)).id.equals("test id")) { //we don't want to display the debug filler posts.
-            info_text1.setText(LocalOffers.get(0 + 7 * (page - 1)).getName());
-            image1.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(0 + 7 * (page - 1)).image), 100, 100, false));
-            card1.setVisibility(View.VISIBLE);
-
-            info_text1.setClickable(true);
-            card1.animate();
-        } else if (LocalOffers.size() <= 7) {
-            //card1.setVisibility(View.GONE);
-            info_text1.setText("No local offers \uD83D\uDE1E");
-            info_text1.setClickable(false);
-        }
-
         for (int i = 1; i < 7 ; i++) {
+            if ( i + 7 * (page - 1) >= LocalOffers.size()){
+                cards.get(i).setVisibility(View.GONE);
+                info_texts.get(i).setClickable(false);
+                continue;
+            }
             Offer offer = LocalOffers.get(i + 7 * (page - 1));
             if (!offer.id.equals("test id")) {
                 info_texts.get(i).setText(offer.getName());
