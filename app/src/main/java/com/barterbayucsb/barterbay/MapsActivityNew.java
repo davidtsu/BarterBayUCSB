@@ -136,7 +136,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         Marker m;
         for(Offer o: LocalOffers)
         {
-            if(!o.getLocation().equals(UCSB)) { //debug offers will have UCSB as their lat long
+            //if(!o.getLocation().equals(UCSB)) { //debug offers will have UCSB as their lat long
                 String snip = o.getDescription();
                 if(snip.length()>=25)
                     snip = snip.substring(0,23) + "...";
@@ -146,7 +146,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
                 m.setTag(o);
                 markerArrayList.add(m);
 
-            }
+            //}
         }
         //mMap.addMarker(new MarkerOptions().position(UCSB).title("UCSB"));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(l.getLatitude(),l.getLongitude()), 12.0f));
