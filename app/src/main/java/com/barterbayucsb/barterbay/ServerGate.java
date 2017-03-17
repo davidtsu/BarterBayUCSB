@@ -34,7 +34,7 @@ class ServerGate {
     User test_user = new User();
     Offer test_offer = new Offer();
     final static String SERVER_URL = "http://nameless-temple-44705.herokuapp.com";
-    //final static String SERVER_URL = "http://0.0.0.0:3000";
+    //final static String SERVER_URL = "http://10.0.2.2:3000/";
     final static String LOGIN_PATH = "/login";
     final static String UPLOAD_OFFER_PATH = "/upload_offer";
     final static String OFFER_JSON_PATH = "/offer_json";
@@ -52,22 +52,29 @@ class ServerGate {
     private ArrayList<Offer> mOffers = null;
     private int mResult = -10;
 
+    //final static private int DEBUG_MODE = 1;
+    //final static private int MODE = 1;
+
     static public  String get_login_url(){
         return SERVER_URL + LOGIN_PATH;
     }
 
     static public String upload_offer_url() {
         return SERVER_URL + UPLOAD_OFFER_PATH;
-        //return "http://10.0.2.2:3000/upload_offer" ;
+
     }
     static public String post_ucsb_login_url(){
         return SERVER_URL + UCSB_LOGIN_PATH;
-        //return "http://10.0.2.2:3000/ucsb_login";
+
     }
     String get_all_offers_url(){
         return SERVER_URL + SHOW_ALL_OFFER_PATH;
-        //return "http://10.0.2.2:3000/show_all_offers";
+
     }
+    String post_offerJson_url(){
+        return SERVER_URL + OFFER_JSON_PATH;
+    }
+
     public ServerGate(){
     }
 
@@ -179,7 +186,7 @@ class ServerGate {
 
     public Offer retrieve_offer_by_id_direct( String offer_id ){
         try {
-            String addr = "http://nameless-temple-44705.herokuapp.com/offer_json";
+            String addr = post_offerJson_url();
             URL url = new URL(addr);
             HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
             String charset = "utf-8";
@@ -539,23 +546,21 @@ class ServerGate {
             String created_at = json.getString("created_at");
             String updated_at = json.getString("updated_at");
             String picture_url = json.getJSONObject("picture").getString("url");
+            Double latitude;
+            Double longitude;
+            try {
+                latitude = json.getDouble("latitude");
+                longitude = json.getDouble("longitude");
+            }
+            catch (Exception e){
+                latitude = null;
+                longitude = null;
+            }
+            String name = json.getString("title");
+
             picture_url = picture_url.replace("https", "http");
             Bitmap offer_pic = read_image_to_bitmap(picture_url);
-            Offer offer = new Offer();
-            try{offer = new Offer(id, user_id, content, picture_url, updated_at, created_at, offer_pic, value);}
-            catch(Exception e)
-            {
-                e.printStackTrace();
-                System.out.println("Error writing offer. Trying to write with blank description.");
-                try{
-                    offer = new Offer(id, user_id, "", picture_url, updated_at, created_at, offer_pic, value);
-                }
-                catch(Exception e2)
-                {
-                    e2.printStackTrace();
-                    System.out.println("Different error writing offer.");
-                }
-            }
+            Offer offer = new Offer(id, user_id, content, picture_url, updated_at, created_at, offer_pic, value, name, latitude, longitude);
             return offer;
         }
         catch (Exception e){
@@ -572,7 +577,8 @@ class ServerGate {
         }
 
         catch (Exception e){
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println("no images in this offer, skip(not critical error)");
             return null;
         }
     }
@@ -603,6 +609,9 @@ class ServerGate {
             json.put("content", content);
             json.put("user_id", offer.getUserId());
             json.put("value", (new Integer(offer.getValue()).toString()));
+            json.put("title", offer.getName());
+            json.put("latitude", offer.getLocation().latitude);
+            json.put("longitude", offer.getLocation().longitude);
 
             System.out.println(json);
             performPostJSON(urlc, json.toString());

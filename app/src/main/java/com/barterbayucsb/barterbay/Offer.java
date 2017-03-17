@@ -65,9 +65,17 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
        
     }
 
-    public Offer(String id, String user_id, String content, String picture_url, String updated_at , String created_at, Bitmap offer_pic, String value){
-        this.latitude = DEFAULT_LATITUDE;
-        this.longitude = DEFAULT_LONGITUTDE;
+    public Offer(String id, String user_id, String content, String picture_url, String updated_at , String created_at, Bitmap offer_pic,
+                 String value, String name, Double latitude, Double longitude){
+        if (latitude == null || longitude == null){
+            this.latitude = DEFAULT_LATITUDE;
+            this.longitude = DEFAULT_LONGITUTDE;
+        }
+        else {
+            this.latitude = longitude;
+            this.longitude = latitude;
+        }
+
         this.id = id;
         this.user_id = user_id;
         this.description = content;
@@ -75,8 +83,13 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
         this.updated_at = updated_at;
         this.created_at = created_at;
 
-        this.name = this.description + " by " + (new ServerGate()).retrieve_user_by_id_direct(user_id).get_name();
-        //this.name = "default name";
+        if (name == "null") {
+            this.name = this.description + " by " + (new ServerGate()).retrieve_user_by_id_direct(user_id).get_name();
+        }
+        else{
+            this.name = name;
+        }
+
         if (offer_pic == null){
             System.out.println("online offer using default pic");
             this.image = DEFAULT_BITMAP;
@@ -89,7 +102,7 @@ class Offer { // since bitmap can't be serialized, we need a helper class for sa
             this.value = (new Integer(value));
         }
         catch (Exception e){
-            System.out.println("Exception, returned user no value, using default value");
+            System.out.println("Exception, returned offer no value, using default value");
             this.value = 0;
         }
     }

@@ -204,7 +204,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
             for (File f : _offers.listFiles()) {
                 try {
 
-//                LocalOffers.add(LocalOffers.size(), SerializableOffer.readOffer(f));
+                  //LocalOffers.add(LocalOffers.size(), SerializableOffer.readOffer(f));
                     Offer newOffer = SerializableOffer.readOffer(f);
                     if (newOffer.image == null)
                         newOffer.image = Bitmap.createBitmap(newArray, 2, 2, Bitmap.Config.ALPHA_8);
