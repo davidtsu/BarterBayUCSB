@@ -370,7 +370,7 @@ public class DispLocalOfferActivity extends AppCompatActivity {
         }
 
 
-        for (int i = 1; i < 7 ; i++) {
+        for (int i = 0; i < 7 ; i++) {
             if ( i + 7 * (page - 1) >= LocalOffers.size()){
                 cards.get(i).setVisibility(View.GONE);
                 info_texts.get(i).setClickable(false);

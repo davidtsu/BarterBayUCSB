@@ -1,33 +1,44 @@
 package com.barterbayucsb.barterbay;
 
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+/**
+ * Created by David on 1/27/2017.
+ */
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.concurrent.TimeUnit;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.os.Environment.getExternalStorageDirectory;
-
-/**
- * Created by David on 1/27/2017.
- */
 
 /**
  * Created by David on 1/27/2017.
@@ -56,8 +67,12 @@ public class MyOffersActivity extends AppCompatActivity {
         LocalOffers = new ArrayList<Offer>();
         setContentView(R.layout.localoffersnew);
         super.onCreate(savedInstanceState);
+        /*
+        for(int i=0; i<8; i++) {
 
+            LocalOffers.add(new Offer()); //so that we don't try to display offers that don't exist
 
+        }*/
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingMapButton);
         Button DELETE = (Button) findViewById(R.id.deletebutton);
 
@@ -150,12 +165,6 @@ public class MyOffersActivity extends AppCompatActivity {
             }
         }
         LocalOffers = temp;
-        if(temp.size()<7)
-            for(int i=0; i<8; i++) {
-
-                LocalOffers.add(new Offer()); //so that we don't try to display offers that don't exist
-
-            }
         sortPosts();
         displayPosts();
         updateButtons();
@@ -163,6 +172,86 @@ public class MyOffersActivity extends AppCompatActivity {
     }
 
     protected void sortPosts() {
+        if(SettingsActivity.Preferences.getFILTER_BY_LOCATION()) //TODO: implement location calculations and sorting. Will need a permission check for location
+        {
+            while (ContextCompat.checkSelfPermission(thisActivity, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                //if (ActivityCompat.shouldShowRequestPermissionRationale(thisActivity,
+                //android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+                //} else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(thisActivity, new String[]{ACCESS_FINE_LOCATION}, PostActivity.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+
+            }
+            final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            final Location l;
+            lm.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+
+                }
+
+                @Override
+                public void onStatusChanged(String s, int i, Bundle bundle) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String s) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String s) {
+
+                }
+            }, null);
+            l =  lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            //final LatLng currentLocation = new LatLng(l.getLatitude(),l.getLongitude());
+
+
+            Collections.sort(LocalOffers, new Comparator<Offer>() {
+                @Override
+                public int compare(Offer O1, Offer O2) {
+                    Location L1 = new Location("");
+                    L1.setLatitude(O1.getLocation().latitude);
+                    L1.setLongitude(O1.getLocation().longitude);
+
+                    Location L2 = new Location("");
+                    L2.setLatitude(O2.getLocation().latitude);
+                    L2.setLongitude(O2.getLocation().longitude);
+                    if(O1.id.equals("test id")||O2.id.equals("test id")) return 0;
+                    if(SettingsActivity.Preferences.getFILTER_LOW_TO_HIGH())
+                        return Float.compare(l.distanceTo(L1),l.distanceTo(L2));
+                    return Float.compare(l.distanceTo(L2),l.distanceTo(L1));
+                }
+            });
+        }
+        else if(SettingsActivity.Preferences.getFILTER_BY_PRICE())
+        {
+            Collections.sort(LocalOffers, new Comparator<Offer>() {
+                @Override
+                public int compare(Offer O1, Offer O2) {
+                    if (O1.id.equals("test id") || O2.id.equals("test id")) return 0;
+
+                    if(!SettingsActivity.Preferences.getFILTER_LOW_TO_HIGH()) {
+
+                        return Integer.compare(O1.getValue(), O2.getValue());
+                    }
+                    else return Integer.compare(O2.getValue(), O1.getValue());
+                }
+            });
+
+
+        }
+        else //default case. Since the radio buttons are mutually exclusive and the logic is too, we can assume this case will be applicable. Additionally, this allows the function to work properly even if settings haven't been initialized yet.
             Collections.sort(LocalOffers, new Comparator<Offer>() {
 
                 @Override
@@ -185,16 +274,15 @@ public class MyOffersActivity extends AppCompatActivity {
             info_text1.setClickable(false);
             for (int i = 1; i < 7 ; i++) {
 
-                cards.get(i).setVisibility(View.GONE);
-                info_texts.get(i).setClickable(false);
-                continue;
+                    cards.get(i).setVisibility(View.GONE);
+                    info_texts.get(i).setClickable(false);
+                    continue;
 
             }
             return;
         }
 
-
-        for (int i = 1; i < 7 ; i++) {
+        for (int i = 0; i < 7 ; i++) {
             if ( i + 7 * (page - 1) >= LocalOffers.size()){
                 cards.get(i).setVisibility(View.GONE);
                 info_texts.get(i).setClickable(false);
@@ -213,59 +301,7 @@ public class MyOffersActivity extends AppCompatActivity {
             }
 
         }
-        /*
-        System.out.println("in display posts");
-        if (LocalOffers.size() <= 7 * (page - 1)){
-            info_text1.setText("No your offers here \uD83D\uDE1E");
-            info_text1.setClickable(false);
-            for (int i = 1; i < 7 ; i++) {
-                if ( i + 7 * (page - 1) >= LocalOffers.size()){
-                    cards.get(i).setVisibility(View.GONE);
-                    info_texts.get(i).setClickable(false);
-                    continue;
-                }
-            }
-            return;
-        }
 
-        if (!LocalOffers.get(0 + 7 * (page - 1)).id.equals("test id")) { //we don't want to display the debug filler posts.
-            info_text1.setText(LocalOffers.get(0 + 7 * (page - 1)).getName());
-            image1.setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(0 + 7 * (page - 1)).image), 100, 100, false));
-            card1.setVisibility(View.VISIBLE);
-
-            info_text1.setClickable(true);
-            card1.animate();
-        } else if (LocalOffers.size() <= 7) {
-            //card1.setVisibility(View.GONE);
-            info_text1.setText("My offers is empty \uD83D\uDE1E");
-            info_text1.setClickable(false);
-        }
-
-        try {
-            for (int i = 1; i < 7; i++) {
-                Offer offer = LocalOffers.get(i + 7 * (page - 1) - 1);
-                if (!offer.id.equals("test id")) {
-                    info_texts.get(i).setText(offer.getName());
-                    images.get(i).setImageBitmap(Bitmap.createScaledBitmap((LocalOffers.get(i + 7 * (page - 1) - 1).image), 100, 100, false));
-                    cards.get(i).setVisibility(View.VISIBLE);
-                    info_texts.get(i).setClickable(true);
-                    cards.get(i).animate();
-                } else {
-                    cards.get(i).setVisibility(View.GONE);
-                    info_texts.get(i).setClickable(false);
-                }
-
-            }
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-            Toast toast= Toast.makeText(super.getBaseContext(), "Error opening my offers!", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.BOTTOM, 0, 150);
-            toast.show();
-
-            finish();
-        }
-*/
     }
 
 
@@ -400,7 +436,7 @@ public class MyOffersActivity extends AppCompatActivity {
 
     protected void updateButtons()
     {
-        maxPage = (LocalOffers.size()+6)/7 - 1;
+        maxPage = (LocalOffers.size()+6)/7;
 
         if(page>=maxPage)
         {
