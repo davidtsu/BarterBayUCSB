@@ -6,8 +6,8 @@ README
 Steps for account creation (required before opening application):
 
 	1. Visit the following website:  https://nameless-temple-44705.herokuapp.com/
-	2. Follow the account creation process
-	3. Verify email address
+	2. Follow the account creation process.
+	3. Verify email address.
 	4. (Optional) Customize account on website.
 
 Steps to run:
