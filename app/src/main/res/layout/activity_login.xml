@@ -81,6 +81,27 @@
                 android:text="login via UCSB netid"
                 android:textSize="15sp" />
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+            <TextView
+                android:id="@+id/registerText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Register"
+                android:textColor="?attr/colorAccent"
+                android:textSize="15sp"
+                android:textStyle="italic" />
+
+            <View
+                android:layout_width="50dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center_horizontal"
+                android:background="?attr/colorAccent" />
+
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
